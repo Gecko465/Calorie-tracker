@@ -163,7 +163,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
       <div class="targets" role="group" aria-label="Macro targets"><div id="targets"></div></div>
     </div>
     <div class="sc"><h2>Your data</h2>
-      <p class="note">Saved in this browser only. Export a backup, or import one to move your log to another device.</p>
+      <p class="note">Saved on this device, and in your account if you are signed in. Export a backup, or import one to move your log to another device.</p>
       <div class="scanbar" style="grid-template-columns:auto auto;margin-top:0"><button type="button" class="btn" id="exp" style="margin:0">Export</button><button type="button" class="btn" id="imp" style="margin:0">Import</button></div>
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
@@ -203,7 +203,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       var s=document.createElement("small");s.textContent=it.meal+(it.m?", P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g":"");n.appendChild(s);
       var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
-      x.onclick=function(){S.days[k]=items.filter(function(i){return i.id!==it.id;});save();render();};
+      x.onclick=function(){S.days[k]=items.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
       li.append(n,c,x);ul.appendChild(li);
     });
     $("count").textContent=items.length+(items.length===1?" item":" items");
@@ -216,7 +216,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   }
   function add(name,kcal,meal,m){var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal,meal:meal};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();render();}
   $("f").onsubmit=function(e){e.preventDefault();var n=$("name").value.trim(),c=parseInt($("kcal").value,10);if(!n||!c)return;add(n,c,$("meal").value);$("name").value="";$("kcal").value="";$("name").focus();};
-  $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500){S.goal=g;save();}render();};
+  $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500){S.goal=g;S.sUpdated=Date.now();save();}render();};
   $("prev").onclick=function(){cur.setDate(cur.getDate()-1);render();};
   $("next").onclick=function(){cur.setDate(cur.getDate()+1);render();};
   /* Home cooking: [group, name, kcal, protein, carbs, fat per 100g/100ml, unit, grams each] */
@@ -280,8 +280,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     $("targets").appendChild(r);
     var cb=r.querySelector('input[type=checkbox]'),num=r.querySelector('input[type=number]');
     cb.checked=S.targets[k].on;
-    cb.onchange=function(){S.targets[k].on=cb.checked;save();render();};
-    num.onchange=function(){var g=parseInt(num.value,10);if(g>0){S.targets[k].g=g;save();}render();};
+    cb.onchange=function(){S.targets[k].on=cb.checked;S.sUpdated=Date.now();save();render();};
+    num.onchange=function(){var g=parseInt(num.value,10);if(g>0){S.targets[k].g=g;S.sUpdated=Date.now();save();}render();};
   });
   function drawRings(m){
     var h="";
@@ -296,7 +296,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     drawRings(m);
     MAC.forEach(function(x){
       var k=x[0],t=S.targets[k],r=$("tr-"+k),num=r.querySelector('input[type=number]');
-      num.hidden=!t.on;
+      num.hidden=!t.on;r.querySelector('input[type=checkbox]').checked=t.on;
       num.value=t.g;
       
       
@@ -347,7 +347,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       s.textContent="per 100g: "+r(it.k)+" kcal, P "+r(it.p)+"g, C "+r(it.c)+"g, F "+r(it.f)+"g"+(it.e?", item "+it.e+"g":"");
       n.appendChild(s);
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
-      x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});save();drawIngs();buildFoods();};
+      x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();drawIngs();buildFoods();};
       li.append(n,x);ul.appendChild(li);
     });
   }
@@ -391,26 +391,52 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     else if(user){$("acwho").textContent="Signed in as "+user.email;amsg("Your log is saved to your account and syncs across your devices.");}
     else amsg("Sign in to keep your log in the cloud and use it on any device.");
   }
-  function push(){
-    if(!sb||!user)return Promise.resolve();
-    return sb.from("user_data").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()}).then(function(r){amsg(r.error?"Couldn't sync: "+r.error.message:"Synced.");});
-  }
-  function queuePush(){if(!sb||!user)return;clearTimeout(pushT);pushT=setTimeout(push,1500);}
-  function pull(){
-    if(!sb||!user)return;
-    sb.from("user_data").select("data").maybeSingle().then(function(r){
-      if(r.error){amsg("Couldn't sync: "+r.error.message);return;}
-      var c=r.data&&r.data.data;
-      if(c&&c.days&&(c.updated||0)>(S.updated||0)){try{localStorage.setItem(KEY,JSON.stringify(c));}catch(e){}location.reload();}
-      else push();
+  /* MERGE START */
+  function merge(a,b){
+    var del={},k,now=Date.now();
+    [a.del,b.del].forEach(function(d){for(k in (d||{}))del[k]=Math.max(del[k]||0,d[k]);});
+    for(k in del)if(now-del[k]>7776000000)delete del[k];
+    var st=(a.sUpdated||0)>(b.sUpdated||0)?a:b;
+    var M={goal:st.goal||2000,targets:st.targets||a.targets||b.targets,sUpdated:st.sUpdated||0,days:{},ings:[],del:del,mig1:a.mig1||b.mig1,updated:now};
+    var dk={};Object.keys(a.days||{}).concat(Object.keys(b.days||{})).forEach(function(d){dk[d]=1;});
+    Object.keys(dk).forEach(function(d){
+      var seen={},out=[];
+      ((a.days||{})[d]||[]).concat((b.days||{})[d]||[]).forEach(function(e){if(!seen[e.id]&&!del[e.id]){seen[e.id]=1;out.push(e);}});
+      out.sort(function(x,y){return x.id-y.id;});
+      if(out.length)M.days[d]=out;
     });
+    var im={};
+    (a.ings||[]).concat(b.ings||[]).forEach(function(i){if(del[i.id])return;var n=i.name.toLowerCase(),o=im[n];if(!o||i.id>o.id)im[n]=i;});
+    M.ings=Object.keys(im).map(function(n){return im[n];}).sort(function(x,y){return x.name.localeCompare(y.name);});
+    return M;
   }
+  /* MERGE END */
+  var syncing=false,again=false,lastSync=0;
+  function sync(){
+    if(!sb||!user)return Promise.resolve();
+    if(syncing){again=true;return Promise.resolve();}
+    syncing=true;amsg("Syncing...");
+    return sb.from("user_data").select("data").maybeSingle().then(function(r){
+      if(r.error)throw r.error;
+      var c=r.data&&r.data.data;
+      if(c&&c.days)S=merge(S,c);
+      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+      return sb.from("user_data").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});
+    }).then(function(r){
+      if(r&&r.error)throw r.error;
+      render();drawIngs();buildFoods();
+      lastSync=Date.now();
+      amsg("Synced at "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+".");
+    }).catch(function(e){amsg("Couldn't sync: "+(e&&e.message?e.message:e));}).then(function(){syncing=false;if(again){again=false;queuePush();}});
+  }
+  function queuePush(){if(!sb||!user)return;clearTimeout(pushT);pushT=setTimeout(sync,1500);}
   function creds(){return {email:$("aem").value.trim(),password:$("apw").value};}
   $("asi").onclick=function(){if(!sb)return;amsg("Signing in...");sb.auth.signInWithPassword(creds()).then(function(r){if(r.error)amsg(r.error.message);});};
   $("asu").onclick=function(){if(!sb)return;amsg("Creating account...");sb.auth.signUp(creds()).then(function(r){if(r.error)amsg(r.error.message);else if(!r.data.session)amsg("Check your email to confirm your account, then sign in.");});};
   $("aso").onclick=function(){if(sb)sb.auth.signOut();};
-  $("asy").onclick=function(){amsg("Syncing...");pull();};
-  if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)pull();});
+  $("asy").onclick=function(){sync();};
+  if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)sync();});
+  document.addEventListener("visibilitychange",function(){if(!document.hidden&&Date.now()-lastSync>5000)sync();});
   drawAcct();
   $("ver").textContent=VERSION;
   units();drawCook();drawIngs();
