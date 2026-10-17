@@ -89,6 +89,8 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
 .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(5rem,1fr));gap:.5rem}
 .linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;cursor:pointer;padding:.5rem 0;font-size:.9rem}
 #pg-ing h2{font-size:1rem;margin:1rem 0 .25rem}
+.fl{display:grid;gap:.2rem;font-size:.8rem;color:var(--muted);margin-top:.4rem}
+.fl input{padding:.5rem;border:1px solid var(--line);border-radius:.5rem;background:var(--bg);color:var(--ink);width:100%}
 </style>
 </head>
 <body>
@@ -146,6 +148,13 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
     <p class="note">Saved ingredients appear at the top of the food list on the Home cooking page.</p>
   </section>
   <section id="pg-set" hidden>
+    <div class="sc"><h2>Account and sync</h2>
+      <p class="note" id="acnote"></p>
+      <div id="acout"><label class="fl">Email<input id="aem" type="email" autocomplete="email"></label><label class="fl">Password (6+ characters)<input id="apw" type="password" autocomplete="current-password" minlength="6"></label>
+        <div class="scanbar" style="grid-template-columns:auto auto;margin-top:.75rem"><button type="button" class="btn" id="asi" style="margin:0">Sign in</button><button type="button" class="btn" id="asu" style="margin:0">Create account</button></div></div>
+      <div id="acin" hidden><p id="acwho" style="margin:.25rem 0 .75rem"></p>
+        <div class="scanbar" style="grid-template-columns:auto auto;margin-top:0"><button type="button" class="btn" id="asy" style="margin:0">Sync now</button><button type="button" class="btn" id="aso" style="margin:0">Sign out</button></div></div>
+    </div>
     <div class="sc"><h2>Calorie goal</h2>
       <div class="goal"><label for="goal">Daily goal</label><input id="goal" type="number" min="500" step="50" inputmode="numeric"><span>kcal</span></div>
     </div>
@@ -159,12 +168,17 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
   </section>
+<p class="note" style="text-align:center;margin-top:2rem">Calorie tracker <span id="ver"></span></p>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
+var VERSION="v2-wip";
+/* Paste your two Supabase values here (Project Settings > API). The publishable/anon key is safe to put in the page. NEVER paste the service_role key. */
+var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_publishable_o9SiM0CmxuyHfW3NIxtlGA_c_2Vjuyi";
 (function(){
   var KEY="calorie-tracker-v1", S={goal:2000,days:{}}, cur=new Date();
   try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&p.days) S=p;}}catch(e){}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+  function save(){S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}queuePush();}
   function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   var $=function(id){return document.getElementById(id);};
   function render(){
@@ -258,7 +272,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   };
   /* Macro targets */
   if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};
-  if(!S.mig1){MAC_ALL=["p","c","f"];MAC_ALL.forEach(function(k){S.targets[k].on=true;});S.mig1=1;save();}
+  if(!S.mig1){MAC_ALL=["p","c","f"];MAC_ALL.forEach(function(k){S.targets[k].on=true;});S.mig1=1;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
   var MAC=[["p","Protein"],["c","Carbs"],["f","Fat"]];
   MAC.forEach(function(x){
     var k=x[0],r=document.createElement("div");r.className="trow";r.id="tr-"+k;
@@ -367,6 +381,38 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   $("imp").onclick=function(){$("impf").click();};
   $("impf").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.days)throw 0;S=d;if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};save();location.reload();}catch(e){alert("That file isn't a valid backup.");}};r.readAsText(f);};
   $("manual").onclick=function(){showProd(null,"Enter the values per 100g from the pack label.");};
+  /* Accounts + cloud sync (Supabase). Newest save wins. */
+  var sb=null,user=null,pushT=null;
+  if(window.supabase&&SUPABASE_URL.indexOf("http")===0){try{sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
+  function amsg(t){$("acnote").textContent=t;}
+  function drawAcct(){
+    $("acout").hidden=!sb||!!user;$("acin").hidden=!user;
+    if(!sb)amsg("Cloud sync isn't set up yet. Your data is saved on this device only.");
+    else if(user){$("acwho").textContent="Signed in as "+user.email;amsg("Your log is saved to your account and syncs across your devices.");}
+    else amsg("Sign in to keep your log in the cloud and use it on any device.");
+  }
+  function push(){
+    if(!sb||!user)return Promise.resolve();
+    return sb.from("user_data").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()}).then(function(r){amsg(r.error?"Couldn't sync: "+r.error.message:"Synced.");});
+  }
+  function queuePush(){if(!sb||!user)return;clearTimeout(pushT);pushT=setTimeout(push,1500);}
+  function pull(){
+    if(!sb||!user)return;
+    sb.from("user_data").select("data").maybeSingle().then(function(r){
+      if(r.error){amsg("Couldn't sync: "+r.error.message);return;}
+      var c=r.data&&r.data.data;
+      if(c&&c.days&&(c.updated||0)>(S.updated||0)){try{localStorage.setItem(KEY,JSON.stringify(c));}catch(e){}location.reload();}
+      else push();
+    });
+  }
+  function creds(){return {email:$("aem").value.trim(),password:$("apw").value};}
+  $("asi").onclick=function(){if(!sb)return;amsg("Signing in...");sb.auth.signInWithPassword(creds()).then(function(r){if(r.error)amsg(r.error.message);});};
+  $("asu").onclick=function(){if(!sb)return;amsg("Creating account...");sb.auth.signUp(creds()).then(function(r){if(r.error)amsg(r.error.message);else if(!r.data.session)amsg("Check your email to confirm your account, then sign in.");});};
+  $("aso").onclick=function(){if(sb)sb.auth.signOut();};
+  $("asy").onclick=function(){amsg("Syncing...");pull();};
+  if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)pull();});
+  drawAcct();
+  $("ver").textContent=VERSION;
   units();drawCook();drawIngs();
   render();
 })();
