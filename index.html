@@ -91,6 +91,8 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
 .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(5rem,1fr));gap:.5rem}
 .linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;cursor:pointer;padding:.5rem 0;font-size:.9rem}
 #pg-ing h2{font-size:1rem;margin:1rem 0 .25rem}
+.fl{display:grid;gap:.2rem;font-size:.8rem;color:var(--muted);margin-top:.4rem}
+.fl input{padding:.5rem;border:1px solid var(--line);border-radius:.5rem;background:var(--bg);color:var(--ink);width:100%}
 </style>
 </head>
 <body>
@@ -148,6 +150,13 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
     <p class="note">Saved ingredients appear at the top of the food list on the Home cooking page.</p>
   </section>
   <section id="pg-set" hidden>
+    <div class="sc"><h2>Account and sync</h2>
+      <p class="note" id="acnote"></p>
+      <div id="acout"><label class="fl">Email<input id="aem" type="email" autocomplete="email"></label><label class="fl">Password (6+ characters)<input id="apw" type="password" autocomplete="current-password" minlength="6"></label>
+        <div class="scanbar" style="grid-template-columns:auto auto;margin-top:.75rem"><button type="button" class="btn" id="asi" style="margin:0">Sign in</button><button type="button" class="btn" id="asu" style="margin:0">Create account</button></div></div>
+      <div id="acin" hidden><p id="acwho" style="margin:.25rem 0 .75rem"></p>
+        <div class="scanbar" style="grid-template-columns:auto auto;margin-top:0"><button type="button" class="btn" id="asy" style="margin:0">Sync now</button><button type="button" class="btn" id="aso" style="margin:0">Sign out</button></div></div>
+    </div>
     <div class="sc"><h2>Calorie goal</h2>
       <div class="goal"><label for="goal">Daily goal</label><input id="goal" type="number" min="500" step="50" inputmode="numeric"><span>kcal</span></div>
     </div>
@@ -156,17 +165,22 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
       <div class="targets" role="group" aria-label="Macro targets"><div id="targets"></div></div>
     </div>
     <div class="sc"><h2>Your data</h2>
-      <p class="note">Saved in this browser only. Export a backup, or import one to move your log to another device.</p>
+      <p class="note">Saved on this device, and in your account if you are signed in. Export a backup, or import one to move your log to another device.</p>
       <div class="scanbar" style="grid-template-columns:auto auto;margin-top:0"><button type="button" class="btn" id="exp" style="margin:0">Export</button><button type="button" class="btn" id="imp" style="margin:0">Import</button></div>
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
   </section>
+<p class="note" style="text-align:center;margin-top:2rem">Calorie tracker <span id="ver"></span></p>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
+var VERSION="v2";
+/* Paste your two Supabase values here (Project Settings > API). The publishable/anon key is safe to put in the page. NEVER paste the service_role key. */
+var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_publishable_o9SiM0CmxuyHfW3NIxtlGA_c_2Vjuyi";
 (function(){
   var KEY="calorie-tracker-v1", S={goal:2000,days:{}}, cur=new Date();
   try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&p.days) S=p;}}catch(e){}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+  function save(){S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}queuePush();}
   function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   var $=function(id){return document.getElementById(id);};
   function render(){
@@ -191,7 +205,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
       var s=document.createElement("small");s.textContent=it.meal+(it.m?", P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g":"");n.appendChild(s);
       var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
-      x.onclick=function(){S.days[k]=items.filter(function(i){return i.id!==it.id;});save();render();};
+      x.onclick=function(){S.days[k]=items.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
       li.append(n,c,x);ul.appendChild(li);
     });
     $("count").textContent=items.length+(items.length===1?" item":" items");
@@ -204,7 +218,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   }
   function add(name,kcal,meal,m){var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal,meal:meal};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();render();}
   $("f").onsubmit=function(e){e.preventDefault();var n=$("name").value.trim(),c=parseInt($("kcal").value,10);if(!n||!c)return;add(n,c,$("meal").value);$("name").value="";$("kcal").value="";$("name").focus();};
-  $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500){S.goal=g;save();}render();};
+  $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500){S.goal=g;S.sUpdated=Date.now();save();}render();};
   $("prev").onclick=function(){cur.setDate(cur.getDate()-1);render();};
   $("next").onclick=function(){cur.setDate(cur.getDate()+1);render();};
   /* Home cooking: [group, name, kcal, protein, carbs, fat per 100g/100ml, unit, grams each] */
@@ -260,7 +274,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   };
   /* Macro targets */
   if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};
-  if(!S.mig1){MAC_ALL=["p","c","f"];MAC_ALL.forEach(function(k){S.targets[k].on=true;});S.mig1=1;save();}
+  if(!S.mig1){MAC_ALL=["p","c","f"];MAC_ALL.forEach(function(k){S.targets[k].on=true;});S.mig1=1;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
   var MAC=[["p","Protein"],["c","Carbs"],["f","Fat"]];
   MAC.forEach(function(x){
     var k=x[0],r=document.createElement("div");r.className="trow";r.id="tr-"+k;
@@ -268,8 +282,8 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
     $("targets").appendChild(r);
     var cb=r.querySelector('input[type=checkbox]'),num=r.querySelector('input[type=number]');
     cb.checked=S.targets[k].on;
-    cb.onchange=function(){S.targets[k].on=cb.checked;save();render();};
-    num.onchange=function(){var g=parseInt(num.value,10);if(g>0){S.targets[k].g=g;save();}render();};
+    cb.onchange=function(){S.targets[k].on=cb.checked;S.sUpdated=Date.now();save();render();};
+    num.onchange=function(){var g=parseInt(num.value,10);if(g>0){S.targets[k].g=g;S.sUpdated=Date.now();save();}render();};
   });
   function drawRings(m){
     var h="";
@@ -284,7 +298,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
     drawRings(m);
     MAC.forEach(function(x){
       var k=x[0],t=S.targets[k],r=$("tr-"+k),num=r.querySelector('input[type=number]');
-      num.hidden=!t.on;
+      num.hidden=!t.on;r.querySelector('input[type=checkbox]').checked=t.on;
       num.value=t.g;
       
       
@@ -335,7 +349,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
       s.textContent="per 100g: "+r(it.k)+" kcal, P "+r(it.p)+"g, C "+r(it.c)+"g, F "+r(it.f)+"g"+(it.e?", item "+it.e+"g":"");
       n.appendChild(s);
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
-      x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});save();drawIngs();buildFoods();};
+      x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();drawIngs();buildFoods();};
       li.append(n,x);ul.appendChild(li);
     });
   }
@@ -369,6 +383,64 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   $("imp").onclick=function(){$("impf").click();};
   $("impf").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.days)throw 0;S=d;if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};save();location.reload();}catch(e){alert("That file isn't a valid backup.");}};r.readAsText(f);};
   $("manual").onclick=function(){showProd(null,"Enter the values per 100g from the pack label.");};
+  /* Accounts + cloud sync (Supabase). Newest save wins. */
+  var sb=null,user=null,pushT=null;
+  if(window.supabase&&SUPABASE_URL.indexOf("http")===0){try{sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
+  function amsg(t){$("acnote").textContent=t;}
+  function drawAcct(){
+    $("acout").hidden=!sb||!!user;$("acin").hidden=!user;
+    if(!sb)amsg("Cloud sync isn't set up yet. Your data is saved on this device only.");
+    else if(user){$("acwho").textContent="Signed in as "+user.email;amsg("Your log is saved to your account and syncs across your devices.");}
+    else amsg("Sign in to keep your log in the cloud and use it on any device.");
+  }
+  /* MERGE START */
+  function merge(a,b){
+    var del={},k,now=Date.now();
+    [a.del,b.del].forEach(function(d){for(k in (d||{}))del[k]=Math.max(del[k]||0,d[k]);});
+    for(k in del)if(now-del[k]>7776000000)delete del[k];
+    var st=(a.sUpdated||0)>(b.sUpdated||0)?a:b;
+    var M={goal:st.goal||2000,targets:st.targets||a.targets||b.targets,sUpdated:st.sUpdated||0,days:{},ings:[],del:del,mig1:a.mig1||b.mig1,updated:now};
+    var dk={};Object.keys(a.days||{}).concat(Object.keys(b.days||{})).forEach(function(d){dk[d]=1;});
+    Object.keys(dk).forEach(function(d){
+      var seen={},out=[];
+      ((a.days||{})[d]||[]).concat((b.days||{})[d]||[]).forEach(function(e){if(!seen[e.id]&&!del[e.id]){seen[e.id]=1;out.push(e);}});
+      out.sort(function(x,y){return x.id-y.id;});
+      if(out.length)M.days[d]=out;
+    });
+    var im={};
+    (a.ings||[]).concat(b.ings||[]).forEach(function(i){if(del[i.id])return;var n=i.name.toLowerCase(),o=im[n];if(!o||i.id>o.id)im[n]=i;});
+    M.ings=Object.keys(im).map(function(n){return im[n];}).sort(function(x,y){return x.name.localeCompare(y.name);});
+    return M;
+  }
+  /* MERGE END */
+  var syncing=false,again=false,lastSync=0;
+  function sync(){
+    if(!sb||!user)return Promise.resolve();
+    if(syncing){again=true;return Promise.resolve();}
+    syncing=true;amsg("Syncing...");
+    return sb.from("user_data").select("data").maybeSingle().then(function(r){
+      if(r.error)throw r.error;
+      var c=r.data&&r.data.data;
+      if(c&&c.days)S=merge(S,c);
+      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+      return sb.from("user_data").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});
+    }).then(function(r){
+      if(r&&r.error)throw r.error;
+      render();drawIngs();buildFoods();
+      lastSync=Date.now();
+      amsg("Synced at "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+".");
+    }).catch(function(e){amsg("Couldn't sync: "+(e&&e.message?e.message:e));}).then(function(){syncing=false;if(again){again=false;queuePush();}});
+  }
+  function queuePush(){if(!sb||!user)return;clearTimeout(pushT);pushT=setTimeout(sync,1500);}
+  function creds(){return {email:$("aem").value.trim(),password:$("apw").value};}
+  $("asi").onclick=function(){if(!sb)return;amsg("Signing in...");sb.auth.signInWithPassword(creds()).then(function(r){if(r.error)amsg(r.error.message);});};
+  $("asu").onclick=function(){if(!sb)return;amsg("Creating account...");sb.auth.signUp(creds()).then(function(r){if(r.error)amsg(r.error.message);else if(!r.data.session)amsg("Check your email to confirm your account, then sign in.");});};
+  $("aso").onclick=function(){if(sb)sb.auth.signOut();};
+  $("asy").onclick=function(){sync();};
+  if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)sync();});
+  document.addEventListener("visibilitychange",function(){if(!document.hidden&&Date.now()-lastSync>5000)sync();});
+  drawAcct();
+  $("ver").textContent=VERSION;
   units();drawCook();drawIngs();
   render();
 })();
