@@ -46,7 +46,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
 .sum{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;margin-top:.75rem}
 @media (prefers-reduced-motion:reduce){.fill{transition:none}}
 .tabs{display:flex;gap:.25rem;background:var(--surface);border:1px solid var(--line);border-radius:2rem;padding:.25rem;margin-bottom:1rem}
-.tabs button{flex:1;border:0;background:none;border-radius:2rem;padding:.5rem;font-weight:600;cursor:pointer;color:var(--muted)}
+.tabs button{flex:1;border:0;background:none;border-radius:2rem;padding:.5rem .2rem;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--muted)}
 .tabs button[aria-selected=true]{background:var(--accent);color:var(--accent-ink)}
 [hidden]{display:none!important}
 .macros{display:flex;justify-content:center;gap:1.25rem;margin-top:.75rem;font-size:.9rem;color:var(--muted)}
@@ -87,11 +87,13 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
 #prod label{display:grid;gap:.2rem;font-size:.8rem;color:var(--muted)}
 #prod input,#prod select{padding:.5rem;border:1px solid var(--line);border-radius:.5rem;background:var(--bg);width:100%;min-width:0;color:var(--ink)}
 .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(5rem,1fr));gap:.5rem}
+.linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;cursor:pointer;padding:.5rem 0;font-size:.9rem}
+#pg-ing h2{font-size:1rem;margin:1rem 0 .25rem}
 </style>
 </head>
 <body>
 <main>
-  <nav class="tabs" aria-label="Pages"><button id="t-log" aria-selected="true">Daily log</button><button id="t-cook" aria-selected="false">Home cooking</button><button id="t-set" aria-selected="false">Settings</button></nav>
+  <nav class="tabs" aria-label="Pages"><button id="t-log" aria-selected="true">Daily log</button><button id="t-cook" aria-selected="false">Home cooking</button><button id="t-ing" aria-selected="false">Ingredients</button><button id="t-set" aria-selected="false">Settings</button></nav>
   <div id="pg-log">
   <div class="nav">
     <button class="icon" id="prev" aria-label="Previous day">&lsaquo;</button>
@@ -107,9 +109,6 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   <div class="mrings" id="mrings"></div>
   
 
-  <div class="scanbar"><button type="button" class="btn" id="scanBtn" style="margin:0">Scan barcode</button><input id="bc" inputmode="numeric" placeholder="or type barcode" aria-label="Barcode number"><button type="button" class="btn" id="bcGo" style="margin:0">Look up</button></div>
-  <video id="vid" playsinline muted hidden></video>
-  <div id="prod" class="sc" hidden></div>
   <form id="f">
     <input id="name" placeholder="What did you eat?" required maxlength="80" autocomplete="off">
     <input id="kcal" type="number" min="1" max="5000" placeholder="kcal" required inputmode="numeric">
@@ -137,7 +136,16 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
     </div>
     <p class="note">Estimates use typical values per 100g for each food. The supermarket is saved with the ingredient but doesn't change the numbers, so check the pack label if you need exact figures.</p>
   </section>
-<section id="pg-set" hidden>
+<section id="pg-ing" hidden>
+    <div class="scanbar" style="margin-top:0"><button type="button" class="btn" id="scanBtn" style="margin:0">Scan barcode</button><input id="bc" inputmode="numeric" placeholder="or type barcode" aria-label="Barcode number"><button type="button" class="btn" id="bcGo" style="margin:0">Look up</button></div>
+    <video id="vid" playsinline muted hidden></video>
+    <button type="button" class="linkbtn" id="manual">Or add an ingredient manually</button>
+    <div id="prod" class="sc" hidden></div>
+    <h2>Saved ingredients</h2>
+    <ul id="mylist"></ul>
+    <p class="note">Saved ingredients appear at the top of the food list on the Home cooking page.</p>
+  </section>
+  <section id="pg-set" hidden>
     <div class="sc"><h2>Calorie goal</h2>
       <div class="goal"><label for="goal">Daily goal</label><input id="goal" type="number" min="500" step="50" inputmode="numeric"><span>kcal</span></div>
     </div>
@@ -208,10 +216,19 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   var SHOPS=["Tesco","Sainsbury's","Asda","Morrisons","Aldi","Lidl","Waitrose","Co-op","Other"], ings=[];
   function opt(s,v,t){var o=document.createElement("option");o.value=v;o.textContent=t;s.appendChild(o);}
   SHOPS.forEach(function(s){opt($("shop"),s,s);});
-  var grp=null,og;
-  FOODS.forEach(function(f,i){if(f[0]!==grp){grp=f[0];og=document.createElement("optgroup");og.label=grp;$("food").appendChild(og);}var o=document.createElement("option");o.value=i;o.textContent=f[1];og.appendChild(o);});
-  function units(){var f=FOODS[$("food").value],u=$("unit");u.innerHTML="";opt(u,"u",f[6]);if(f[7])opt(u,"e","each (\u2248"+f[7]+"g)");}
-  function tab(w){$("pg-log").hidden=w!=="log";$("pg-cook").hidden=w!=="cook";$("pg-set").hidden=w!=="set";$("t-log").setAttribute("aria-selected",w==="log");$("t-cook").setAttribute("aria-selected",w==="cook");$("t-set").setAttribute("aria-selected",w==="set");}
+  var ALL=FOODS.slice();
+  function buildFoods(){
+    var sel=$("food");
+    if(!S.ings)S.ings=[];
+    ALL=S.ings.map(function(x){return ["My ingredients",x.name,x.k,x.p,x.c,x.f,"g",x.e];}).concat(FOODS);
+    sel.innerHTML="";
+    var grp=null,og;
+    ALL.forEach(function(f,i){if(f[0]!==grp){grp=f[0];og=document.createElement("optgroup");og.label=grp;sel.appendChild(og);}var o=document.createElement("option");o.value=i;o.textContent=f[1];og.appendChild(o);});
+    units();
+  }
+  buildFoods();
+  function units(){var f=ALL[$("food").value],u=$("unit");u.innerHTML="";opt(u,"u",f[6]);if(f[7])opt(u,"e","each (\u2248"+f[7]+"g)");}
+  function tab(w){["log","cook","ing","set"].forEach(function(k){$("pg-"+k).hidden=w!==k;$("t-"+k).setAttribute("aria-selected",w===k);});if(w!=="ing")stopCam();}
   function r1(x){return Math.round(x*10)/10;}
   function totals(){var t={k:0,p:0,c:0,f:0},n=Math.max(1,parseInt($("serv").value,10)||1);ings.forEach(function(i){t.k+=i.k;t.p+=i.p;t.c+=i.c;t.f+=i.f;});return {k:Math.round(t.k/n),p:Math.round(t.p/n),c:Math.round(t.c/n),f:Math.round(t.f/n)};}
   function drawCook(){
@@ -224,9 +241,10 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   $("serv").oninput=drawCook;
   $("t-log").onclick=function(){tab("log");};
   $("t-cook").onclick=function(){tab("cook");};
+  $("t-ing").onclick=function(){tab("ing");};
   $("t-set").onclick=function(){tab("set");};
   $("addIng").onclick=function(){
-    var f=FOODS[$("food").value],a=parseFloat($("amt").value);
+    var f=ALL[$("food").value],a=parseFloat($("amt").value);
     if(!(a>0)){$("amt").focus();return;}
     var each=$("unit").value==="e",r=(each?a*f[7]:a)/100;
     ings.push({shop:$("shop").value,name:f[1],label:each?a+" each":a+f[6],k:f[2]*r,p:f[3]*r,c:f[4]*r,f:f[5]*r});
@@ -287,16 +305,37 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
         showProd({name:((d.product.brands||"").split(",")[0]+" "+(d.product.product_name||"")).trim(),k:kc,p:n.proteins_100g,c:n.carbohydrates_100g,f:n.fat_100g,sv:parseFloat(d.product.serving_quantity)});
       }).catch(function(){box.textContent="Couldn't reach Open Food Facts. Check your connection and try again.";});
   }
-  function showProd(p){
-    var box=$("prod"),found=!!p;p=p||{};
-    box.innerHTML='<p class="note"></p><label>Name<input id="pn" maxlength="80"></label><div class="g4"><label>kcal per 100g<input id="pk" type="number" step="any" min="0"></label><label>Protein<input id="pp" type="number" step="any" min="0"></label><label>Carbs<input id="pc" type="number" step="any" min="0"></label><label>Fat<input id="pf" type="number" step="any" min="0"></label></div><div class="g4"><label>Amount eaten (g)<input id="pa" type="number" min="1" step="any"></label><label>Meal<select id="pm"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option></select></label></div><div class="macros" id="pt"></div><button type="button" class="btn" id="pgo">Add to log</button>';
-    box.querySelector(".note").textContent=found?"Found. Check the values against the pack, as the database is crowd-sourced.":"Not found. Enter the values from the pack label.";
+  function showProd(p,msg){
+    var box=$("prod"),note=msg||(p?"Found. Check the values against the pack, as the database is crowd-sourced.":"Not found. Enter the values per 100g from the pack label.");p=p||{};
+    box.hidden=false;
+    box.innerHTML='<p class="note"></p><label>Name<input id="pn" maxlength="80"></label><div class="g4"><label>kcal per 100g<input id="pk" type="number" step="any" min="0"></label><label>Protein<input id="pp" type="number" step="any" min="0"></label><label>Carbs<input id="pc" type="number" step="any" min="0"></label><label>Fat<input id="pf" type="number" step="any" min="0"></label></div><label>Grams per item (optional, e.g. one egg)<input id="pe" type="number" step="any" min="1"></label><button type="button" class="btn" id="pgo">Save ingredient</button>';
+    box.querySelector(".note").textContent=note;
     $("pn").value=p.name||"";
     ["k","p","c","f"].forEach(function(x){var v=p[x];$("p"+x).value=(v==null||isNaN(v))?"":Math.round(v*10)/10;});
-    $("pa").value=Math.round(p.sv)||100;
-    function pv(){var a=parseFloat($("pa").value)||0,r=a/100,g=function(id){return Math.round((parseFloat($(id).value)||0)*r);},o={k:g("pk"),p:g("pp"),c:g("pc"),f:g("pf")};$("pt").innerHTML="<span><b>"+o.k+"</b> kcal</span><span><b>"+o.p+"g</b> protein</span><span><b>"+o.c+"g</b> carbs</span><span><b>"+o.f+"g</b> fat</span>";return o;}
-    box.querySelectorAll("input").forEach(function(i){i.oninput=pv;});pv();
-    $("pgo").onclick=function(){var o=pv();if(!o.k&&!o.p&&!o.c&&!o.f){$("pk").focus();return;}add(($("pn").value.trim()||"Scanned food")+" ("+$("pa").value+"g)",o.k,$("pm").value,{p:o.p,c:o.c,f:o.f});box.hidden=true;$("bc").value="";};
+    $("pe").value=p.sv>0?Math.round(p.sv):"";
+    $("pgo").onclick=function(){
+      var nm=$("pn").value.trim(),k=parseFloat($("pk").value);
+      if(!nm){$("pn").focus();return;}
+      if(isNaN(k)){$("pk").focus();return;}
+      var it={id:Date.now(),name:nm,k:k,p:parseFloat($("pp").value)||0,c:parseFloat($("pc").value)||0,f:parseFloat($("pf").value)||0},e=parseFloat($("pe").value);
+      if(e>0)it.e=e;
+      S.ings=S.ings.filter(function(x){return x.name.toLowerCase()!==nm.toLowerCase();});
+      S.ings.push(it);S.ings.sort(function(a,b){return a.name.localeCompare(b.name);});
+      save();box.hidden=true;$("bc").value="";drawIngs();buildFoods();
+    };
+  }
+  function drawIngs(){
+    var ul=$("mylist");ul.innerHTML="";
+    if(!S.ings.length){var e=document.createElement("div");e.className="empty";e.textContent="No saved ingredients yet. Scan a barcode or add one manually.";ul.appendChild(e);}
+    S.ings.forEach(function(it){
+      var li=document.createElement("li"),n=document.createElement("div"),s=document.createElement("small"),r=function(x){return Math.round(x*10)/10;};
+      n.className="n";n.textContent=it.name;
+      s.textContent="per 100g: "+r(it.k)+" kcal, P "+r(it.p)+"g, C "+r(it.c)+"g, F "+r(it.f)+"g"+(it.e?", item "+it.e+"g":"");
+      n.appendChild(s);
+      var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
+      x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});save();drawIngs();buildFoods();};
+      li.append(n,x);ul.appendChild(li);
+    });
   }
   function onCode(c){stopCam();$("bc").value=c;lookup(c);}
   function startZ(){
@@ -327,7 +366,8 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   $("exp").onclick=function(){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="calorie-tracker-"+key(new Date())+".json";a.click();};
   $("imp").onclick=function(){$("impf").click();};
   $("impf").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.days)throw 0;S=d;if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};save();location.reload();}catch(e){alert("That file isn't a valid backup.");}};r.readAsText(f);};
-  units();drawCook();
+  $("manual").onclick=function(){showProd(null,"Enter the values per 100g from the pack label.");};
+  units();drawCook();drawIngs();
   render();
 })();
 </script>
