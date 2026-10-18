@@ -91,8 +91,105 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
 .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(5rem,1fr));gap:.5rem}
 .linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;cursor:pointer;padding:.5rem 0;font-size:.9rem}
 #pg-ing h2{font-size:1rem;margin:1rem 0 .25rem}
+
+/* Visual refresh */
+:root{--bg:#f5f4ee;--surface:#fffefa;--ink:#202c27;--muted:#778078;--line:#e4e6dc;--accent:#39745b;--accent-ink:#fff;--over:#bf6844;--track:#e5ebe3}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151b18;--surface:#202923;--ink:#edf1e9;--muted:#a6b1a6;--line:#35423a;--accent:#8ec3a2;--accent-ink:#142019;--over:#ed9a70;--track:#354238}}
+:root[data-theme="dark"]{--bg:#151b18;--surface:#202923;--ink:#edf1e9;--muted:#a6b1a6;--line:#35423a;--accent:#8ec3a2;--accent-ink:#142019;--over:#ed9a70;--track:#354238}
+body{background:radial-gradient(ellipse at 50% -15%,#e3eadf 0,transparent 34rem),var(--bg);font-size:16px;line-height:1.55}
+main{max-width:43rem;padding:1.5rem 1.25rem 4rem}
+.tabs{position:sticky;top:.65rem;z-index:5;gap:.35rem;padding:.35rem;margin:0 0 1.5rem;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(14px);border-color:color-mix(in srgb,var(--line) 75%,transparent);box-shadow:0 8px 24px #18241b12}
+.tabs button{min-height:2.75rem;border-radius:1.5rem;font-size:.9rem;transition:background .18s,color .18s}
+.tabs button[aria-selected=true]{box-shadow:0 3px 9px color-mix(in srgb,var(--accent) 24%,transparent)}
+.nav{margin:0;padding:.25rem .15rem .75rem}
+.nav h1{font-size:1.15rem;letter-spacing:-.02em}
+.icon{width:2.75rem;height:2.75rem;font-size:1.35rem;transition:transform .15s,border-color .15s}
+.icon:hover:not(:disabled){transform:translateY(-1px);border-color:var(--accent)}
+.icon:disabled{cursor:default}
+#pg-log:before{content:"TODAY AT A GLANCE";display:block;margin:0 0 .25rem .15rem;color:var(--muted);font-size:.7rem;font-weight:800;letter-spacing:.14em}
+.plate{width:19rem;margin:.5rem auto .75rem}
+.plate circle{stroke-width:13}
+.centre b{font-size:3.4rem;letter-spacing:-.06em}
+.centre span{margin-top:.35rem;font-size:.95rem}
+.mrings{gap:clamp(.8rem,5vw,2rem);margin:1.25rem 0 1.5rem}
+.mw{width:6.25rem;height:6.25rem}
+.mr span{font-size:.9rem}
+form{grid-template-columns:minmax(0,1fr) 7.5rem;gap:.65rem;margin:1.25rem 0 .65rem;padding:.9rem;border:1px solid var(--line);border-radius:1.15rem;box-shadow:0 8px 24px #18241b08}
+form input,form select,#prod input,#prod select,.card input,.card select{min-height:2.9rem;border-radius:.75rem;border-color:var(--line);background:var(--bg)}
+form input:first-child{font-weight:600}
+form button,.btn{min-height:2.9rem;border-radius:.75rem;box-shadow:0 4px 10px color-mix(in srgb,var(--accent) 20%,transparent);transition:transform .15s,filter .15s}
+form button:hover,.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.chips{scrollbar-width:thin}
+.chips button{border-color:var(--line);background:var(--surface);padding:.4rem .8rem;transition:border-color .15s,color .15s}
+.chips button:hover{border-color:var(--accent);color:var(--accent)}
+#list,#ings,#mylist{overflow:hidden;border:1px solid var(--line);border-radius:1rem;background:var(--surface);padding:0 .9rem}
+li{gap:.65rem;padding:.85rem .1rem;border-color:var(--line)}
+li:last-child{border-bottom:0}
+li .n{font-weight:600}
+li small{margin-top:.12rem;font-size:.78rem;font-weight:400}
+li .k{white-space:nowrap;font-size:.9rem}
+li button{width:2rem;height:2rem;border-radius:50%;font-size:1.35rem;transition:background .15s,color .15s}
+li button:hover{background:var(--bg);color:var(--over)}
+.empty{padding:1.25rem .1rem;font-size:.92rem}
+.sum{padding:.2rem .15rem;font-size:.83rem}
+.card,.sc{padding:1rem;border-radius:1rem;border-color:var(--line);box-shadow:0 8px 24px #18241b08}
+.card{gap:.55rem;margin-bottom:1rem}
+.card label,.sc h2{font-weight:700}
+.row2{grid-template-columns:minmax(0,1fr) minmax(7rem,.65fr);gap:.65rem}
+.scanbar{gap:.6rem}
+.scanbar input{border-radius:.75rem;border-color:var(--line)}
+#prod{border-radius:1rem}
+.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+.trow{gap:.65rem}
+.trow input[type=number]{min-height:2.35rem;border-radius:.65rem}
+@media(max-width:420px){main{padding:1rem .85rem 3rem}.tabs{top:.4rem;margin-bottom:1.1rem}.tabs button{font-size:.78rem}.mrings{gap:.65rem}.mw{width:5rem;height:5rem}.plate{width:16rem}.mr{font-size:.78rem}.mr small{font-size:.72rem}form{grid-template-columns:minmax(0,1fr) 6rem;padding:.7rem;gap:.5rem}.scanbar{grid-template-columns:auto minmax(0,1fr) auto;gap:.35rem}.scanbar .btn{padding:.55rem;font-size:.82rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+#f{grid-template-columns:minmax(0,1fr) 8rem;align-items:center}
+#f #name{grid-column:1}
+#f button{grid-column:2}
+#f select{min-height:2.9rem;border-radius:.75rem;border-color:var(--line);background:var(--bg)}
+#f button:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.list-head{display:flex;align-items:center;justify-content:space-between;margin:1.2rem .15rem .45rem}
+.list-head h2{margin:0;font-size:1rem;letter-spacing:-.02em}
+.list-head span{color:var(--muted);font-size:.82rem}
+#list{background:var(--surface);border:1px solid var(--line);border-radius:1rem;padding:0 .95rem;overflow:hidden}
+#list li{min-height:4rem;padding:.7rem .1rem;border-bottom:1px solid var(--line)}
+#list li .n{font-size:.95rem;line-height:1.3}
+#list li small{display:block;width:max-content;max-width:100%;margin-top:.28rem;padding:.08rem .45rem;border-radius:1rem;background:var(--bg);font-size:.73rem;line-height:1.5}
+#list li .k{color:var(--accent);font-size:.88rem;font-variant-numeric:tabular-nums}
+#list li button{flex:0 0 2rem;background:var(--bg);font-size:1.15rem;line-height:1}
+.sum{min-height:1.5rem}
+@media(max-width:420px){#f{grid-template-columns:minmax(0,1fr) 6.5rem}}
+ .fill{transition:stroke-dashoffset 3s cubic-bezier(.22,.61,.36,1),stroke .3s}
+@keyframes calorie-wheel-thicken{0%,100%{stroke-width:13}28%{stroke-width:16}}
+@keyframes macro-wheel-thicken{0%,100%{stroke-width:7}28%{stroke-width:9.5}}
+.plate .fill.growing{animation:calorie-wheel-thicken 3s ease-out}
+.mw .fill.growing{animation:macro-wheel-thicken 3s ease-out}
+@media(prefers-reduced-motion:reduce){.fill.growing{animation:none!important}}
+.plate .fill{stroke-linecap:butt;filter:none}
+.tip-group{transform-box:view-box;transform-origin:100px 100px;transition:transform 3s cubic-bezier(.22,.61,.36,1)}
+.tip{fill:var(--accent);stroke:var(--surface);stroke-width:2.5}
+.tip.over{fill:var(--over)}
 .fl{display:grid;gap:.2rem;font-size:.8rem;color:var(--muted);margin-top:.4rem}
 .fl input{padding:.5rem;border:1px solid var(--line);border-radius:.5rem;background:var(--bg);color:var(--ink);width:100%}
+/* Calorie ring keeps going round past the goal, green fading to red */
+:root{--danger:#d2382d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--danger:#ff7468}}
+:root[data-theme="dark"]{--danger:#ff7468}
+.plate .fill{transition:none}
+.plate .tip-group{transition:none}
+.card h2{font-size:1.05rem;margin:0 0 .15rem}
+.chk{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--muted);margin-top:.4rem}
+/* v3: canvas calorie ring, four macro rings, messages */
+.plate canvas{display:block;width:100%;aspect-ratio:1}
+.mrings{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-start;gap:clamp(.35rem,2.4vw,1.1rem)}
+.mw{width:100%;height:auto;aspect-ratio:1;margin:0 auto}
+.mr{flex:1 1 0;min-width:0;max-width:6.25rem}
+.mr small{font-size:.68rem;line-height:1.2}
+.mw b{font-size:clamp(.85rem,4.2vw,1.1rem)}
+.mr span,.mr small{text-align:center}
+.miss{border-color:var(--danger)!important;outline:1px solid var(--danger)}
+.notice{border:1px solid var(--line);border-radius:.7rem;padding:.6rem .75rem;display:grid;gap:.5rem;font-size:.9rem;background:var(--bg)}
 </style>
 </head>
 <body>
@@ -105,7 +202,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
     <button class="icon" id="next" aria-label="Next day">&rsaquo;</button>
   </div>
   <div class="plate">
-    <svg viewBox="0 0 200 200" aria-hidden="true"><circle class="track" cx="100" cy="100" r="80"/><circle class="fill" id="fill" cx="100" cy="100" r="80" stroke-dasharray="502.65" stroke-dashoffset="502.65"/></svg>
+    <canvas id="ring" aria-hidden="true"></canvas>
     <div class="centre"><b id="eaten">0</b><span id="left"></span></div>
   </div>
   
@@ -114,31 +211,28 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
   
 
   <form id="f">
-    <input id="name" placeholder="What did you eat?" required maxlength="80" autocomplete="off">
-    <input id="kcal" type="number" min="1" max="5000" placeholder="kcal" required inputmode="numeric">
-    <select id="meal" aria-label="Meal"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option></select>
-    <button type="submit">Add food</button>
+    <select id="name" aria-label="Choose a saved meal"></select>
+    <button id="fsubmit" type="submit">Add meal</button>
   </form>
-  <div class="chips" id="chips" aria-label="Recent foods"></div>
-
+  <p class="note" id="fmsg" role="status" hidden></p>
+  <div class="list-head"><h2>Today’s log</h2><span id="count"></span></div>
   <ul id="list"></ul>
-  <div class="sum"><span id="count"></span><span id="avg"></span></div>
+  <div class="sum"><span id="avg"></span></div>
   </div>
   <section id="pg-cook" hidden>
     <div class="card">
-      <label for="shop">Supermarket</label><select id="shop"></select>
-      <label for="food">Food</label><select id="food"></select>
-      <div class="row2"><div><label for="amt">Amount used</label><input id="amt" type="number" min="1" inputmode="decimal"></div><div><label for="unit">Unit</label><select id="unit"></select></div></div>
-      <button class="btn" id="addIng" type="button">Add ingredient</button>
-    </div>
-    <ul id="ings"></ul>
-    <div class="card" style="margin-top:.75rem">
+      <h2>Create New Meal</h2>
       <label for="mname">Meal name</label><input id="mname" maxlength="80" placeholder="e.g. Chicken pasta">
-      <div class="row2"><div><label for="mmeal">Meal</label><select id="mmeal"><option>Breakfast</option><option>Lunch</option><option selected>Dinner</option><option>Snack</option></select></div><div><label for="serv">Makes (portions)</label><input id="serv" type="number" min="1" value="1"></div></div>
+      <label for="food">Ingredient</label><select id="food"></select>
+      <div class="row2"><div><label for="amt">Amount used</label><input id="amt" type="number" min="0.1" step="any" inputmode="decimal"></div><div><label for="unit">Unit</label><select id="unit"></select></div></div>
+      <button class="btn" id="addIng" type="button">Add to meal</button>
+      <ul id="ings"></ul>
+      <label for="serv">Makes (portions)</label><input id="serv" type="number" min="1" value="1">
       <div class="macros" id="cm"></div>
-      <button class="btn" id="logMeal" type="button">Add one portion to my log</button>
+      <div class="row2"><button class="btn" id="saveMeal" type="button">Save this meal</button><button class="btn" id="logMeal" type="button">Add one portion to my log</button></div>
+      <div id="replaceBox" class="notice" role="alert" hidden><span id="replaceText"></span><div class="row2"><button class="btn" id="replaceYes" type="button">Replace</button><button class="btn" id="replaceNo" type="button">Keep old meal</button></div></div>
     </div>
-    <p class="note">Estimates use typical values per 100g for each food. The supermarket is saved with the ingredient but doesn't change the numbers, so check the pack label if you need exact figures.</p>
+    <p class="note">Scanned Ingredients come from your barcode scans. Basic Ingredients use typical values per 100g (raw or dry unless stated), so check the pack label for exact figures.</p>
   </section>
 <section id="pg-ing" hidden>
     <div class="scanbar" style="margin-top:0"><button type="button" class="btn" id="scanBtn" style="margin:0">Scan barcode</button><input id="bc" inputmode="numeric" placeholder="or type barcode" aria-label="Barcode number"><button type="button" class="btn" id="bcGo" style="margin:0">Look up</button></div>
@@ -153,6 +247,7 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
     <div class="sc"><h2>Account and sync</h2>
       <p class="note" id="acnote"></p>
       <div id="acout"><label class="fl">Email<input id="aem" type="email" autocomplete="email"></label><label class="fl">Password (6+ characters)<input id="apw" type="password" autocomplete="current-password" minlength="6"></label>
+        <label class="chk"><input type="checkbox" id="spw"> Show password</label>
         <div class="scanbar" style="grid-template-columns:auto auto;margin-top:.75rem"><button type="button" class="btn" id="asi" style="margin:0">Sign in</button><button type="button" class="btn" id="asu" style="margin:0">Create account</button></div></div>
       <div id="acin" hidden><p id="acwho" style="margin:.25rem 0 .75rem"></p>
         <div class="scanbar" style="grid-template-columns:auto auto;margin-top:0"><button type="button" class="btn" id="asy" style="margin:0">Sync now</button><button type="button" class="btn" id="aso" style="margin:0">Sign out</button></div></div>
@@ -165,44 +260,102 @@ li button{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:po
       <div class="targets" role="group" aria-label="Macro targets"><div id="targets"></div></div>
     </div>
     <div class="sc"><h2>Your data</h2>
-      <p class="note">Saved on this device, and in your account if you are signed in. Export a backup, or import one to move your log to another device.</p>
+      <p class="note">Saved in this browser only. Export a backup, or import one to move your log to another device.</p>
       <div class="scanbar" style="grid-template-columns:auto auto;margin-top:0"><button type="button" class="btn" id="exp" style="margin:0">Export</button><button type="button" class="btn" id="imp" style="margin:0">Import</button></div>
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
   </section>
-<p class="note" style="text-align:center;margin-top:2rem">Calorie tracker <span id="ver"></span></p>
+<p class="note" style="text-align:center;margin-top:2rem">Calorie tracker <span id="ver"></span><span id="build"></span></p>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v2";
-/* Paste your two Supabase values here (Project Settings > API). The publishable/anon key is safe to put in the page. NEVER paste the service_role key. */
+var VERSION="v3", BUILD="18 Oct 18:55";
+/* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_publishable_o9SiM0CmxuyHfW3NIxtlGA_c_2Vjuyi";
 (function(){
-  var KEY="calorie-tracker-v1", S={goal:2000,days:{}}, cur=new Date();
+  var KEY="calorie-tracker-v1", S={goal:2000,days:{},meals:[]}, cur=new Date(),animateWheels=false;
   try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&p.days) S=p;}}catch(e){}
+  if(!Array.isArray(S.meals))S.meals=[];
+  function ensureTargets(){if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};if(!S.targets.fi)S.targets.fi={on:true,g:30};}
   function save(){S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}queuePush();}
   function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   var $=function(id){return document.getElementById(id);};
+  function animateNumber(el,from,to,duration,suffix){
+    var run=(el._numberAnimation||0)+1;el._numberAnimation=run;
+    function format(v){return String(Math.round(v))+(suffix||"");}
+    if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=format(to);return;}
+    var start=performance.now(),delta=to-from;
+    function step(now){if(el._numberAnimation!==run)return;var p=Math.min((now-start)/duration,1),ease=1-Math.pow(1-p,3);el.textContent=format(from+delta*ease);if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  var ringShown=0,ringRun=0,colCache={};
+  function rgbOf(c){c=(c||"").trim();if(colCache[c])return colCache[c];var cv=document.createElement("canvas");cv.width=cv.height=1;var q=cv.getContext("2d");q.fillStyle="#000";q.fillStyle=c;q.fillRect(0,0,1,1);var d=q.getImageData(0,0,1,1).data,r=[d[0],d[1],d[2]];colCache[c]=r;return r;}
+  function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n);}
+  function mixa(a,b,t){t=Math.max(0,Math.min(1,t));return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}
+  function rgbs(a){return "rgb("+Math.round(a[0])+","+Math.round(a[1])+","+Math.round(a[2])+")";}
+  /* Colour is a single steady gradient that depends only on how far round the bar has gone (q = amount / goal):
+     - Along the whole bar (across both laps) the colour gets steadily darker towards the head, so the head is always the darkest part.
+     - Once the total passes the goal, the WHOLE ring (both laps) shifts from green to red, finished at 15% over the goal.
+     The second lap is drawn on top of the first, starting in exactly the colour the first lap ended on, so nothing is mixed or jumps. */
+  function rgb2hsl(c){var r=c[0]/255,g=c[1]/255,b=c[2]/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,h=0,s=0,d=mx-mn;if(d){s=d/(1-Math.abs(2*l-1));if(mx===r)h=((g-b)/d+6)%6;else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60;}return [h,s,l];}
+  function hsl2rgb(h,s,l){var c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2,r=0,g=0,b=0;if(h<60){r=c;g=x;}else if(h<120){r=x;g=c;}else if(h<180){g=c;b=x;}else if(h<240){g=x;b=c;}else if(h<300){r=x;b=c;}else{r=c;b=x;}return [(r+m)*255,(g+m)*255,(b+m)*255];}
+  function hueMix(a,b,t){t=Math.max(0,Math.min(1,t));var A=rgb2hsl(a),B=rgb2hsl(b),dh=B[0]-A[0];if(dh>180)dh-=360;if(dh<-180)dh+=360;return hsl2rgb((A[0]+dh*t+360)%360,A[1]+(B[1]-A[1])*t,A[2]+(B[2]-A[2])*t);}
+  function ringPaint(v){
+    var cv=$("ring"),g=S.goal||2000,size=cv.clientWidth||304,dpr=window.devicePixelRatio||1;
+    if(cv.width!==Math.round(size*dpr)){cv.width=Math.round(size*dpr);cv.height=cv.width;}
+    var x=cv.getContext("2d");x.setTransform(cv.width/size,0,0,cv.width/size,0,0);x.clearRect(0,0,size,size);
+    var cx=size/2,R=size*0.4,w=size*0.065,TOP=-Math.PI/2,TAU=Math.PI*2,line=Math.max(1.5,size*0.0075);
+    var green=rgbOf(cssVar("--accent")),red=rgbOf(cssVar("--danger")),black=[0,0,0];
+    var tAll=Math.max(0,Math.min(1,(v/g-1)/0.15));
+    function colourQ(q){var dk=0.5*Math.max(q,0)/Math.max(qe,1);return rgbs(mixa(hueMix(green,red,tAll),black,dk));}
+    x.lineCap="butt";x.lineWidth=w;x.strokeStyle=cssVar("--track").trim();x.beginPath();x.arc(cx,cx,R,0,TAU);x.stroke();
+    var qe=Math.min(Math.max(v,0),g*2)/g;if(qe<=0)return;
+    function front(qpos){var a=TOP+qpos*TAU;return [cx+R*Math.cos(a),cx+R*Math.sin(a)];}
+    function lap(qa,qb,off){
+      var n=Math.max(2,Math.ceil((qb-qa)*220));x.lineCap="butt";x.lineWidth=w;
+      for(var i=0;i<n;i++){var s0=qa+(qb-qa)*i/n,s1=qa+(qb-qa)*(i+1)/n;x.strokeStyle=colourQ((s0+s1)/2);x.beginPath();x.arc(cx,cx,R,TOP+(s0-off)*TAU,TOP+(s1-off)*TAU+(i<n-1?0.012:0));x.stroke();}
+      var p0=front(qa-off),p1=front(qb-off);
+      x.fillStyle=colourQ(qa);x.beginPath();x.arc(p0[0],p0[1],w/2,0,TAU);x.fill();
+      x.fillStyle=colourQ(qb);x.beginPath();x.arc(p1[0],p1[1],w/2,0,TAU);x.fill();
+    }
+    function outlineEnd(qpos){var p=front(qpos);x.fillStyle=cssVar("--surface").trim();x.beginPath();x.arc(p[0],p[1],w/2+line,0,TAU);x.fill();}
+    if(qe<=1){outlineEnd(qe);lap(0,qe,0);}
+    else{lap(0,1,0);outlineEnd(qe-1);lap(1,qe,1);}
+  }
+  function paintRing(v){ringPaint(v);}
+  function ringTo(v,animate){
+    var run=++ringRun,from=ringShown;
+    var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(!animate||reduce||from===v){ringShown=v;paintRing(v);return;}
+    var start=performance.now();
+    function step(now){if(run!==ringRun)return;var p=Math.min((now-start)/3000,1),e=1-Math.pow(1-p,3);ringShown=from+(v-from)*e;paintRing(ringShown);if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  window.addEventListener("resize",function(){paintRing(ringShown);});
   function render(){
-    var k=key(cur), items=S.days[k]||[], total=items.reduce(function(a,b){return a+b.kcal;},0);
+    var animate=animateWheels;animateWheels=false;
+    var k=key(cur), items=S.days[k]||[], total=Math.round(items.reduce(function(a,b){return a+b.kcal;},0));
     var today=key(new Date())===k;
     $("date").textContent=today?"Today":cur.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
     $("next").disabled=today; $("next").style.opacity=today?.4:1;
-    $("eaten").textContent=total;
-    var m={p:0,c:0,f:0};items.forEach(function(i){if(i.m){m.p+=i.m.p;m.c+=i.m.c;m.f+=i.m.f;}});
+    var oldTotal=parseFloat($("eaten").textContent)||0;
+    if(animate)animateNumber($("eaten"),oldTotal,total,3000);else $("eaten").textContent=total;
+    var m={p:0,c:0,f:0,fi:0},fiKnown=0,fiPartial=false;
+    items.forEach(function(i){if(i.m){m.p+=i.m.p;m.c+=i.m.c;m.f+=i.m.f;if(typeof i.m.fi==="number"){m.fi+=i.m.fi;fiKnown++;if(i.m.fip)fiPartial=true;}}});
+    m.fiState=!items.length?"all":(!fiKnown?"none":((fiKnown<items.length||fiPartial)?"partial":"all"));
     $("macros").innerHTML="<span><b>"+m.p+"g</b> protein</span><span><b>"+m.c+"g</b> carbs</span><span><b>"+m.f+"g</b> fat</span>";
-    drawT(m);
+    drawT(m,animate);
     var diff=S.goal-total;
     $("left").textContent=diff>=0?diff+" kcal left":(-diff)+" kcal over";
-    var f=$("fill"); f.classList.toggle("over",diff<0);
-    f.style.strokeDashoffset=502.65*(1-Math.min(total/S.goal,1));
+    
+    ringTo(total,animate);
     $("goal").value=S.goal;
     var ul=$("list"); ul.innerHTML="";
-    if(!items.length){var e=document.createElement("div");e.className="empty";e.textContent="Nothing logged yet. Add your first food above.";ul.appendChild(e);}
+    if(!items.length){var e=document.createElement("li");e.className="empty";e.textContent="Nothing logged yet. Choose a saved meal above.";ul.appendChild(e);}
     items.forEach(function(it){
       var li=document.createElement("li");
       var n=document.createElement("div");n.className="n";n.textContent=it.name;
-      var s=document.createElement("small");s.textContent=it.meal+(it.m?", P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g":"");n.appendChild(s);
+      if(it.m){var s=document.createElement("small");s.textContent="P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g, Fibre "+(typeof it.m.fi==="number"?r1(it.m.fi)+"g"+(it.m.fip?"+ (partial)":""):"unknown");n.appendChild(s);}
       var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
       x.onclick=function(){S.days[k]=items.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
@@ -211,47 +364,82 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     $("count").textContent=items.length+(items.length===1?" item":" items");
     var keys=Object.keys(S.days).filter(function(d){return S.days[d].length;});
     if(keys.length>1){var t=keys.reduce(function(a,d){return a+S.days[d].reduce(function(x,y){return x+y.kcal;},0);},0);$("avg").textContent="Average "+Math.round(t/keys.length)+" kcal/day";}else $("avg").textContent="";
-    var seen={},recent=[];
-    Object.keys(S.days).sort().reverse().forEach(function(d){S.days[d].slice().reverse().forEach(function(i){var n=i.name.toLowerCase();if(!seen[n]&&recent.length<8){seen[n]=1;recent.push(i);}});});
-    var ch=$("chips");ch.innerHTML="";
-    recent.forEach(function(i){var b=document.createElement("button");b.type="button";b.textContent=i.name+" \u00b7 "+i.kcal;b.onclick=function(){add(i.name,i.kcal,i.meal,i.m);};ch.appendChild(b);});
   }
-  function add(name,kcal,meal,m){var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal,meal:meal};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();render();}
-  $("f").onsubmit=function(e){e.preventDefault();var n=$("name").value.trim(),c=parseInt($("kcal").value,10);if(!n||!c)return;add(n,c,$("meal").value);$("name").value="";$("kcal").value="";$("name").focus();};
+  function add(name,kcal,m){var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();}
+  function addedNote(name){var m=$("fmsg"),t=key(cur)===key(new Date());m.textContent="Added \u201c"+name+"\u201d to "+(t?"today's log":cur.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"})+" (not today)")+".";m.hidden=false;}
+  function mealM(x){var m={p:x.p,c:x.c,f:x.f};if(x.fiState){if(x.fiState!=="none"){m.fi=x.fi;if(x.fiState==="partial")m.fip=true;}}else if(typeof x.fi==="number"){m.fi=x.fi;if(x.fip)m.fip=true;}return m;}
+  $("f").onsubmit=function(e){e.preventDefault();var item=S.meals[parseInt($("name").value,10)],msg=$("fmsg");if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}msg.hidden=true;add(item.name,item.kcal,mealM(item));addedNote(item.name);$("name").focus();};
+  $("name").onchange=function(){$("fmsg").hidden=true;};
   $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500){S.goal=g;S.sUpdated=Date.now();save();}render();};
   $("prev").onclick=function(){cur.setDate(cur.getDate()-1);render();};
   $("next").onclick=function(){cur.setDate(cur.getDate()+1);render();};
-  /* Home cooking: [group, name, kcal, protein, carbs, fat per 100g/100ml, unit, grams each] */
-  var FOODS=[
-  ["Meat & fish","Chicken breast, raw",106,23,0,1.3,"g"],["Meat & fish","Beef mince 10% fat, raw",176,20,0,10,"g"],["Meat & fish","Beef mince 20% fat, raw",254,17,0,20,"g"],["Meat & fish","Pork sausages, raw",290,13,6,24,"g",50],["Meat & fish","Bacon rasher, raw",215,15,0,17,"g",25],["Meat & fish","Salmon fillet, raw",208,20,0,13,"g"],["Meat & fish","Cod fillet, raw",82,18,0,0.7,"g"],
-  ["Dairy & eggs","Egg",143,12.5,0.7,10,"g",55],["Dairy & eggs","Whole milk",64,3.4,4.7,3.6,"ml"],["Dairy & eggs","Semi-skimmed milk",47,3.5,4.8,1.7,"ml"],["Dairy & eggs","Cheddar cheese",416,25,0.1,35,"g"],["Dairy & eggs","Greek yoghurt",120,5.5,4,9,"g"],["Dairy & eggs","Butter",717,0.5,0.5,81,"g"],["Dairy & eggs","Double cream",345,1.7,2.7,36,"ml"],
-  ["Grains & carbs","Pasta, dry",352,12.5,70,1.8,"g"],["Grains & carbs","White rice, dry",350,7,78,0.6,"g"],["Grains & carbs","Rolled oats",372,11,60,8,"g"],["Grains & carbs","Bread, white (slice)",245,8,47,2,"g",36],["Grains & carbs","Potato, raw",75,2,17,0.1,"g",180],["Grains & carbs","Plain flour",349,10,73,1.3,"g"],
-  ["Veg & pulses","Onion",40,1,9,0.1,"g",110],["Veg & pulses","Carrot",36,0.6,8,0.2,"g",80],["Veg & pulses","Tinned chopped tomatoes",20,1.2,3.5,0.1,"g"],["Veg & pulses","Broccoli",34,2.8,4,0.4,"g"],["Veg & pulses","Pepper",31,1,6,0.3,"g",150],["Veg & pulses","Mushrooms",22,3,0.4,0.5,"g"],["Veg & pulses","Spinach",23,2.9,1.4,0.4,"g"],["Veg & pulses","Chickpeas, tinned drained",120,7,16,2.5,"g"],["Veg & pulses","Kidney beans, tinned drained",100,7,14,0.5,"g"],["Veg & pulses","Red lentils, dry",318,24,50,1.5,"g"],
-  ["Fruit","Banana",95,1.2,23,0.3,"g",120],["Fruit","Apple",52,0.3,14,0.2,"g",150],
-  ["Oils & other","Olive oil",828,0,0,92,"ml"],["Oils & other","Coconut milk, tinned",150,1.2,2.5,15,"ml"],["Oils & other","Sugar",400,0,100,0,"g"]];
-  var SHOPS=["Tesco","Sainsbury's","Asda","Morrisons","Aldi","Lidl","Waitrose","Co-op","Other"], ings=[];
+  var ings=[];
   function opt(s,v,t){var o=document.createElement("option");o.value=v;o.textContent=t;s.appendChild(o);}
-  SHOPS.forEach(function(s){opt($("shop"),s,s);});
-  var ALL=FOODS.slice();
+  var ALL=[];
+  /* Basic ingredients: [group, name, kcal, protein, carbs, fat per 100g (or 100ml), unit, grams each] */
+  var BASIC=[
+  ["Protein","Chicken breast, raw",106,23,0,1.3,"g"],["Protein","Chicken thigh, raw skinless",121,20,0,4,"g"],["Protein","Beef mince 5% fat, raw",137,21,0,5,"g"],["Protein","Beef mince 10% fat, raw",176,20,0,10,"g"],["Protein","Beef mince 20% fat, raw",254,17,0,20,"g"],["Protein","Beef steak, raw",150,22,0,6,"g"],["Protein","Pork loin chop, raw",140,21,0,5.5,"g"],["Protein","Pork sausages, raw",290,13,6,24,"g",50],["Protein","Bacon rashers, raw",215,15,0,17,"g",25],["Protein","Lamb mince, raw",250,17,0,20,"g"],["Protein","Turkey mince, raw",140,20,0,6,"g"],["Protein","Salmon fillet, raw",208,20,0,13,"g"],["Protein","Cod fillet, raw",82,18,0,0.7,"g"],["Protein","Tuna, tinned in water, drained",110,25,0,1,"g"],["Protein","Prawns, raw",85,18,0,1,"g"],["Protein","Egg",143,12.5,0.7,10,"g",55],["Protein","Tofu, firm",120,13,2,7,"g"],["Protein","Chickpeas, tinned, drained",120,7,16,2.5,"g"],["Protein","Kidney beans, tinned, drained",100,7,14,0.5,"g"],["Protein","Red lentils, dry",318,24,50,1.5,"g"],
+  ["Grains & starch","White rice, dry",350,7,78,0.6,"g"],["Grains & starch","Brown rice, dry",360,7.5,76,2.7,"g"],["Grains & starch","Pasta, dry",352,12.5,70,1.8,"g"],["Grains & starch","Rolled oats",372,11,60,8,"g"],["Grains & starch","Bread, white (slice)",245,8,47,2,"g",36],["Grains & starch","Bread, wholemeal (slice)",235,9,41,3,"g",36],["Grains & starch","Tortilla wrap",300,8,50,7,"g",60],["Grains & starch","Potato, raw",75,2,17,0.1,"g",180],["Grains & starch","Sweet potato, raw",86,1.6,20,0.1,"g",130],["Grains & starch","Couscous, dry",360,12,73,1.6,"g"],["Grains & starch","Quinoa, dry",368,14,64,6,"g"],
+  ["Dairy","Whole milk",64,3.4,4.7,3.6,"ml"],["Dairy","Semi-skimmed milk",47,3.5,4.8,1.7,"ml"],["Dairy","Skimmed milk",35,3.5,5,0.1,"ml"],["Dairy","Cheddar cheese",416,25,0.1,35,"g"],["Dairy","Mozzarella",270,20,1,21,"g"],["Dairy","Cottage cheese",98,11,3,4,"g"],["Dairy","Greek yoghurt, full fat",120,5.5,4,9,"g"],["Dairy","Natural yoghurt, low fat",60,5,7,1,"g"],["Dairy","Butter",717,0.5,0.5,81,"g"],["Dairy","Double cream",450,1.6,2,48,"ml"],
+  ["Fruit","Banana",95,1.2,23,0.3,"g",120],["Fruit","Apple",52,0.3,14,0.2,"g",150],["Fruit","Orange",47,0.9,12,0.1,"g",130],["Fruit","Strawberries",32,0.7,7.7,0.3,"g"],["Fruit","Blueberries",57,0.7,14,0.3,"g"],["Fruit","Grapes",69,0.7,18,0.2,"g"],["Fruit","Avocado",160,2,9,15,"g",140],
+  ["Vegetables","Onion",40,1,9,0.1,"g",110],["Vegetables","Carrot",36,0.6,8,0.2,"g",80],["Vegetables","Tomato",18,0.9,3.9,0.2,"g",100],["Vegetables","Tinned chopped tomatoes",20,1.2,3.5,0.1,"g"],["Vegetables","Broccoli",34,2.8,4,0.4,"g"],["Vegetables","Pepper",31,1,6,0.3,"g",150],["Vegetables","Mushrooms",22,3,0.4,0.5,"g"],["Vegetables","Spinach",23,2.9,1.4,0.4,"g"],["Vegetables","Cauliflower",25,2,3,0.3,"g"],["Vegetables","Courgette",17,1.2,3,0.3,"g",200],["Vegetables","Cabbage",25,1.3,6,0.1,"g"],["Vegetables","Peas, frozen",77,5,11,1,"g"],["Vegetables","Sweetcorn, tinned",85,2.6,17,1,"g"],["Vegetables","Lettuce",15,1.4,2,0.2,"g"],
+  ["Pantry","Olive oil",828,0,0,92,"ml"],["Pantry","Vegetable oil",828,0,0,92,"ml"],["Pantry","Sugar",400,0,100,0,"g"],["Pantry","Plain flour",349,10,73,1.3,"g"],["Pantry","Honey",304,0.3,82,0,"g"],["Pantry","Peanut butter",600,25,12,50,"g"],["Pantry","Coconut milk, tinned",150,1.2,2.5,15,"ml"],["Pantry","Soy sauce",53,8,5,0,"ml"],["Pantry","Tomato ketchup",100,1,25,0.1,"g"],["Pantry","Mayonnaise",680,1,2,75,"g"],["Pantry","Baked beans, tinned",80,5,13,0.5,"g"]];
+  /* Fibre per 100g (or 100ml) for basic ingredients. 0 means the food genuinely has none. */
+  var FIBRE={"Chicken breast, raw":0,"Chicken thigh, raw skinless":0,"Beef mince 5% fat, raw":0,"Beef mince 10% fat, raw":0,"Beef mince 20% fat, raw":0,"Beef steak, raw":0,"Pork loin chop, raw":0,"Pork sausages, raw":1,"Bacon rashers, raw":0,"Lamb mince, raw":0,"Turkey mince, raw":0,"Salmon fillet, raw":0,"Cod fillet, raw":0,"Tuna, tinned in water, drained":0,"Prawns, raw":0,"Egg":0,"Tofu, firm":1.5,"Chickpeas, tinned, drained":4,"Kidney beans, tinned, drained":6,"Red lentils, dry":10,
+  "White rice, dry":1.3,"Brown rice, dry":3.5,"Pasta, dry":3,"Rolled oats":9,"Bread, white (slice)":2.7,"Bread, wholemeal (slice)":6,"Tortilla wrap":3,"Potato, raw":1.8,"Sweet potato, raw":3,"Couscous, dry":3.5,"Quinoa, dry":7,
+  "Whole milk":0,"Semi-skimmed milk":0,"Skimmed milk":0,"Cheddar cheese":0,"Mozzarella":0,"Cottage cheese":0,"Greek yoghurt, full fat":0,"Natural yoghurt, low fat":0,"Butter":0,"Double cream":0,
+  "Banana":2.6,"Apple":2.4,"Orange":2.4,"Strawberries":2,"Blueberries":2.4,"Grapes":0.9,"Avocado":6.7,
+  "Onion":1.7,"Carrot":2.8,"Tomato":1.2,"Tinned chopped tomatoes":1,"Broccoli":2.6,"Pepper":2,"Mushrooms":1,"Spinach":2.2,"Cauliflower":2,"Courgette":1,"Cabbage":2.5,"Peas, frozen":5,"Sweetcorn, tinned":1.8,"Lettuce":1.2,
+  "Olive oil":0,"Vegetable oil":0,"Sugar":0,"Plain flour":3,"Honey":0.2,"Peanut butter":6,"Coconut milk, tinned":0,"Soy sauce":0.8,"Tomato ketchup":0.3,"Mayonnaise":0,"Baked beans, tinned":3.7};
   function buildFoods(){
     var sel=$("food");
     if(!S.ings)S.ings=[];
-    ALL=S.ings.map(function(x){return ["My ingredients",x.name,x.k,x.p,x.c,x.f,"g",x.e];}).concat(FOODS);
+    var sc=S.ings.map(function(x){return [x.name,x.k,x.p,x.c,x.f,"g",x.e,typeof x.fi==="number"?x.fi:null];});
+    ALL=sc.concat(BASIC.map(function(b){return [b[1],b[2],b[3],b[4],b[5],b[6],b[7],typeof FIBRE[b[1]]==="number"?FIBRE[b[1]]:null];}));
     sel.innerHTML="";
-    var grp=null,og;
-    ALL.forEach(function(f,i){if(f[0]!==grp){grp=f[0];og=document.createElement("optgroup");og.label=grp;sel.appendChild(og);}var o=document.createElement("option");o.value=i;o.textContent=f[1];og.appendChild(o);});
+    var g1=document.createElement("optgroup");g1.label="Scanned Ingredients";
+    if(!sc.length){var n=document.createElement("option");n.disabled=true;n.textContent="None yet. Scan one on the Ingredients page";g1.appendChild(n);}
+    sc.forEach(function(f,i){var o=document.createElement("option");o.value=i;o.textContent=f[0];g1.appendChild(o);});
+    sel.appendChild(g1);
+    var g2=document.createElement("optgroup");g2.label="Basic Ingredients";var cat="";
+    BASIC.forEach(function(b,i){
+      if(b[0]!==cat){cat=b[0];var h=document.createElement("option");h.disabled=true;h.textContent="\u2014 "+cat+" \u2014";g2.appendChild(h);}
+      var o=document.createElement("option");o.value=sc.length+i;o.textContent=b[1];g2.appendChild(o);
+    });
+    sel.appendChild(g2);
+    var first=sel.querySelector("option:not([disabled])");if(first)sel.value=first.value;
     units();
   }
   buildFoods();
-  function units(){var f=ALL[$("food").value],u=$("unit");u.innerHTML="";opt(u,"u",f[6]);if(f[7])opt(u,"e","each (\u2248"+f[7]+"g)");}
-  function tab(w){["log","cook","ing","set"].forEach(function(k){$("pg-"+k).hidden=w!==k;$("t-"+k).setAttribute("aria-selected",w===k);});if(w!=="ing")stopCam();}
+  function units(){var f=ALL[$("food").value],u=$("unit");u.innerHTML="";if(!f)return;opt(u,"u",f[5]||"g");if(f[6])opt(u,"e","each (\u2248"+f[6]+"g)");}
+  function tab(w){["log","cook","ing","set"].forEach(function(k){$("pg-"+k).hidden=w!==k;$("t-"+k).setAttribute("aria-selected",w===k);});if(w!=="ing")stopCam();if(w==="log")paintRing(ringShown);}
   function r1(x){return Math.round(x*10)/10;}
-  function totals(){var t={k:0,p:0,c:0,f:0},n=Math.max(1,parseInt($("serv").value,10)||1);ings.forEach(function(i){t.k+=i.k;t.p+=i.p;t.c+=i.c;t.f+=i.f;});return {k:Math.round(t.k/n),p:Math.round(t.p/n),c:Math.round(t.c/n),f:Math.round(t.f/n)};}
+  function totals(){
+    var t={k:0,p:0,c:0,f:0,fi:0},n=Math.max(1,parseInt($("serv").value,10)||1),known=0;
+    ings.forEach(function(i){t.k+=i.k;t.p+=i.p;t.c+=i.c;t.f+=i.f;if(typeof i.fi==="number"){t.fi+=i.fi;known++;}});
+    return {k:Math.round(t.k/n),p:Math.round(t.p/n),c:Math.round(t.c/n),f:Math.round(t.f/n),fi:Math.round(t.fi/n*10)/10,fiState:!ings.length?"all":(!known?"none":(known<ings.length?"partial":"all"))};
+  }
+  function fibreHtml(t){return t.fiState==="none"?"<span>fibre unknown</span>":"<span><b>"+t.fi+"g"+(t.fiState==="partial"?"+":"")+"</b> fibre"+(t.fiState==="partial"?" (partial)":"")+"</span>";}
   function drawCook(){
     var ul=$("ings");ul.innerHTML="";
-    if(!ings.length){var e=document.createElement("div");e.className="empty";e.textContent="Pick a supermarket, a food and an amount, then add each ingredient.";ul.appendChild(e);}
-    ings.forEach(function(it,idx){var li=document.createElement("li"),n=document.createElement("div");n.className="n";n.textContent=it.name;var s=document.createElement("small");s.textContent=it.label+" from "+it.shop;n.appendChild(s);var c=document.createElement("span");c.className="k";c.textContent=Math.round(it.k)+" kcal";var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);x.onclick=function(){ings.splice(idx,1);drawCook();};li.append(n,c,x);ul.appendChild(li);});
-    var t=totals();$("cm").innerHTML="<span><b>"+t.k+"</b> kcal</span><span><b>"+t.p+"g</b> protein</span><span><b>"+t.c+"g</b> carbs</span><span><b>"+t.f+"g</b> fat</span>";
+    if(!ings.length){var e=document.createElement("div");e.className="empty";e.textContent="Choose an ingredient and an amount, then add it to your meal.";ul.appendChild(e);}
+    ings.forEach(function(it,idx){var li=document.createElement("li"),n=document.createElement("div");n.className="n";n.textContent=it.name;var s=document.createElement("small");s.textContent=it.label;n.appendChild(s);var c=document.createElement("span");c.className="k";c.textContent=Math.round(it.k)+" kcal";var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);x.onclick=function(){ings.splice(idx,1);drawCook();};li.append(n,c,x);ul.appendChild(li);});
+    var t=totals();$("cm").innerHTML="<span><b>"+t.k+"</b> kcal</span><span><b>"+t.p+"g</b> protein</span><span><b>"+t.c+"g</b> carbs</span><span><b>"+t.f+"g</b> fat</span>"+fibreHtml(t);
+  }
+  var mealsSig=null;
+  function drawSavedMeals(){
+    var daily=$("name");
+    var sig=JSON.stringify(S.meals.map(function(m){return [m.name,m.kcal];}));
+    if(sig===mealsSig&&daily.options.length>0)return;
+    mealsSig=sig;
+    function chosen(s){var o=s.options[s.selectedIndex];return o&&o.dataset?o.dataset.name||null:null;}
+    var k2=chosen(daily);
+    daily.innerHTML="";
+    if(!S.meals.length){opt(daily,"","Save a meal in Home cooking first");daily.disabled=true;$("fsubmit").disabled=true;return;}
+    daily.disabled=false;$("fsubmit").disabled=false;
+    opt(daily,"","Choose a saved meal");daily.options[0].disabled=true;daily.options[0].selected=true;
+    S.meals.forEach(function(m,i){opt(daily,String(i),m.name+" \u00b7 "+m.kcal+" kcal");daily.options[daily.options.length-1].dataset.name=m.name.toLowerCase();});
+    [[daily,k2]].forEach(function(p){if(!p[1])return;for(var i=1;i<p[0].options.length;i++)if(p[0].options[i].dataset.name===p[1]){p[0].selectedIndex=i;break;}});
   }
   $("food").onchange=units;
   $("serv").oninput=drawCook;
@@ -261,21 +449,40 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("t-set").onclick=function(){tab("set");};
   $("addIng").onclick=function(){
     var f=ALL[$("food").value],a=parseFloat($("amt").value);
-    if(!(a>0)){$("amt").focus();return;}
-    var each=$("unit").value==="e",r=(each?a*f[7]:a)/100;
-    ings.push({shop:$("shop").value,name:f[1],label:each?a+" each":a+f[6],k:f[2]*r,p:f[3]*r,c:f[4]*r,f:f[5]*r});
+    if(!f)return;
+    if(!(a>=0.1)){$("amt").focus();return;}
+    var each=$("unit").value==="e",r=(each?a*f[6]:a)/100;
+    ings.push({name:f[0],label:each?a+" each":a+(f[5]||"g"),k:f[1]*r,p:f[2]*r,c:f[3]*r,f:f[4]*r,fi:(typeof f[7]==="number")?f[7]*r:null});
     $("amt").value="";drawCook();
   };
   $("logMeal").onclick=function(){
     if(!ings.length){$("food").focus();return;}
     var t=totals();
-    add($("mname").value.trim()||"Home-cooked meal",t.k,$("mmeal").value,{p:t.p,c:t.c,f:t.f});
+    add($("mname").value.trim()||"Home-cooked meal",t.k,mealM(t));
     ings=[];$("mname").value="";$("serv").value=1;drawCook();tab("log");
   };
+  var pendingMeal=null;
+  function commitMeal(meal){
+    var idx=S.meals.findIndex(function(m){return m.name.toLowerCase()===meal.name.toLowerCase();});
+    if(idx>=0)S.meals[idx]=meal;else S.meals.push(meal);
+    S.meals.sort(function(a,b){return a.name.localeCompare(b.name);});save();drawSavedMeals();
+  }
+  $("saveMeal").onclick=function(){
+    if(!ings.length){$("food").focus();return;}
+    var name=$("mname").value.trim();if(!name){$("mname").focus();return;}
+    var t=totals(),meal={name:name,kcal:t.k,p:t.p,c:t.c,f:t.f,t:Date.now()};
+    if(t.fiState!=="none"){meal.fi=t.fi;if(t.fiState==="partial")meal.fip=true;}
+    var existing=S.meals.find(function(m){return m.name.toLowerCase()===name.toLowerCase();});
+    if(existing){pendingMeal=meal;$("replaceText").textContent="A saved meal called \u201c"+existing.name+"\u201d already exists. Replace it with this one?";$("replaceBox").hidden=false;return;}
+    commitMeal(meal);
+  };
+  $("replaceYes").onclick=function(){if(pendingMeal)commitMeal(pendingMeal);pendingMeal=null;$("replaceBox").hidden=true;};
+  $("replaceNo").onclick=function(){pendingMeal=null;$("replaceBox").hidden=true;};
+  $("mname").oninput=function(){pendingMeal=null;$("replaceBox").hidden=true;};
   /* Macro targets */
-  if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};
+  ensureTargets();
   if(!S.mig1){MAC_ALL=["p","c","f"];MAC_ALL.forEach(function(k){S.targets[k].on=true;});S.mig1=1;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
-  var MAC=[["p","Protein"],["c","Carbs"],["f","Fat"]];
+  var MAC=[["p","Protein"],["c","Carbs"],["f","Fat"],["fi","Fibre"]];
   MAC.forEach(function(x){
     var k=x[0],r=document.createElement("div");r.className="trow";r.id="tr-"+k;
     r.innerHTML='<label class="sw"><input type="checkbox"> '+x[1]+' (g)</label><input type="number" min="1" inputmode="numeric" aria-label="'+x[1]+' target in grams">';
@@ -285,23 +492,48 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     cb.onchange=function(){S.targets[k].on=cb.checked;S.sUpdated=Date.now();save();render();};
     num.onchange=function(){var g=parseInt(num.value,10);if(g>0){S.targets[k].g=g;S.sUpdated=Date.now();save();}render();};
   });
-  function drawRings(m){
-    var h="";
-    MAC.forEach(function(x){
-      var k=x[0],t=S.targets[k];if(!t.on)return;
-      var v=m[k],off=163.36*(1-Math.min(v/t.g,1));
-      h+='<div class="mr"><div class="mw"><svg viewBox="0 0 64 64" aria-hidden="true"><circle class="track" cx="32" cy="32" r="26"/><circle class="fill" cx="32" cy="32" r="26" stroke-dasharray="163.36" stroke-dashoffset="'+off+'"/></svg><b>'+v+'g</b></div><span>'+x[1]+'</span><small>of '+t.g+'g</small></div>';
-    });
-    $("mrings").innerHTML=h;
+  var mrEl={},mrShown={},mrRun={},mrTimer={};
+  function macroEl(k,label){
+    if(mrEl[k])return mrEl[k];
+    var d=document.createElement("div");d.className="mr";
+    d.innerHTML='<div class="mw"><svg viewBox="0 0 64 64" aria-hidden="true"><circle class="track" cx="32" cy="32" r="26"/><circle class="fill" cx="32" cy="32" r="26" stroke-dasharray="163.36" stroke-dashoffset="163.36"/></svg><b>0g</b></div><span></span><small></small>';
+    d.querySelector("span").textContent=label;
+    mrEl[k]={root:d,ring:d.querySelector(".fill"),num:d.querySelector("b"),cap:d.querySelector("small")};mrShown[k]=0;
+    return mrEl[k];
   }
-  function drawT(m){
-    drawRings(m);
+  function paintMacro(k,val,t,state){
+    var e=mrEl[k];
+    e.ring.style.strokeDashoffset=state==="none"?163.36:163.36*(1-Math.min(Math.max(val,0)/t.g,1));
+    e.num.textContent=state==="none"?"\u2014":Math.round(val)+"g"+(state==="partial"?"+":"");
+    e.cap.textContent=state==="none"?"unknown":("of "+t.g+"g"+(state==="partial"?", partial":""));
+  }
+  function drawRings(m,animate){
+    var box=$("mrings"),reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches,want=[];
+    MAC.forEach(function(x){
+      var k=x[0],t=S.targets[k],e=macroEl(k,x[1]);
+      if(!t.on){if(e.root.parentNode)e.root.parentNode.removeChild(e.root);return;}
+      want.push(e.root);
+      var v=m[k]||0,state=k==="fi"?m.fiState:"all",run=(mrRun[k]||0)+1;mrRun[k]=run;
+      var from=mrShown[k]||0;
+      if(!animate||reduce||from===v||state==="none"){mrShown[k]=v;paintMacro(k,v,t,state);return;}
+      e.ring.classList.add("growing");clearTimeout(mrTimer[k]);mrTimer[k]=setTimeout(function(){e.ring.classList.remove("growing");},3050);
+      var start=performance.now();
+      (function step(now){
+        if(mrRun[k]!==run)return;
+        var p=Math.min((now-start)/3000,1),ease=1-Math.pow(1-p,3);
+        mrShown[k]=from+(v-from)*ease;paintMacro(k,mrShown[k],t,state);
+        if(p<1)requestAnimationFrame(step);
+      })(start);
+    });
+    var cur=[].slice.call(box.children);
+    if(cur.length!==want.length||cur.some(function(c,i){return c!==want[i];})){want.forEach(function(c){box.appendChild(c);});[].slice.call(box.children).forEach(function(c){if(want.indexOf(c)<0)box.removeChild(c);});}
+  }
+  function drawT(m,animate){
+    drawRings(m,animate);
     MAC.forEach(function(x){
       var k=x[0],t=S.targets[k],r=$("tr-"+k),num=r.querySelector('input[type=number]');
       num.hidden=!t.on;r.querySelector('input[type=checkbox]').checked=t.on;
       num.value=t.g;
-      
-      
     });
   }
   /* Barcode scanning + Open Food Facts lookup */
@@ -312,29 +544,37 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var box=$("prod");box.hidden=false;
     if(code.length<8){box.textContent="Enter a valid barcode (8 to 14 digits).";return;}
     box.textContent="Looking up "+code+"...";
-    fetch("https://world.openfoodfacts.org/api/v2/product/"+code+".json?fields=product_name,brands,nutriments,serving_quantity")
+    fetch("https://world.openfoodfacts.org/api/v2/product/"+code+".json?fields=product_name,brands,nutriments,serving_quantity,nutriscore_grade")
       .then(function(r){return r.json();})
       .then(function(d){
-        if(d.status!==1||!d.product){showProd(null);return;}
+        if(d.status!==1||!d.product){showProd(null,undefined,true);return;}
         var n=d.product.nutriments||{},kc=n["energy-kcal_100g"];
         if(kc==null&&n.energy_100g!=null)kc=n.energy_100g/4.184;
-        showProd({name:((d.product.brands||"").split(",")[0]+" "+(d.product.product_name||"")).trim(),k:kc,p:n.proteins_100g,c:n.carbohydrates_100g,f:n.fat_100g,sv:parseFloat(d.product.serving_quantity)});
+        var g=String(d.product.nutriscore_grade||"").toLowerCase();
+        showProd({name:((d.product.brands||"").split(",")[0]+" "+(d.product.product_name||"")).trim(),k:kc,p:n.proteins_100g,c:n.carbohydrates_100g,f:n.fat_100g,fi:n.fiber_100g,sv:parseFloat(d.product.serving_quantity),rating:/^[a-e]$/.test(g)?{value:g.toUpperCase(),scheme:"Nutri-Score",source:"Open Food Facts"}:null},undefined,true);
       }).catch(function(){box.textContent="Couldn't reach Open Food Facts. Check your connection and try again.";});
   }
-  function showProd(p,msg){
-    var box=$("prod"),note=msg||(p?"Found. Check the values against the pack, as the database is crowd-sourced.":"Not found. Enter the values per 100g from the pack label.");p=p||{};
+  function showProd(p,msg,scanned){
+    var box=$("prod"),found=!!p,note=msg||(p?"Found. Check the values against the pack, as the database is crowd-sourced.":"Not found. Enter the values per 100g from the pack label.");p=p||{};
+    var fields=[["k","pk","calories"],["p","pp","protein"],["c","pc","carbs"],["f","pf","fat"]];
+    var absent=found?fields.filter(function(x){var v=p[x[0]];return v==null||isNaN(v);}).map(function(x){return x[2];}):[];
+    if(absent.length)note="Open Food Facts didn't provide: "+absent.join(", ")+". Enter a value for each before saving (type 0 only if the product really has none).";
     box.hidden=false;
-    box.innerHTML='<p class="note"></p><label>Name<input id="pn" maxlength="80"></label><div class="g4"><label>kcal per 100g<input id="pk" type="number" step="any" min="0"></label><label>Protein<input id="pp" type="number" step="any" min="0"></label><label>Carbs<input id="pc" type="number" step="any" min="0"></label><label>Fat<input id="pf" type="number" step="any" min="0"></label></div><label>Grams per item (optional, e.g. one egg)<input id="pe" type="number" step="any" min="1"></label><button type="button" class="btn" id="pgo">Save ingredient</button>';
+    box.innerHTML='<p class="note"></p><label>Name<input id="pn" maxlength="80"></label><div class="g4"><label>kcal per 100g<input id="pk" type="number" step="any" min="0"></label><label>Protein<input id="pp" type="number" step="any" min="0"></label><label>Carbs<input id="pc" type="number" step="any" min="0"></label><label>Fat<input id="pf" type="number" step="any" min="0"></label></div><div class="g4"><label>Fibre per 100g (optional)<input id="pi" type="number" step="any" min="0"></label><label>Grams per item (optional)<input id="pe" type="number" step="any" min="1"></label></div><p class="note" id="pmsg" role="alert" hidden></p><button type="button" class="btn" id="pgo">Save ingredient</button>';
     box.querySelector(".note").textContent=note;
     $("pn").value=p.name||"";
-    ["k","p","c","f"].forEach(function(x){var v=p[x];$("p"+x).value=(v==null||isNaN(v))?"":Math.round(v*10)/10;});
+    fields.forEach(function(x){var v=p[x[0]],el=$(x[1]);el.value=(v==null||isNaN(v))?"":Math.round(v*10)/10;if(el.value===""&&found)el.classList.add("miss");el.oninput=function(){el.classList.remove("miss");};});
+    $("pi").value=(typeof p.fi==="number"&&!isNaN(p.fi))?Math.round(p.fi*10)/10:"";
     $("pe").value=p.sv>0?Math.round(p.sv):"";
     $("pgo").onclick=function(){
-      var nm=$("pn").value.trim(),k=parseFloat($("pk").value);
+      var nm=$("pn").value.trim(),pm=$("pmsg"),miss=[];
       if(!nm){$("pn").focus();return;}
-      if(isNaN(k)){$("pk").focus();return;}
-      var it={id:Date.now(),name:nm,k:k,p:parseFloat($("pp").value)||0,c:parseFloat($("pc").value)||0,f:parseFloat($("pf").value)||0},e=parseFloat($("pe").value);
+      fields.forEach(function(x){var el=$(x[1]),v=parseFloat(el.value);if(isNaN(v)||v<0){miss.push(x[2]);el.classList.add("miss");}});
+      if(miss.length){pm.textContent="Enter "+miss.join(", ")+" before saving (type 0 if the product has none).";pm.hidden=false;return;}
+      var it={id:Date.now(),name:nm,k:parseFloat($("pk").value),p:parseFloat($("pp").value),c:parseFloat($("pc").value),f:parseFloat($("pf").value),scanned:scanned===true},e=parseFloat($("pe").value),fi=parseFloat($("pi").value);
       if(e>0)it.e=e;
+      if(!isNaN(fi)&&fi>=0)it.fi=fi;
+      if(p.rating)it.rating=p.rating;
       S.ings=S.ings.filter(function(x){return x.name.toLowerCase()!==nm.toLowerCase();});
       S.ings.push(it);S.ings.sort(function(a,b){return a.name.localeCompare(b.name);});
       save();box.hidden=true;$("bc").value="";drawIngs();buildFoods();
@@ -346,7 +586,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     S.ings.forEach(function(it){
       var li=document.createElement("li"),n=document.createElement("div"),s=document.createElement("small"),r=function(x){return Math.round(x*10)/10;};
       n.className="n";n.textContent=it.name;
-      s.textContent="per 100g: "+r(it.k)+" kcal, P "+r(it.p)+"g, C "+r(it.c)+"g, F "+r(it.f)+"g"+(it.e?", item "+it.e+"g":"");
+      s.textContent="per 100g: "+r(it.k)+" kcal, P "+r(it.p)+"g, C "+r(it.c)+"g, F "+r(it.f)+"g"+(typeof it.fi==="number"?", Fibre "+r(it.fi)+"g":"")+(it.e?", item "+it.e+"g":"");
       n.appendChild(s);
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
       x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();drawIngs();buildFoods();};
@@ -381,16 +621,16 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   /* Export / import */
   $("exp").onclick=function(){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="calorie-tracker-"+key(new Date())+".json";a.click();};
   $("imp").onclick=function(){$("impf").click();};
-  $("impf").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.days)throw 0;S=d;if(!S.targets)S.targets={p:{on:true,g:150},c:{on:true,g:250},f:{on:true,g:70}};save();location.reload();}catch(e){alert("That file isn't a valid backup.");}};r.readAsText(f);};
-  $("manual").onclick=function(){showProd(null,"Enter the values per 100g from the pack label.");};
-  /* Accounts + cloud sync (Supabase). Newest save wins. */
-  var sb=null,user=null,pushT=null;
+  $("impf").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.days)throw 0;S=d;save();location.reload();}catch(e){alert("That file isn't a valid backup.");}};r.readAsText(f);};
+  $("manual").onclick=function(){showProd(null,"Enter the values per 100g from the pack label.",false);};
+  /* Accounts + cloud sync (Supabase). Entries from all devices are merged. */
+  var sb=null,user=null,pushT=null,syncing=false,again=false,lastSync=0;
   if(window.supabase&&SUPABASE_URL.indexOf("http")===0){try{sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
   function amsg(t){$("acnote").textContent=t;}
   function drawAcct(){
     $("acout").hidden=!sb||!!user;$("acin").hidden=!user;
     if(!sb)amsg("Cloud sync isn't set up yet. Your data is saved on this device only.");
-    else if(user){$("acwho").textContent="Signed in as "+user.email;amsg("Your log is saved to your account and syncs across your devices.");}
+    else if(user){$("spw").checked=false;$("apw").type="password";$("acwho").textContent="Signed in as "+user.email;amsg("Your log is saved to your account and syncs across your devices.");}
     else amsg("Sign in to keep your log in the cloud and use it on any device.");
   }
   /* MERGE START */
@@ -399,7 +639,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     [a.del,b.del].forEach(function(d){for(k in (d||{}))del[k]=Math.max(del[k]||0,d[k]);});
     for(k in del)if(now-del[k]>7776000000)delete del[k];
     var st=(a.sUpdated||0)>(b.sUpdated||0)?a:b;
-    var M={goal:st.goal||2000,targets:st.targets||a.targets||b.targets,sUpdated:st.sUpdated||0,days:{},ings:[],del:del,mig1:a.mig1||b.mig1,updated:now};
+    var M={goal:st.goal||2000,targets:st.targets||a.targets||b.targets,sUpdated:st.sUpdated||0,days:{},ings:[],meals:[],del:del,mig1:a.mig1||b.mig1,updated:now};
     var dk={};Object.keys(a.days||{}).concat(Object.keys(b.days||{})).forEach(function(d){dk[d]=1;});
     Object.keys(dk).forEach(function(d){
       var seen={},out=[];
@@ -410,10 +650,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var im={};
     (a.ings||[]).concat(b.ings||[]).forEach(function(i){if(del[i.id])return;var n=i.name.toLowerCase(),o=im[n];if(!o||i.id>o.id)im[n]=i;});
     M.ings=Object.keys(im).map(function(n){return im[n];}).sort(function(x,y){return x.name.localeCompare(y.name);});
+    var mm={};
+    (a.meals||[]).concat(b.meals||[]).forEach(function(m){var n=m.name.toLowerCase(),o=mm[n];if(!o||(m.t||0)>(o.t||0))mm[n]=m;});
+    M.meals=Object.keys(mm).map(function(n){return mm[n];}).sort(function(x,y){return x.name.localeCompare(y.name);});
     return M;
   }
   /* MERGE END */
-  var syncing=false,again=false,lastSync=0;
   function sync(){
     if(!sb||!user)return Promise.resolve();
     if(syncing){again=true;return Promise.resolve();}
@@ -421,12 +663,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     return sb.from("user_data").select("data").maybeSingle().then(function(r){
       if(r.error)throw r.error;
       var c=r.data&&r.data.data;
-      if(c&&c.days)S=merge(S,c);
+      if(c&&c.days)S=merge(S,c);ensureTargets();
+      if(!Array.isArray(S.meals))S.meals=[];
       try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
       return sb.from("user_data").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});
     }).then(function(r){
       if(r&&r.error)throw r.error;
-      render();drawIngs();buildFoods();
+      render();drawIngs();buildFoods();drawSavedMeals();
       lastSync=Date.now();
       amsg("Synced at "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+".");
     }).catch(function(e){amsg("Couldn't sync: "+(e&&e.message?e.message:e));}).then(function(){syncing=false;if(again){again=false;queuePush();}});
@@ -437,11 +680,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("asu").onclick=function(){if(!sb)return;amsg("Creating account...");sb.auth.signUp(creds()).then(function(r){if(r.error)amsg(r.error.message);else if(!r.data.session)amsg("Check your email to confirm your account, then sign in.");});};
   $("aso").onclick=function(){if(sb)sb.auth.signOut();};
   $("asy").onclick=function(){sync();};
+  $("spw").onchange=function(){$("apw").type=this.checked?"text":"password";};
   if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)sync();});
   document.addEventListener("visibilitychange",function(){if(!document.hidden&&Date.now()-lastSync>5000)sync();});
   drawAcct();
-  $("ver").textContent=VERSION;
-  units();drawCook();drawIngs();
+  $("ver").textContent=VERSION;$("build").textContent=" \u00b7 built "+BUILD;
+  units();drawCook();drawSavedMeals();drawIngs();
   render();
 })();
 </script>
