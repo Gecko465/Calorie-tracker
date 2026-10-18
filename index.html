@@ -267,7 +267,7 @@ li button:hover{background:var(--bg);color:var(--over)}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v3-wip", BUILD="18 Oct 18:47";
+var VERSION="v3", BUILD="18 Oct 18:55";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_publishable_o9SiM0CmxuyHfW3NIxtlGA_c_2Vjuyi";
 (function(){
@@ -392,7 +392,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function buildFoods(){
     var sel=$("food");
     if(!S.ings)S.ings=[];
-    var sc=S.ings.filter(function(x){return x.scanned===true;}).map(function(x){return [x.name,x.k,x.p,x.c,x.f,"g",x.e,typeof x.fi==="number"?x.fi:null];});
+    var sc=S.ings.map(function(x){return [x.name,x.k,x.p,x.c,x.f,"g",x.e,typeof x.fi==="number"?x.fi:null];});
     ALL=sc.concat(BASIC.map(function(b){return [b[1],b[2],b[3],b[4],b[5],b[6],b[7],typeof FIBRE[b[1]]==="number"?FIBRE[b[1]]:null];}));
     sel.innerHTML="";
     var g1=document.createElement("optgroup");g1.label="Scanned Ingredients";
