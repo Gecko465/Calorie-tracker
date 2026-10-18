@@ -104,7 +104,7 @@ main{max-width:43rem;padding:1.5rem 1.25rem 4rem}
 .icon{width:2.75rem;height:2.75rem;font-size:1.35rem;transition:transform .15s,border-color .15s}
 .icon:hover:not(:disabled){transform:translateY(-1px);border-color:var(--accent)}
 .icon:disabled{cursor:default}
-#pg-log:before{content:"TODAY AT A GLANCE";display:block;margin:0 0 .25rem .15rem;color:var(--muted);font-size:.7rem;font-weight:800;letter-spacing:.14em}
+#pg-log:before{content:attr(data-glance);display:block;margin:0 0 .25rem .15rem;color:var(--muted);font-size:.7rem;font-weight:800;letter-spacing:.14em}
 .plate{width:19rem;margin:.5rem auto .75rem}
 .plate circle{stroke-width:13}
 .centre b{font-size:3.4rem;letter-spacing:-.06em}
@@ -188,17 +188,47 @@ li button:hover{background:var(--bg);color:var(--over)}
 .mr span,.mr small{text-align:center}
 .miss{border-color:var(--danger)!important;outline:1px solid var(--danger)}
 .notice{border:1px solid var(--line);border-radius:.7rem;padding:.6rem .75rem;display:grid;gap:.5rem;font-size:.9rem;background:var(--bg)}
+/* v4 */
+.calrow{display:flex;justify-content:center;margin:0 0 .25rem}
+.calbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:2rem;padding:.4rem 1.1rem;font-weight:600;font-size:.9rem;cursor:pointer;min-height:2.5rem}
+.calbtn:hover{border-color:var(--accent);color:var(--accent)}
+.ro{text-align:center;margin:.25rem 0 .5rem}
+.calwrap{position:fixed;inset:0;z-index:30;background:#0007;display:flex;align-items:center;justify-content:center;padding:1rem}
+.calbox{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:1.15rem;width:min(26rem,100%);max-height:min(88vh,40rem);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 50px #0005}
+.calhead{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem .25rem}
+.calhead h2{margin:0;font-size:1.1rem}
+.calbox>.note{margin:0 1rem .5rem}
+.calbody{overflow-y:auto;padding:0 1rem 1rem;display:grid;gap:1rem;align-content:start}
+.calmonth h3{margin:.25rem 0 .4rem;font-size:.95rem}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.25rem}
+.calgrid .wd{text-align:center;font-size:.7rem;color:var(--muted);font-weight:700}
+.calgrid button{position:relative;min-height:2.4rem;border:1px solid var(--line);border-radius:.6rem;background:var(--bg);cursor:pointer;font-size:.9rem}
+.calgrid button:disabled{opacity:.35;cursor:not-allowed;background:transparent;border-color:transparent}
+.calgrid button.sel{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.calgrid button.has:after{content:"";position:absolute;left:50%;bottom:.2rem;width:.28rem;height:.28rem;margin-left:-.14rem;border-radius:50%;background:currentColor}
+.confetti{position:absolute;pointer-events:none;z-index:4}
+#mylist li{align-items:flex-start}
+.rate{display:flex;align-items:center;flex-wrap:wrap;gap:.2rem .5rem;margin-top:.3rem;font-size:.75rem;color:var(--muted)}
+.rbar{position:relative;flex:0 0 7rem;height:.5rem;border-radius:1rem;background:linear-gradient(90deg,#d2382d,#e8a33d,#5aa469)}
+.rbar i{position:absolute;top:-.22rem;width:.3rem;height:.94rem;border-radius:.2rem;background:var(--ink);border:1px solid var(--surface)}
+details.nut{margin-top:.35rem;font-size:.8rem}
+details.nut summary{cursor:pointer;color:var(--accent);font-weight:600;padding:.15rem 0}
+details.nut dl{display:grid;grid-template-columns:auto 1fr;gap:.1rem .9rem;margin:.3rem 0 0}
+details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
+#fsearch{margin-bottom:.1rem}
+#fnone{margin:0}
 </style>
 </head>
 <body>
 <main>
   <nav class="tabs" aria-label="Pages"><button id="t-log" aria-selected="true">Daily log</button><button id="t-cook" aria-selected="false">Home cooking</button><button id="t-ing" aria-selected="false">Ingredients</button><button id="t-set" aria-selected="false">Settings</button></nav>
-  <div id="pg-log">
+  <div id="pg-log" data-glance="TODAY AT A GLANCE">
   <div class="nav">
     <button class="icon" id="prev" aria-label="Previous day">&lsaquo;</button>
     <h1 id="date"></h1>
     <button class="icon" id="next" aria-label="Next day">&rsaquo;</button>
   </div>
+  <div class="calrow"><button type="button" class="calbtn" id="calBtn" aria-haspopup="dialog">Calendar</button></div>
   <div class="plate">
     <canvas id="ring" aria-hidden="true"></canvas>
     <div class="centre"><b id="eaten">0</b><span id="left"></span></div>
@@ -213,7 +243,8 @@ li button:hover{background:var(--bg);color:var(--over)}
     <button id="fsubmit" type="submit">Add meal</button>
   </form>
   <p class="note" id="fmsg" role="status" hidden></p>
-  <div class="list-head"><h2>Today’s log</h2><span id="count"></span></div>
+  <p class="note ro" id="ro" role="status" hidden>This day is read-only. Go back to today to add or remove foods.</p>
+  <div class="list-head"><h2 id="lhead">Today’s log</h2><span id="count"></span></div>
   <ul id="list"></ul>
   <div class="sum"><span id="avg"></span></div>
   </div>
@@ -221,13 +252,14 @@ li button:hover{background:var(--bg);color:var(--over)}
     <div class="card">
       <h2>Create New Meal</h2>
       <label for="mname">Meal name</label><input id="mname" maxlength="80" placeholder="e.g. Chicken pasta">
+      <label for="fsearch">Search ingredients</label><input id="fsearch" type="search" autocomplete="off" placeholder="e.g. chicken" aria-describedby="fnone">
       <label for="food">Ingredient</label><select id="food"></select>
+      <p class="note" id="fnone" role="status" hidden>No ingredients match your search. Edit or clear the search to see options again.</p>
       <div class="row2"><div><label for="amt">Amount used</label><input id="amt" type="number" min="0.1" step="any" inputmode="decimal"></div><div><label for="unit">Unit</label><select id="unit"></select></div></div>
       <button class="btn" id="addIng" type="button">Add to meal</button>
       <ul id="ings"></ul>
-      <label for="serv">Makes (portions)</label><input id="serv" type="number" min="1" value="1">
       <div class="macros" id="cm"></div>
-      <div class="row2"><button class="btn" id="saveMeal" type="button">Save this meal</button><button class="btn" id="logMeal" type="button">Add one portion to my log</button></div>
+      <div class="row2"><button class="btn" id="saveMeal" type="button">Save this meal</button><button class="btn" id="logMeal" type="button">Add this meal to my log</button></div>
       <div id="replaceBox" class="notice" role="alert" hidden><span id="replaceText"></span><div class="row2"><button class="btn" id="replaceYes" type="button">Replace</button><button class="btn" id="replaceNo" type="button">Keep old meal</button></div></div>
     </div>
     <p class="note">Scanned Ingredients come from your barcode scans. Basic Ingredients use typical values per 100g (raw or dry unless stated), so check the pack label for exact figures.</p>
@@ -263,11 +295,13 @@ li button:hover{background:var(--bg);color:var(--over)}
       <input type="file" id="impf" accept="application/json" hidden>
     </div>
   </section>
+<div id="cal" class="calwrap" hidden><div class="calbox" role="dialog" aria-modal="true" aria-labelledby="caltitle"><div class="calhead"><h2 id="caltitle">Calendar</h2><button type="button" class="icon" id="calClose" aria-label="Close calendar">&times;</button></div><p class="note">You can open today and the previous 7 days. Older days stay saved but can't be opened.</p><div class="calbody" id="calbody"></div></div></div>
 <p class="note" style="text-align:center;margin-top:2rem">Calorie tracker <span id="ver"></span><span id="build"></span></p>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v3", BUILD="18 Oct 18:55";
+var VERSION="v4-wip";
+var BUILD="18 Oct 19:33";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_publishable_o9SiM0CmxuyHfW3NIxtlGA_c_2Vjuyi";
 (function(){
@@ -279,11 +313,11 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   var $=function(id){return document.getElementById(id);};
   function animateNumber(el,from,to,duration,suffix){
-    var run=(el._numberAnimation||0)+1;el._numberAnimation=run;
+    var run=(el._numberAnimation||0)+1;el._numberAnimation=run;el._numTo=to;
     function format(v){return String(Math.round(v))+(suffix||"");}
-    if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=format(to);return;}
+    if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=format(to);el._numTo=null;return;}
     var start=performance.now(),delta=to-from;
-    function step(now){if(el._numberAnimation!==run)return;var p=Math.min((now-start)/duration,1),ease=1-Math.pow(1-p,3);el.textContent=format(from+delta*ease);if(p<1)requestAnimationFrame(step);}
+    function step(now){if(el._numberAnimation!==run)return;var p=Math.min((now-start)/duration,1),ease=1-Math.pow(1-p,3);el.textContent=format(from+delta*ease);if(p<1)requestAnimationFrame(step);else el._numTo=null;}
     requestAnimationFrame(step);
   }
   var ringShown=0,ringRun=0,colCache={};
@@ -321,27 +355,78 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     else{lap(0,1,0);outlineEnd(qe-1);lap(1,qe,1);}
   }
   function paintRing(v){ringPaint(v);}
+  var ringAnimTo=null;
   function ringTo(v,animate){
+    /* A background redraw (e.g. after a cloud sync) must not cut a running animation short and snap it to the end. */
+    if(!animate&&ringAnimTo!==null&&ringAnimTo===v)return;
     var run=++ringRun,from=ringShown;
     var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if(!animate||reduce||from===v){ringShown=v;paintRing(v);return;}
+    if(!animate||reduce||from===v){ringShown=v;ringAnimTo=null;paintRing(v);return;}
+    ringAnimTo=v;
     var start=performance.now();
-    function step(now){if(run!==ringRun)return;var p=Math.min((now-start)/3000,1),e=1-Math.pow(1-p,3);ringShown=from+(v-from)*e;paintRing(ringShown);if(p<1)requestAnimationFrame(step);}
+    function step(now){if(run!==ringRun)return;var p=Math.min((now-start)/3000,1),e=1-Math.pow(1-p,3);ringShown=p>=1?v:from+(v-from)*e;paintRing(ringShown);if(p<1)requestAnimationFrame(step);else ringAnimTo=null;}
     requestAnimationFrame(step);
   }
   window.addEventListener("resize",function(){paintRing(ringShown);});
+  /* Past days are read-only and only today plus the previous 7 days can be opened (older records stay stored and synced). */
+  var WINDOW=7;
+  function sod(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
+  function daysAgo(d){return Math.round((sod(new Date())-sod(d))/864e5);}
+  function inWindow(d){var n=daysAgo(d);return n>=0&&n<=WINDOW;}
+  function reducedMotion(){return !!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);}
+  /* Small confetti burst at the top of a ring when it first reaches its target */
+  var hit={};
+  function crossDelay(from,to,target){if(!(to>from))return 0;var e=Math.max(0,Math.min(1,(target-from)/(to-from)));return e<=0?0:3000*(1-Math.pow(1-e,1/3));}
+  function confetti(host,w,h,oy){
+    if(reducedMotion()||!host)return;
+    var cv=document.createElement("canvas"),dpr=window.devicePixelRatio||1;
+    cv.className="confetti";cv.setAttribute("aria-hidden","true");
+    cv.style.width=w+"px";cv.style.height=h+"px";cv.style.left="calc(50% - "+(w/2)+"px)";cv.style.top=(oy-h*0.75)+"px";
+    cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);host.appendChild(cv);
+    var x=cv.getContext("2d");x.scale(dpr,dpr);
+    var cols=[cssVar("--accent").trim()||"#39745b","#e8a33d","#d2382d","#4b8bd6","#c46bb0"],ps=[],i;
+    for(i=0;i<22;i++){var a=-Math.PI/2+(Math.random()-0.5)*2.2,sp=45+Math.random()*80;ps.push({x:w/2,y:h*0.75,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,r:Math.random()*6,vr:(Math.random()-0.5)*10,s:2.5+Math.random()*2.5,c:cols[i%cols.length]});}
+    var t0=performance.now(),last=t0;
+    (function f(now){
+      var dt=Math.min((now-last)/1000,0.05),el=(now-t0)/1100;last=now;
+      x.clearRect(0,0,w,h);
+      if(el>=1){if(cv.parentNode)cv.parentNode.removeChild(cv);return;}
+      ps.forEach(function(p){p.vy+=140*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=p.vr*dt;x.save();x.globalAlpha=1-el*el;x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});
+      requestAnimationFrame(f);
+    })(t0);
+  }
+  function fireHits(animate,dayKey,total,m,fromCal){
+    function check(id,reached,host,w,h,oy,from,to,target){
+      var kk=id+"|"+dayKey,was=!!hit[kk];hit[kk]=reached;
+      if(animate&&reached&&!was&&!reducedMotion())setTimeout(function(){confetti(host(),w,h,oy);},crossDelay(from,to,target));
+    }
+    check("cal",total>0&&total>=S.goal,function(){return document.querySelector(".plate");},150,110,($("ring").clientWidth||304)*0.1,fromCal,total,S.goal);
+    MAC.forEach(function(x){
+      var k=x[0],t=S.targets[k];if(!t.on)return;
+      var state=k==="fi"?m.fiState:"all",v=m[k]||0;
+      check(k,state!=="none"&&v>0&&v>=t.g,function(){return mrEl[k]&&mrEl[k].root.querySelector(".mw");},90,70,6,mrShown[k]||0,v,t.g);
+    });
+  }
   function render(){
+    if(!inWindow(cur))cur=new Date();
     var animate=animateWheels;animateWheels=false;
     var k=key(cur), items=S.days[k]||[], total=Math.round(items.reduce(function(a,b){return a+b.kcal;},0));
-    var today=key(new Date())===k;
+    var today=daysAgo(cur)===0;
     $("date").textContent=today?"Today":cur.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
     $("next").disabled=today; $("next").style.opacity=today?.4:1;
-    var oldTotal=parseFloat($("eaten").textContent)||0;
-    if(animate)animateNumber($("eaten"),oldTotal,total,3000);else $("eaten").textContent=total;
+    $("prev").disabled=daysAgo(cur)>=WINDOW; $("prev").style.opacity=$("prev").disabled?.4:1;
+    $("f").hidden=!today;if(!today)$("fmsg").hidden=true;
+    $("ro").hidden=today;
+    $("pg-log").dataset.glance=today?"TODAY AT A GLANCE":"PAST DAY \u00b7 READ-ONLY";
+    $("lhead").textContent=today?"Today\u2019s log":"Log for "+cur.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"});
+    var oldTotal=parseFloat($("eaten").textContent)||0,fromCal=ringShown;
+    if(animate)animateNumber($("eaten"),oldTotal,total,3000);
+    else if($("eaten")._numTo!==total||$("eaten")._numTo==null){$("eaten")._numberAnimation=($("eaten")._numberAnimation||0)+1;$("eaten")._numTo=null;$("eaten").textContent=total;}
     var m={p:0,c:0,f:0,fi:0},fiKnown=0,fiPartial=false;
     items.forEach(function(i){if(i.m){m.p+=i.m.p;m.c+=i.m.c;m.f+=i.m.f;if(typeof i.m.fi==="number"){m.fi+=i.m.fi;fiKnown++;if(i.m.fip)fiPartial=true;}}});
     m.fiState=!items.length?"all":(!fiKnown?"none":((fiKnown<items.length||fiPartial)?"partial":"all"));
     $("macros").innerHTML="<span><b>"+m.p+"g</b> protein</span><span><b>"+m.c+"g</b> carbs</span><span><b>"+m.f+"g</b> fat</span>";
+    fireHits(animate,k,total,m,fromCal);
     drawT(m,animate);
     var diff=S.goal-total;
     $("left").textContent=diff>=0?diff+" kcal left":(-diff)+" kcal over";
@@ -349,28 +434,65 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     ringTo(total,animate);
     $("goal").value=S.goal;
     var ul=$("list"); ul.innerHTML="";
-    if(!items.length){var e=document.createElement("li");e.className="empty";e.textContent="Nothing logged yet. Choose a saved meal above.";ul.appendChild(e);}
+    if(!items.length){var e=document.createElement("li");e.className="empty";e.textContent=today?"Nothing logged yet. Choose a saved meal above.":"Nothing was logged on this day.";ul.appendChild(e);}
     items.forEach(function(it){
       var li=document.createElement("li");
       var n=document.createElement("div");n.className="n";n.textContent=it.name;
       if(it.m){var s=document.createElement("small");s.textContent="P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g, Fibre "+(typeof it.m.fi==="number"?r1(it.m.fi)+"g"+(it.m.fip?"+ (partial)":""):"unknown");n.appendChild(s);}
       var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
-      x.onclick=function(){S.days[k]=items.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
-      li.append(n,c,x);ul.appendChild(li);
+      x.onclick=function(){if(daysAgo(cur)!==0)return;S.days[k]=items.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
+      if(today)li.append(n,c,x);else li.append(n,c);
+      ul.appendChild(li);
     });
     $("count").textContent=items.length+(items.length===1?" item":" items");
     var keys=Object.keys(S.days).filter(function(d){return S.days[d].length;});
     if(keys.length>1){var t=keys.reduce(function(a,d){return a+S.days[d].reduce(function(x,y){return x+y.kcal;},0);},0);$("avg").textContent="Average "+Math.round(t/keys.length)+" kcal/day";}else $("avg").textContent="";
   }
-  function add(name,kcal,m){var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();}
+  function add(name,kcal,m){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();}
   function addedNote(name){var m=$("fmsg"),t=key(cur)===key(new Date());m.textContent="Added \u201c"+name+"\u201d to "+(t?"today's log":cur.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"})+" (not today)")+".";m.hidden=false;}
   function mealM(x){var m={p:x.p,c:x.c,f:x.f};if(x.fiState){if(x.fiState!=="none"){m.fi=x.fi;if(x.fiState==="partial")m.fip=true;}}else if(typeof x.fi==="number"){m.fi=x.fi;if(x.fip)m.fip=true;}return m;}
   $("f").onsubmit=function(e){e.preventDefault();var item=S.meals[parseInt($("name").value,10)],msg=$("fmsg");if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}msg.hidden=true;add(item.name,item.kcal,mealM(item));addedNote(item.name);$("name").focus();};
   $("name").onchange=function(){$("fmsg").hidden=true;};
   $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500){S.goal=g;S.sUpdated=Date.now();save();}render();};
-  $("prev").onclick=function(){cur.setDate(cur.getDate()-1);render();};
-  $("next").onclick=function(){cur.setDate(cur.getDate()+1);render();};
+  $("prev").onclick=function(){if(daysAgo(cur)>=WINDOW)return;cur=new Date(cur.getFullYear(),cur.getMonth(),cur.getDate()-1);render();};
+  $("next").onclick=function(){if(daysAgo(cur)<=0)return;cur=new Date(cur.getFullYear(),cur.getMonth(),cur.getDate()+1);render();};
+  /* Calendar: month blocks from the account's registration month down to this month */
+  function regInfo(){
+    if(user&&user.created_at){var d=new Date(user.created_at);if(!isNaN(d)){d=sod(d);return {start:new Date(d.getFullYear(),d.getMonth(),1),limit:d};}}
+    var ks=Object.keys(S.days).filter(function(x){return S.days[x]&&S.days[x].length;}).sort();
+    if(ks.length){var p=ks[0].split("-");return {start:new Date(+p[0],+p[1]-1,1),limit:null};}
+    var n=new Date();return {start:new Date(n.getFullYear(),n.getMonth(),1),limit:null};
+  }
+  function monthBlock(y,mo,limit){
+    var sec=document.createElement("section"),h=document.createElement("h3"),g=document.createElement("div");
+    sec.className="calmonth";g.className="calgrid";
+    h.textContent=new Date(y,mo,1).toLocaleDateString(undefined,{month:"long",year:"numeric"});
+    ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(function(w){var c=document.createElement("div");c.className="wd";c.textContent=w;c.setAttribute("aria-hidden","true");g.appendChild(c);});
+    var lead=(new Date(y,mo,1).getDay()+6)%7,days=new Date(y,mo+1,0).getDate(),i;
+    for(i=0;i<lead;i++)g.appendChild(document.createElement("div"));
+    for(i=1;i<=days;i++)(function(day){
+      var d=new Date(y,mo,day),b=document.createElement("button"),kk=key(d);
+      b.type="button";b.textContent=day;b.setAttribute("aria-label",d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"}));
+      b.disabled=!inWindow(d)||(limit&&d<limit);
+      if(kk===key(cur)){b.className="sel";b.setAttribute("aria-current","date");}
+      if(S.days[kk]&&S.days[kk].length)b.className+=" has";
+      b.onclick=function(){cur=d;closeCal();render();};
+      g.appendChild(b);
+    })(i);
+    sec.append(h,g);return sec;
+  }
+  function openCal(){
+    var box=$("calbody"),r=regInfo(),t=new Date(),y=r.start.getFullYear(),mo=r.start.getMonth();
+    box.innerHTML="";
+    while(y<t.getFullYear()||(y===t.getFullYear()&&mo<=t.getMonth())){box.appendChild(monthBlock(y,mo,r.limit));mo++;if(mo>11){mo=0;y++;}}
+    $("cal").hidden=false;box.scrollTop=box.scrollHeight;$("calClose").focus();
+  }
+  function closeCal(){$("cal").hidden=true;$("calBtn").focus();}
+  $("calBtn").onclick=openCal;
+  $("calClose").onclick=closeCal;
+  $("cal").onclick=function(e){if(e.target===this)closeCal();};
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("cal").hidden)closeCal();});
   var ings=[];
   function opt(s,v,t){var o=document.createElement("option");o.value=v;o.textContent=t;s.appendChild(o);}
   var ALL=[];
@@ -390,30 +512,39 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   "Onion":1.7,"Carrot":2.8,"Tomato":1.2,"Tinned chopped tomatoes":1,"Broccoli":2.6,"Pepper":2,"Mushrooms":1,"Spinach":2.2,"Cauliflower":2,"Courgette":1,"Cabbage":2.5,"Peas, frozen":5,"Sweetcorn, tinned":1.8,"Lettuce":1.2,
   "Olive oil":0,"Vegetable oil":0,"Sugar":0,"Plain flour":3,"Honey":0.2,"Peanut butter":6,"Coconut milk, tinned":0,"Soy sauce":0.8,"Tomato ketchup":0.3,"Mayonnaise":0,"Baked beans, tinned":3.7};
   function buildFoods(){
-    var sel=$("food");
+    var sel=$("food"),prevName=ALL[sel.value]?ALL[sel.value][0]:null;
     if(!S.ings)S.ings=[];
+    var words=$("fsearch").value.toLowerCase().split(/\s+/).filter(Boolean),searching=words.length>0;
+    function match(nm){nm=nm.toLowerCase();return words.every(function(w){return nm.indexOf(w)>=0;});}
     var sc=S.ings.map(function(x){return [x.name,x.k,x.p,x.c,x.f,"g",x.e,typeof x.fi==="number"?x.fi:null];});
     ALL=sc.concat(BASIC.map(function(b){return [b[1],b[2],b[3],b[4],b[5],b[6],b[7],typeof FIBRE[b[1]]==="number"?FIBRE[b[1]]:null];}));
     sel.innerHTML="";
+    var shown=0;
     var g1=document.createElement("optgroup");g1.label="Scanned Ingredients";
-    if(!sc.length){var n=document.createElement("option");n.disabled=true;n.textContent="None yet. Scan one on the Ingredients page";g1.appendChild(n);}
-    sc.forEach(function(f,i){var o=document.createElement("option");o.value=i;o.textContent=f[0];g1.appendChild(o);});
-    sel.appendChild(g1);
-    var g2=document.createElement("optgroup");g2.label="Basic Ingredients";var cat="";
+    if(!sc.length&&!searching){var n=document.createElement("option");n.disabled=true;n.textContent="None yet. Scan one on the Ingredients page";g1.appendChild(n);}
+    sc.forEach(function(f,i){if(!match(f[0]))return;var o=document.createElement("option");o.value=i;o.textContent=f[0];g1.appendChild(o);shown++;});
+    if(g1.children.length)sel.appendChild(g1);
+    var g2=document.createElement("optgroup");g2.label="Basic Ingredients";var cat="",catDone="";
     BASIC.forEach(function(b,i){
-      if(b[0]!==cat){cat=b[0];var h=document.createElement("option");h.disabled=true;h.textContent="\u2014 "+cat+" \u2014";g2.appendChild(h);}
-      var o=document.createElement("option");o.value=sc.length+i;o.textContent=b[1];g2.appendChild(o);
+      if(!match(b[1]))return;
+      if(b[0]!==catDone){catDone=b[0];var h=document.createElement("option");h.disabled=true;h.textContent="\u2014 "+catDone+" \u2014";g2.appendChild(h);}
+      var o=document.createElement("option");o.value=sc.length+i;o.textContent=b[1];g2.appendChild(o);shown++;
     });
-    sel.appendChild(g2);
-    var first=sel.querySelector("option:not([disabled])");if(first)sel.value=first.value;
+    if(g2.children.length)sel.appendChild(g2);
+    $("fnone").hidden=shown>0;
+    if(!shown){var none=document.createElement("option");none.disabled=true;none.selected=true;none.textContent="No ingredients match your search";sel.appendChild(none);sel.selectedIndex=sel.options.length-1;}
+    else{
+      var keep=null;if(prevName)[].forEach.call(sel.querySelectorAll("option:not([disabled])"),function(o){if(!keep&&ALL[o.value]&&ALL[o.value][0]===prevName)keep=o;});
+      var first=keep||sel.querySelector("option:not([disabled])");if(first)sel.value=first.value;
+    }
     units();
   }
   buildFoods();
-  function units(){var f=ALL[$("food").value],u=$("unit");u.innerHTML="";if(!f)return;opt(u,"u",f[5]||"g");if(f[6])opt(u,"e","each (\u2248"+f[6]+"g)");}
+  function units(){var f=$("food").value===""?null:ALL[$("food").value],u=$("unit");u.innerHTML="";if(!f)return;opt(u,"u",f[5]||"g");if(f[6])opt(u,"e","each (\u2248"+f[6]+"g)");}
   function tab(w){["log","cook","ing","set"].forEach(function(k){$("pg-"+k).hidden=w!==k;$("t-"+k).setAttribute("aria-selected",w===k);});if(w!=="ing")stopCam();if(w==="log")paintRing(ringShown);}
   function r1(x){return Math.round(x*10)/10;}
   function totals(){
-    var t={k:0,p:0,c:0,f:0,fi:0},n=Math.max(1,parseInt($("serv").value,10)||1),known=0;
+    var t={k:0,p:0,c:0,f:0,fi:0},n=1,known=0;
     ings.forEach(function(i){t.k+=i.k;t.p+=i.p;t.c+=i.c;t.f+=i.f;if(typeof i.fi==="number"){t.fi+=i.fi;known++;}});
     return {k:Math.round(t.k/n),p:Math.round(t.p/n),c:Math.round(t.c/n),f:Math.round(t.f/n),fi:Math.round(t.fi/n*10)/10,fiState:!ings.length?"all":(!known?"none":(known<ings.length?"partial":"all"))};
   }
@@ -440,13 +571,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     [[daily,k2]].forEach(function(p){if(!p[1])return;for(var i=1;i<p[0].options.length;i++)if(p[0].options[i].dataset.name===p[1]){p[0].selectedIndex=i;break;}});
   }
   $("food").onchange=units;
-  $("serv").oninput=drawCook;
+  $("fsearch").oninput=buildFoods;
   $("t-log").onclick=function(){tab("log");};
   $("t-cook").onclick=function(){tab("cook");};
   $("t-ing").onclick=function(){tab("ing");};
   $("t-set").onclick=function(){tab("set");};
   $("addIng").onclick=function(){
-    var f=ALL[$("food").value],a=parseFloat($("amt").value);
+    var f=$("food").value===""?null:ALL[$("food").value],a=parseFloat($("amt").value);
     if(!f)return;
     if(!(a>=0.1)){$("amt").focus();return;}
     var each=$("unit").value==="e",r=(each?a*f[6]:a)/100;
@@ -457,7 +588,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!ings.length){$("food").focus();return;}
     var t=totals();
     add($("mname").value.trim()||"Home-cooked meal",t.k,mealM(t));
-    ings=[];$("mname").value="";$("serv").value=1;drawCook();tab("log");
+    ings=[];$("mname").value="";drawCook();tab("log");
   };
   var pendingMeal=null;
   function commitMeal(meal){
@@ -490,7 +621,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     cb.onchange=function(){S.targets[k].on=cb.checked;S.sUpdated=Date.now();save();render();};
     num.onchange=function(){var g=parseInt(num.value,10);if(g>0){S.targets[k].g=g;S.sUpdated=Date.now();save();}render();};
   });
-  var mrEl={},mrShown={},mrRun={},mrTimer={};
+  var mrEl={},mrShown={},mrRun={},mrTimer={},mrTo={};
   function macroEl(k,label){
     if(mrEl[k])return mrEl[k];
     var d=document.createElement("div");d.className="mr";
@@ -511,16 +642,19 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       var k=x[0],t=S.targets[k],e=macroEl(k,x[1]);
       if(!t.on){if(e.root.parentNode)e.root.parentNode.removeChild(e.root);return;}
       want.push(e.root);
-      var v=m[k]||0,state=k==="fi"?m.fiState:"all",run=(mrRun[k]||0)+1;mrRun[k]=run;
+      var v=m[k]||0,state=k==="fi"?m.fiState:"all";
+      if(!animate&&!reduce&&mrTo[k]&&mrTo[k].v===v&&mrTo[k].g===t.g&&mrTo[k].s===state)return;
+      var run=(mrRun[k]||0)+1;mrRun[k]=run;
       var from=mrShown[k]||0;
-      if(!animate||reduce||from===v||state==="none"){mrShown[k]=v;paintMacro(k,v,t,state);return;}
+      if(!animate||reduce||from===v||state==="none"){mrShown[k]=v;mrTo[k]=null;paintMacro(k,v,t,state);return;}
+      mrTo[k]={v:v,g:t.g,s:state};
       e.ring.classList.add("growing");clearTimeout(mrTimer[k]);mrTimer[k]=setTimeout(function(){e.ring.classList.remove("growing");},3050);
       var start=performance.now();
       (function step(now){
         if(mrRun[k]!==run)return;
         var p=Math.min((now-start)/3000,1),ease=1-Math.pow(1-p,3);
-        mrShown[k]=from+(v-from)*ease;paintMacro(k,mrShown[k],t,state);
-        if(p<1)requestAnimationFrame(step);
+        mrShown[k]=p>=1?v:from+(v-from)*ease;paintMacro(k,mrShown[k],t,state);
+        if(p<1)requestAnimationFrame(step);else mrTo[k]=null;
       })(start);
     });
     var cur=[].slice.call(box.children);
@@ -537,7 +671,9 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   /* Barcode scanning + Open Food Facts lookup */
   var reader=null;
   function stopCam(){var v=$("vid");try{if(reader){reader.reset();reader=null;}}catch(e){}if(v.srcObject){v.srcObject.getTracks().forEach(function(t){t.stop();});v.srcObject=null;}v.hidden=true;}
+  var lookupId=0;
   function lookup(code){
+    var my=++lookupId;
     code=String(code).replace(/\D/g,"");
     var box=$("prod");box.hidden=false;
     if(code.length<8){box.textContent="Enter a valid barcode (8 to 14 digits).";return;}
@@ -545,12 +681,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     fetch("https://world.openfoodfacts.org/api/v2/product/"+code+".json?fields=product_name,brands,nutriments,serving_quantity,nutriscore_grade")
       .then(function(r){return r.json();})
       .then(function(d){
+        if(my!==lookupId)return;
         if(d.status!==1||!d.product){showProd(null,undefined,true);return;}
         var n=d.product.nutriments||{},kc=n["energy-kcal_100g"];
         if(kc==null&&n.energy_100g!=null)kc=n.energy_100g/4.184;
         var g=String(d.product.nutriscore_grade||"").toLowerCase();
         showProd({name:((d.product.brands||"").split(",")[0]+" "+(d.product.product_name||"")).trim(),k:kc,p:n.proteins_100g,c:n.carbohydrates_100g,f:n.fat_100g,fi:n.fiber_100g,sv:parseFloat(d.product.serving_quantity),rating:/^[a-e]$/.test(g)?{value:g.toUpperCase(),scheme:"Nutri-Score",source:"Open Food Facts"}:null},undefined,true);
-      }).catch(function(){box.textContent="Couldn't reach Open Food Facts. Check your connection and try again.";});
+      }).catch(function(){if(my!==lookupId)return;box.textContent="Couldn't reach Open Food Facts. Check your connection and try again.";});
   }
   function showProd(p,msg,scanned){
     var box=$("prod"),found=!!p,note=msg||(p?"Found. Check the values against the pack, as the database is crowd-sourced.":"Not found. Enter the values per 100g from the pack label.");p=p||{};
@@ -578,14 +715,33 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       save();box.hidden=true;$("bc").value="";drawIngs();buildFoods();
     };
   }
+  var openIngs={};
+  function ratingNode(rt){
+    var d=document.createElement("div"),pos={A:1,B:0.75,C:0.5,D:0.25,E:0},v=rt&&rt.value!=null?String(rt.value).toUpperCase():"";
+    d.className="rate";
+    if(rt&&rt.scheme==="Nutri-Score"&&pos.hasOwnProperty(v)){
+      var bar=document.createElement("span"),mk=document.createElement("i"),t=document.createElement("span");
+      bar.className="rbar";bar.setAttribute("role","img");bar.setAttribute("aria-label","Nutri-Score "+v+" on a scale from E (lowest) to A (highest)");
+      mk.style.left="calc((100% - .3rem) * "+pos[v]+")";bar.appendChild(mk);
+      t.textContent="Nutri-Score "+v+" \u00b7 E lowest, A highest";
+      d.append(bar,t);
+    }else if(rt&&rt.value){
+      d.textContent="Rating: "+(rt.scheme?rt.scheme+" ":"")+rt.value;
+    }else d.textContent="No rating available";
+    return d;
+  }
   function drawIngs(){
     var ul=$("mylist");ul.innerHTML="";
     if(!S.ings.length){var e=document.createElement("div");e.className="empty";e.textContent="No saved ingredients yet. Scan a barcode or add one manually.";ul.appendChild(e);}
     S.ings.forEach(function(it){
-      var li=document.createElement("li"),n=document.createElement("div"),s=document.createElement("small"),r=function(x){return Math.round(x*10)/10;};
+      var li=document.createElement("li"),n=document.createElement("div"),r=function(x){return Math.round(x*10)/10;};
       n.className="n";n.textContent=it.name;
-      s.textContent="per 100g: "+r(it.k)+" kcal, P "+r(it.p)+"g, C "+r(it.c)+"g, F "+r(it.f)+"g"+(typeof it.fi==="number"?", Fibre "+r(it.fi)+"g":"")+(it.e?", item "+it.e+"g":"");
-      n.appendChild(s);
+      n.appendChild(ratingNode(it.rating));
+      var dt=document.createElement("details"),sm=document.createElement("summary"),dl=document.createElement("dl");
+      dt.className="nut";sm.textContent="Nutrition per 100g";dt.appendChild(sm);
+      [["Calories",r(it.k)+" kcal"],["Protein",r(it.p)+"g"],["Carbohydrates",r(it.c)+"g"],["Fat",r(it.f)+"g"],["Fibre",typeof it.fi==="number"?r(it.fi)+"g":"not recorded"]].concat(it.e?[["One item",it.e+"g"]]:[]).forEach(function(row){var a=document.createElement("dt"),b=document.createElement("dd");a.textContent=row[0];b.textContent=row[1];dl.append(a,b);});
+      dt.appendChild(dl);dt.open=!!openIngs[it.id];dt.ontoggle=function(){openIngs[it.id]=dt.open;};
+      n.appendChild(dt);
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
       x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();drawIngs();buildFoods();};
       li.append(n,x);ul.appendChild(li);
@@ -620,7 +776,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("exp").onclick=function(){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="calorie-tracker-"+key(new Date())+".json";a.click();};
   $("imp").onclick=function(){$("impf").click();};
   $("impf").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.days)throw 0;S=d;save();location.reload();}catch(e){alert("That file isn't a valid backup.");}};r.readAsText(f);};
-  $("manual").onclick=function(){showProd(null,"Enter the values per 100g from the pack label.",false);};
+  $("manual").onclick=function(){lookupId++;showProd(null,"Enter the values per 100g from the pack label.",false);};
   /* Accounts + cloud sync (Supabase). Entries from all devices are merged. */
   var sb=null,user=null,pushT=null,syncing=false,again=false,lastSync=0;
   if(window.supabase&&SUPABASE_URL.indexOf("http")===0){try{sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){}}
@@ -658,15 +814,28 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!sb||!user)return Promise.resolve();
     if(syncing){again=true;return Promise.resolve();}
     syncing=true;amsg("Syncing...");
-    return sb.from("user_data").select("data").maybeSingle().then(function(r){
-      if(r.error)throw r.error;
-      var c=r.data&&r.data.data;
-      if(c&&c.days)S=merge(S,c);ensureTargets();
-      if(!Array.isArray(S.meals))S.meals=[];
-      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
-      return sb.from("user_data").upsert({user_id:user.id,data:S,updated_at:new Date().toISOString()});
-    }).then(function(r){
-      if(r&&r.error)throw r.error;
+    var uid=user.id,tries=0;
+    /* Read the cloud row, merge, then write only if the row hasn't changed since we read it (compare updated_at).
+       If another device wrote in between, read again and merge again, so neither device's changes are lost. */
+    function attempt(){
+      return sb.from("user_data").select("data,updated_at").maybeSingle().then(function(r){
+        if(r.error)throw r.error;
+        if(!user||user.id!==uid)throw new Error("the account changed during sync");
+        var row=r.data,c=row&&row.data;
+        if(c&&c.days)S=merge(S,c);ensureTargets();
+        if(!Array.isArray(S.meals))S.meals=[];
+        try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+        var ts=new Date().toISOString(),q=row
+          ?sb.from("user_data").update({data:S,updated_at:ts}).eq("user_id",uid).eq("updated_at",row.updated_at).select("user_id")
+          :sb.from("user_data").insert({user_id:uid,data:S,updated_at:ts}).select("user_id");
+        return q.then(function(w){
+          if(w.error){if(!row&&w.error.code==="23505")return again2();throw w.error;}
+          if(!w.data||!w.data.length)return again2();
+        });
+      });
+    }
+    function again2(){if(++tries>=4)throw new Error("another device is syncing, try again in a moment");return attempt();}
+    return attempt().then(function(){
       render();drawIngs();buildFoods();drawSavedMeals();
       lastSync=Date.now();
       amsg("Synced at "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+".");
