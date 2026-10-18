@@ -219,14 +219,6 @@ li button:hover{background:var(--bg);color:var(--over)}
   </div>
   <section id="pg-cook" hidden>
     <div class="card">
-      <h2>Saved meals</h2>
-      <label for="savedMeal">Choose a saved meal</label>
-      <select id="savedMeal"></select>
-      <button class="btn" id="addSavedMeal" type="button">Add to log</button>
-      <p class="note" id="savedMealNote">Create and save a meal below to add it here.</p>
-      <p class="note" id="smmsg" role="status" hidden></p>
-    </div>
-    <div class="card">
       <h2>Create New Meal</h2>
       <label for="mname">Meal name</label><input id="mname" maxlength="80" placeholder="e.g. Chicken pasta">
       <label for="food">Ingredient</label><select id="food"></select>
@@ -275,7 +267,7 @@ li button:hover{background:var(--bg);color:var(--over)}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v3-wip", BUILD="18 Oct 18:38";
+var VERSION="v3-wip", BUILD="18 Oct 18:47";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_publishable_o9SiM0CmxuyHfW3NIxtlGA_c_2Vjuyi";
 (function(){
@@ -434,20 +426,18 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   }
   var mealsSig=null;
   function drawSavedMeals(){
-    var sel=$("savedMeal"),daily=$("name");
+    var daily=$("name");
     var sig=JSON.stringify(S.meals.map(function(m){return [m.name,m.kcal];}));
     if(sig===mealsSig&&daily.options.length>0)return;
     mealsSig=sig;
     function chosen(s){var o=s.options[s.selectedIndex];return o&&o.dataset?o.dataset.name||null:null;}
-    var k1=chosen(sel),k2=chosen(daily);
-    sel.innerHTML="";daily.innerHTML="";
-    if(!S.meals.length){opt(sel,"","No saved meals yet");opt(daily,"","Save a meal in Home cooking first");sel.disabled=true;daily.disabled=true;$("addSavedMeal").disabled=true;$("fsubmit").disabled=true;$("savedMealNote").hidden=false;return;}
-    sel.disabled=false;$("addSavedMeal").disabled=false;$("savedMealNote").hidden=true;
+    var k2=chosen(daily);
+    daily.innerHTML="";
+    if(!S.meals.length){opt(daily,"","Save a meal in Home cooking first");daily.disabled=true;$("fsubmit").disabled=true;return;}
     daily.disabled=false;$("fsubmit").disabled=false;
-    opt(sel,"","Choose a saved meal");sel.options[0].disabled=true;sel.options[0].selected=true;
     opt(daily,"","Choose a saved meal");daily.options[0].disabled=true;daily.options[0].selected=true;
-    S.meals.forEach(function(m,i){opt(sel,String(i),m.name+" \u00b7 "+m.kcal+" kcal per portion");opt(daily,String(i),m.name+" \u00b7 "+m.kcal+" kcal");sel.options[sel.options.length-1].dataset.name=m.name.toLowerCase();daily.options[daily.options.length-1].dataset.name=m.name.toLowerCase();});
-    [[sel,k1],[daily,k2]].forEach(function(p){if(!p[1])return;for(var i=1;i<p[0].options.length;i++)if(p[0].options[i].dataset.name===p[1]){p[0].selectedIndex=i;break;}});
+    S.meals.forEach(function(m,i){opt(daily,String(i),m.name+" \u00b7 "+m.kcal+" kcal");daily.options[daily.options.length-1].dataset.name=m.name.toLowerCase();});
+    [[daily,k2]].forEach(function(p){if(!p[1])return;for(var i=1;i<p[0].options.length;i++)if(p[0].options[i].dataset.name===p[1]){p[0].selectedIndex=i;break;}});
   }
   $("food").onchange=units;
   $("serv").oninput=drawCook;
@@ -487,12 +477,6 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("replaceYes").onclick=function(){if(pendingMeal)commitMeal(pendingMeal);pendingMeal=null;$("replaceBox").hidden=true;};
   $("replaceNo").onclick=function(){pendingMeal=null;$("replaceBox").hidden=true;};
   $("mname").oninput=function(){pendingMeal=null;$("replaceBox").hidden=true;};
-  $("savedMeal").onchange=function(){$("smmsg").hidden=true;};
-  $("addSavedMeal").onclick=function(){
-    var meal=S.meals[parseInt($("savedMeal").value,10)],msg=$("smmsg");
-    if(!meal){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}
-    msg.hidden=true;add(meal.name,meal.kcal,mealM(meal));tab("log");addedNote(meal.name);
-  };
   /* Macro targets */
   ensureTargets();
   if(!S.mig1){MAC_ALL=["p","c","f"];MAC_ALL.forEach(function(k){S.targets[k].on=true;});S.mig1=1;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
