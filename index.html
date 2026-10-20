@@ -411,6 +411,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 .sut,.sutest,.sc.testonly h2{color:var(--danger)}
 .sut{margin:0;padding:.5rem .7rem;border:1px dashed var(--danger);border-radius:.6rem;font-size:.8rem;font-weight:700}
 .sc.testonly{border:1px dashed var(--danger)}
+#testRow .calbtn{border:1px dashed var(--danger)}
 #suChg{font-size:.85rem}
 </style>
 </head>
@@ -424,6 +425,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     <button class="icon" id="next" aria-label="Next day">&rsaquo;</button>
   </div>
   <div class="calrow"><button type="button" class="calbtn" id="calBtn" aria-haspopup="dialog">Calendar</button></div>
+  <div class="calrow" id="testRow" hidden><button type="button" class="calbtn sutest" id="rerunLog" aria-haspopup="dialog">Run setup (test)</button></div>
   <div id="dayview">
   <div class="plate">
     <canvas id="ring" aria-hidden="true"></canvas>
@@ -638,8 +640,8 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v11";
-var BUILD="20 Oct 20:15";
+var VERSION="v12-wip";
+var BUILD="20 Oct 21:00";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 /* USDA FoodData Central key for barcode fallback lookups. DEMO_KEY works without sign-up but is limited to 30 lookups an hour;
    a free personal key from api.data.gov raises that. It is a public, read-only key, safe to keep in the page. */
@@ -2480,8 +2482,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("suSkip").onclick=function(){if(!SU.test)markSetup();closeSetup();};
   /* TEMPORARY TESTING TOOL: skip a step without checking it; on the last step, leave without applying anything. */
   $("suPass").onclick=function(){if(!TESTING)return;if(SUSTEPS[SU.i]==="review"){$("suSkip").click();return;}SU.i++;suShow();};
-  $("testTools").hidden=!TESTING;
-  $("rerun").onclick=function(){if(TESTING)openSetup(true);};
+  $("testTools").hidden=!TESTING;$("testRow").hidden=!TESTING;
+  $("rerun").onclick=$("rerunLog").onclick=function(){if(TESTING)openSetup(true);};
   /* The estimate (adults only). Resting burn: Mifflin-St Jeor, 10 × kg + 6.25 × cm − 5 × age, +5 for men, −161 for women
      (−78, the average, for "prefer not to say"), times an activity factor (1.2 to 1.9). The aim (kg a week) adjusts that at
      7,700 kcal per kg, never below 1,200 kcal. Protein: 1.6g per kg (1.8 when cutting), or 2.0g (2.2g) with weight lifting

@@ -1,6 +1,6 @@
 # AI notes (shared by ChatGPT and Claude)
 
-Last updated by: Claude, 2026-10-20. Refers to `index.html` version: `v11` (released to `main`; it includes v10, which was never released on its own).
+Last updated by: Claude, 2026-10-20. Refers to `index.html` version: `v12-wip` on the `wip` branch (not released). `main` is `v11`.
 
 Isaac (the owner) keeps his `vN_features_to_implement.md` planning documents on his own device. This file lives in the repo so every AI reads the same rules.
 
@@ -61,7 +61,7 @@ Every new piece of data needs: a merge rule, deletion markers where it can be de
   - The review suggests calories and macros: Mifflin-St Jeor times an activity factor, then the aim at 7,700 kcal/kg, with a 1,200 floor. Protein is 1.6 to 2.2 g/kg, fat 25 to 30%, carbs the rest, fibre 14 g per 1,000 kcal.
   - The suggestion is for adults only: under 18 or pregnant/breastfeeding gives no suggestion and points to a professional. Missing details mean manual targets, starting from the current settings.
   - Nothing is saved until "Apply these targets". Skip keeps the defaults. An account that already has data after signing in is offered "Keep my settings".
-- v11 TEMPORARY TEST TOOLS: "Pass (test)" on every setup step and "Run setup again (test)" in Settings. They show only when VERSION ends in `-wip` (`TESTING`), so released builds hide them. A test run starts from the saved values and asks for confirmation (listing the changes) before applying. Remove the code once setup testing is finished.
+- v11 TEMPORARY TEST TOOLS: "Pass (test)" on every setup step, "Run setup again (test)" in Settings and (v12) "Run setup (test)" under Calendar on the Daily log. They show only when VERSION ends in `-wip` (`TESTING`), so released builds hide them. A test run starts from the saved values and asks for confirmation (listing the changes) before applying. Remove the code once setup testing is finished.
 - v11: Progress shows the target weight against the latest reading ("X to lose/gain to reach it"), with a dashed Target line on the weight chart. It can be edited or removed there. No target means none is shown.
 - v11: Daily log chart "How the day built up" is one chart: calories and each tracked macro as % of goal/target (one scale). Each measure has an aria-pressed toggle that also shows its line style (the legend); toggles add or remove that line and its table column, and the table shows actual kcal/g.
   - The time axis runs from the first item (rounded down to an even hour) to midnight, labelled every 2 hours (4 or 6 when they don't fit). Today's lines stop at "Now".
@@ -97,6 +97,11 @@ From ChatGPT's reviews (v9, v10 and v11 planning docs), not approved yet:
 Done: adaptive-target wording and USDA rate limit (v9); meals with a removed ingredient stay in review, impossible times rejected (v10); renaming a meal no longer duplicates it (v11).
 
 ## Handoff log (newest first)
+
+### [Claude] 2026-10-20, v12-wip
+**Did:** at the owner's request, added a "Run setup (test)" button on the Daily log (under Calendar) that opens a setup test run. Pass was already on every setup step. Like the other test tools, it only shows on -wip builds; the owner chose to keep them out of the live site.
+**Tested:** 300 checks (the v11 suite plus: the button shows, opens a test run on step 1, Pass is on all six steps and walks through them, closing without changing anything, focus returns to the button). A copy with VERSION "v12" passes 282 checks with every test tool hidden. Screenshot checked.
+**Not released:** the owner asked for the test file only.
 
 ### [Claude] 2026-10-20, v11
 **Did:** from v11_features_to_implement.md (it includes v10, which was never released on its own):
