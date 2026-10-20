@@ -242,8 +242,9 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 .score .sl{display:block;font-weight:700}
 .score small{display:block;color:var(--muted);font-size:.78rem}
 .score b{font-size:1.9rem;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1}
-@keyframes ringpulse{0%{transform:scale(1)}35%{transform:scale(1.07)}100%{transform:scale(1)}}
-.pulse{animation:ringpulse 1s ease-in-out}
+/* v9: a small bulge and a gentle shake when a ring first fills; transforms only, so nothing nearby moves */
+@keyframes ringpulse{0%{transform:none}22%{transform:scale(1.06)}38%{transform:scale(1.06) rotate(-2.5deg)}54%{transform:scale(1.05) rotate(2deg)}70%{transform:scale(1.03) rotate(-1deg)}100%{transform:none}}
+.pulse{animation:ringpulse .9s ease-in-out}
 @media(prefers-reduced-motion:reduce){.pulse{animation:none!important}}
 .calgrid button canvas{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none}
 .calgrid button{overflow:visible}
@@ -260,8 +261,6 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 .seg button{flex:1;min-height:2.5rem;border:0;background:none;border-radius:1.5rem;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;padding:.3rem .4rem}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
 #logbox{margin:1.25rem 0 .5rem}
-.slotrow{display:flex;align-items:center;gap:.6rem;margin:.65rem .15rem 0;font-size:.9rem;color:var(--muted)}
-.slotrow select{min-height:2.6rem;padding:.4rem .6rem;border:1px solid var(--line);border-radius:.75rem;background:var(--surface);color:var(--ink);font-weight:600}
 #logbox #f{margin-top:.65rem}
 #logbox .card{margin:.65rem 0 .5rem}
 #lwrap{position:relative}
@@ -277,11 +276,11 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 .qa{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem}
 .qa label{display:grid;gap:.2rem;font-size:.75rem}
 .qa input{font-weight:400}
-#list .slot li:last-child{border-bottom:0}
+#list .loglist li:last-child{border-bottom:0}
 #fmsg{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.4rem .15rem}
 #fmsg[hidden]{display:none}
 #fmsg .linkbtn{padding:.25rem .5rem;flex:none}
-#recentBox h3,.slot h3{margin:0;font-size:.9rem;letter-spacing:-.01em}
+#recentBox h3{margin:0;font-size:.9rem;letter-spacing:-.01em}
 #recentBox{margin:.75rem 0 0}
 #recentBox h3{margin:0 .15rem .2rem;color:var(--muted);font-weight:700}
 #recent{padding-bottom:.25rem}
@@ -290,11 +289,25 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 #recent button b{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
 #list{border:0;background:none;padding:0;overflow:visible;display:grid;grid-template-columns:minmax(0,1fr);gap:.8rem}
 #list .empty{border:1px solid var(--line);border-radius:1rem;background:var(--surface);padding:1rem .95rem}
-.slot ul{border:1px solid var(--line);border-radius:1rem;background:var(--surface);padding:0 .95rem;overflow:hidden}
-.sloth{display:flex;align-items:center;gap:.5rem;margin:0 .15rem .35rem;min-height:2rem}
-.sloth h3{flex:1}
-.sloth span{color:var(--muted);font-size:.82rem;font-variant-numeric:tabular-nums}
-.sloth .linkbtn{padding:.2rem 0 .2rem .4rem;font-size:.82rem}
+.loglist{border:1px solid var(--line);border-radius:1rem;background:var(--surface);padding:0 .95rem;overflow:hidden}
+#list li .tk{display:flex;flex-direction:column;align-items:flex-end;gap:.1rem;flex:none}
+#list li time,#list li .tm{color:var(--muted);font-size:.75rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+#list li .cp{width:auto;height:auto;border-radius:.5rem;background:none;font-size:.82rem;color:var(--accent);text-decoration:underline;padding:.3rem .2rem}
+.porrow{display:flex;align-items:center;gap:.6rem;margin:.5rem .15rem 0;font-size:.9rem;color:var(--muted)}
+.porrow input{width:5.5rem;min-height:2.6rem;padding:.4rem .6rem;border:1px solid var(--line);border-radius:.75rem;background:var(--surface);color:var(--ink)}
+.ewrow{display:grid;gap:.35rem;padding:.6rem .7rem;border:1px dashed var(--line);border-radius:.75rem}
+.ewrow .chk{margin:0}
+#cm,#cmT{flex-wrap:wrap;gap:.15rem 1rem}
+#cmT{margin-top:.35rem}
+#cm .lbl,#cmT .lbl{flex-basis:100%;text-align:center;font-weight:700;font-size:.8rem}
+#review .rv{border-top:1px solid var(--line);padding:.75rem 0 .25rem;display:grid;gap:.4rem}
+#review .rv:first-of-type{border-top:0}
+#review table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+#review th,#review td{text-align:right;padding:.15rem .3rem;border-bottom:1px solid var(--line)}
+#review th:first-child,#review td:first-child{text-align:left;color:var(--muted);font-weight:400}
+#review ul{font-size:.82rem;color:var(--muted);padding:0}
+#review ul li{padding:.2rem 0;border:0;display:block}
+#ingNote{margin:.75rem 0}
 #copyrow{display:flex;justify-content:center;margin:.75rem 0 0}
 #copyBox{margin:.75rem 0 0}
 #pg-prog .seg{margin:0 0 .75rem}
@@ -340,17 +353,19 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 
   <div id="logbox">
   <div class="seg" id="lmode" role="group" aria-label="What to log"><button type="button" data-m="meal" aria-pressed="true">Saved meal</button><button type="button" data-m="food" aria-pressed="false">Food</button><button type="button" data-m="quick" aria-pressed="false">Quick add</button></div>
-  <div class="slotrow"><label for="slot">Add to</label><select id="slot"></select></div>
   <form id="f">
     <select id="name" aria-label="Choose a saved meal"></select>
     <button id="fsubmit" type="submit">Add meal</button>
   </form>
+  <div class="porrow" id="porrow"><label for="lpor">Portions</label><input id="lpor" type="number" min="0.1" max="100" step="0.5" value="1" inputmode="decimal"><span id="porinfo"></span></div>
+  <p class="note" id="pormsg" role="alert" hidden>Enter a number of portions between 0.1 and 100.</p>
   <div id="mealq" hidden></div>
   <div class="card" id="lfood" hidden>
     <label for="lsearch">Food</label>
     <div id="lwrap"><input id="lsearch" type="text" role="combobox" aria-expanded="false" aria-controls="llist" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search ingredients, e.g. banana"><ul id="llist" class="cbx" role="listbox" aria-label="Matching foods" hidden></ul></div>
     <p class="note hint" id="lhint" role="status" hidden>Choose a food from the list first.</p>
     <div class="row2"><div><label for="lamt">Amount</label><input id="lamt" type="number" min="0.1" step="any" inputmode="decimal"></div><div><label for="lunit">Unit</label><select id="lunit"></select></div></div>
+    <div class="ewrow" id="lewrow" hidden><label for="lew">Grams per item</label><input id="lew" type="number" min="0.1" max="100000" step="any" inputmode="decimal"><label class="chk" id="lewsl"><input type="checkbox" id="lewsave" checked> Remember this weight for this ingredient</label></div>
     <p class="note" id="lamtmsg" role="alert" hidden>Enter an amount between 0.1 and 100,000.</p>
     <button class="btn" id="lgo" type="button">Log this food</button>
   </div>
@@ -385,7 +400,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     <div class="sc"><h2>Macros</h2><div class="legend" id="lgMac"></div><canvas class="chart" id="chMac" aria-hidden="true"></canvas><p class="note csum" id="sumMac"></p></div>
     <div class="sc"><h2>Weight trend</h2><div class="legend" id="lgW"></div><canvas class="chart" id="chW" aria-hidden="true"></canvas><p class="note csum" id="sumW"></p></div>
     <div class="sc" id="adapt"><h2>Adaptive calorie target</h2>
-      <p class="note">Estimates how much you really burn each day from what you logged and how your weight trend changed over the last 4 weeks (about 7,700 kcal per kg). Only days you logged count.</p>
+      <p class="note">A rough estimate of how much you burn each day, from what you logged and how your weight trend changed over the last 4 weeks (about 7,700 kcal per kg). Only days you logged count, so days that weren't fully logged, and short-term water changes, can throw it off. It's general guidance for adults, not medical advice: if you're under 18, pregnant or breastfeeding, or managing a medical condition, talk to a health professional before changing your goal.</p>
       <label for="arate">Aim<select id="arate"></select></label>
       <div id="aout" role="status"></div>
       <button class="btn" id="ause" type="button" hidden>Use this goal</button>
@@ -393,17 +408,24 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     </div>
   </section>
   <section id="pg-cook" hidden>
+    <div class="card" id="review" hidden></div>
     <div class="card">
       <h2>Create New Meal</h2>
+      <label for="medit">Edit a saved meal (optional)</label><select id="medit"></select>
+      <p class="note" id="meditmsg" role="status" hidden></p>
       <label for="mname">Meal name</label><input id="mname" maxlength="80" placeholder="e.g. Chicken pasta">
+      <label for="mpor">Portions made</label><input id="mpor" type="number" min="0.1" max="100" step="1" value="1" inputmode="decimal">
+      <p class="note" id="mpormsg" role="alert" hidden>Enter how many portions the whole recipe makes (more than 0, up to 100).</p>
       <label for="fsearch">Ingredient</label>
       <div id="fwrap"><input id="fsearch" type="text" role="combobox" aria-expanded="false" aria-controls="flist" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search ingredients, e.g. chicken"><ul id="flist" class="cbx" role="listbox" aria-label="Matching ingredients" hidden></ul></div>
       <p class="note" id="fhint" role="status" hidden>Choose an ingredient from the list first.</p>
       <div class="row2"><div><label for="amt">Amount used</label><input id="amt" type="number" min="0.1" step="any" inputmode="decimal"></div><div><label for="unit">Unit</label><select id="unit"></select></div></div>
+      <div class="ewrow" id="ewrow" hidden><label for="ew">Grams per item</label><input id="ew" type="number" min="0.1" max="100000" step="any" inputmode="decimal"><label class="chk" id="ewsl"><input type="checkbox" id="ewsave" checked> Remember this weight for this ingredient</label></div>
       <p class="note" id="amtmsg" role="alert" hidden>Enter an amount between 0.1 and 100,000.</p>
       <button class="btn" id="addIng" type="button">Add to meal</button>
       <ul id="ings"></ul>
       <div class="macros" id="cm"></div>
+      <div class="macros" id="cmT"></div>
       <div id="cq" role="status" hidden></div>
       <div class="row2"><button class="btn" id="saveMeal" type="button">Save this meal</button><button class="btn" id="logMeal" type="button">Add this meal to my log</button></div>
       <div id="replaceBox" class="notice" role="alert" hidden><span id="replaceText"></span><div class="row2"><button class="btn" id="replaceYes" type="button">Replace</button><button class="btn" id="replaceNo" type="button">Keep old meal</button></div></div>
@@ -417,6 +439,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     <p class="scanerr" id="bcerr" role="alert" hidden></p>
     <button type="button" class="linkbtn" id="manual">Or add an ingredient manually</button>
     <div id="prod" class="sc" hidden></div>
+    <div id="ingNote" class="notice" role="status" hidden></div>
     <h2>Saved ingredients</h2>
     <ul id="mylist"></ul>
     <p class="note">Saved ingredients appear at the top of the food list on the Home cooking page.</p>
@@ -456,8 +479,8 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v8";
-var BUILD="20 Oct 11:51";
+var VERSION="v9-wip";
+var BUILD="20 Oct 14:51";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 /* USDA FoodData Central key for barcode fallback lookups. DEMO_KEY works without sign-up but is limited to 30 lookups an hour;
    a free personal key from api.data.gov raises that. It is a public, read-only key, safe to keep in the page. */
@@ -704,7 +727,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var today=daysAgo(cur)===0;
     navHead();
     $("logbox").hidden=!today;if(!today)$("fmsg").hidden=true;drawMealQ();
-    if(today){autoSlot();drawRecent();}
+    if(today)drawRecent();
     $("ro").hidden=today;
     $("copyrow").hidden=today||!items.length;
     if(pendingCopy&&(today||pendingCopy.d!==k))cancelCopy();
@@ -728,48 +751,48 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     $("goal").value=S.goal;
     var box=$("list"); box.innerHTML="";
     if(!items.length){var e=document.createElement("p");e.className="empty";e.textContent=today?"Nothing logged yet. Add a saved meal, a food or a quick add above.":"Nothing was logged on this day.";box.appendChild(e);}
-    /* Grouped by meal slot, each with its subtotal. Newest first within a slot on screen; the saved order is unchanged. */
-    var groups={};items.forEach(function(it){var s=slotOf(it);(groups[s]=groups[s]||[]).push(it);});
-    SLOT_ORDER.forEach(function(s){
-      var g=groups[s];if(!g)return;
-      var sec=document.createElement("section"),hd=document.createElement("div"),h=document.createElement("h3"),sub=document.createElement("span"),ul=document.createElement("ul");
-      sec.className="slot";sec.dataset.slot=s;hd.className="sloth";h.textContent=SLOTN[s];
-      sub.textContent=Math.round(g.reduce(function(a,b){return a+b.kcal;},0))+" kcal";
-      hd.append(h,sub);
-      if(!today){var cb=document.createElement("button");cb.type="button";cb.className="linkbtn";cb.textContent="Copy to today";cb.setAttribute("aria-label","Copy "+SLOTN[s].toLowerCase()+" to today");cb.onclick=function(){askCopy(k,s);};hd.appendChild(cb);}
-      g.slice().sort(function(a,b){return b.id-a.id;}).forEach(function(it){
-        var li=document.createElement("li");
-        var n=document.createElement("div");n.className="n";n.textContent=it.name;
-        if(it.m){var sm=document.createElement("small");sm.textContent="P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g, Fibre "+(typeof it.m.fi==="number"?r1(it.m.fi)+"g"+(it.m.fip?"+ (partial)":""):"unknown");n.appendChild(sm);}
-        var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
-        var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
+    /* Newest first, each with the time it was logged; the saved order is unchanged. */
+    var ul=document.createElement("ul");ul.className="loglist";
+    items.slice().sort(byNewest).forEach(function(it){
+      var li=document.createElement("li"),at=loggedAt(it);
+      var n=document.createElement("div");n.className="n";n.textContent=it.name;
+      if(it.m){var sm=document.createElement("small");sm.textContent="P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g, Fibre "+(typeof it.m.fi==="number"?r1(it.m.fi)+"g"+(it.m.fip?"+ (partial)":""):"unknown");n.appendChild(sm);}
+      var tk=document.createElement("div");tk.className="tk";
+      var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
+      var tm;
+      if(at!==null){tm=document.createElement("time");tm.dateTime=new Date(at).toISOString();tm.textContent=hm(at);}
+      else{tm=document.createElement("span");tm.className="tm";tm.textContent="Time not recorded";}
+      tk.append(c,tm);
+      if(today){
+        var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name+(at!==null?", logged at "+hm(at):""));
         /* Works from the list as it is now, so an entry merged in by a sync since this was drawn isn't dropped. */
         x.onclick=function(){if(daysAgo(cur)!==0)return;S.days[k]=(S.days[k]||[]).filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
-        if(today)li.append(n,c,x);else li.append(n,c);
-        ul.appendChild(li);
-      });
-      sec.append(hd,ul);box.appendChild(sec);
+        li.append(n,tk,x);
+      }else{
+        var cp=document.createElement("button");cp.type="button";cp.className="cp";cp.textContent="Copy";cp.setAttribute("aria-label","Copy "+it.name+" to today");
+        cp.onclick=function(){askCopy(k,it.id);};
+        li.append(n,tk,cp);
+      }
+      ul.appendChild(li);
     });
+    if(items.length)box.appendChild(ul);
     $("count").textContent=items.length+(items.length===1?" item":" items");
     var keys=Object.keys(S.days).filter(function(d){return S.days[d].length;});
     if(keys.length>1){var t=keys.reduce(function(a,d){return a+S.days[d].reduce(function(x,y){return x+y.kcal;},0);},0);$("avg").textContent="Average "+Math.round(t/keys.length)+" kcal/day";}else $("avg").textContent="";
     drawProgress();
   }
-  /* Meal slots. The default follows the time of day; a slot the user picks stays until the time-of-day default moves on. */
-  var SLOTS=[["b","Breakfast"],["l","Lunch"],["d","Dinner"],["s","Snacks"]],SLOTN={o:"Other"},SLOT_ORDER=["b","l","d","s","o"],slotPick=null,renderedToday=null;
-  SLOTS.forEach(function(x){SLOTN[x[0]]=x[1];opt($("slot"),x[0],x[1]);});
-  function slotAt(d){var h=d.getHours()+d.getMinutes()/60;return h>=4&&h<11?"b":h>=11&&h<15?"l":h>=17&&h<21.5?"d":"s";}
-  /* Entries saved before slots existed are placed by the time they were logged (their id is that time). This is for display only; nothing is saved. */
-  function slotOf(e){if(e.s&&SLOTN[e.s]&&e.s!=="o")return e.s;var t=Number(e.id);return t>946684800000&&t<4102444800000?slotAt(new Date(t)):"o";}
-  function autoSlot(){var a=slotAt(new Date());if(slotPick&&slotPick.base!==a)slotPick=null;$("slot").value=slotPick?slotPick.s:a;}
-  function curSlot(){autoSlot();return $("slot").value;}
-  $("slot").onchange=function(){slotPick={s:this.value,base:slotAt(new Date())};};
-  function add(name,kcal,m,s){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal,s:s||curSlot()};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();return e;}
+  var renderedToday=null;
+  /* When an entry was logged: its saved time (v9 on), or for older entries the time in its id (every version has made the id
+     from the time the entry was added). An id that isn't a time shows "Time not recorded" rather than a guess. */
+  function loggedAt(e){if(okNum(e.at))return e.at;var t=Number(e.id);return t>946684800000&&t<4102444800000?t:null;}
+  function byNewest(a,b){var x=loggedAt(a),y=loggedAt(b);if(x===null&&y===null)return b.id-a.id;if(x===null)return 1;if(y===null)return -1;return y-x||b.id-a.id;}
+  function hm(t){return new Date(t).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});}
+  function add(name,kcal,m){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur),now=Date.now();var e={id:now+Math.random(),name:name,kcal:kcal,at:now};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();return e;}
   /* "Added ..." with an Undo for the newest entry, so a mistaken tap is easy to take back. */
   var lastAdded=null;
   function addedNote(name,e){
     var m=$("fmsg"),t=document.createElement("span"),u=document.createElement("button");
-    m.innerHTML="";t.textContent="Added \u201c"+name+"\u201d to "+SLOTN[slotOf(e)].toLowerCase()+".";
+    m.innerHTML="";t.textContent="Added \u201c"+name+"\u201d at "+hm(loggedAt(e))+".";
     lastAdded={id:e.id,k:key(new Date()),name:name};
     u.type="button";u.className="linkbtn";u.textContent="Undo";u.setAttribute("aria-label","Undo adding "+name);
     u.onclick=undoAdd;m.append(t,u);m.hidden=false;
@@ -781,11 +804,24 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var m=$("fmsg");m.textContent="Removed \u201c"+la.name+"\u201d.";m.hidden=false;
   }
   function mealM(x){var m={p:x.p,c:x.c,f:x.f};if(x.fiState){if(x.fiState!=="none"){m.fi=x.fi;if(x.fiState==="partial")m.fip=true;}}else if(typeof x.fi==="number"){m.fi=x.fi;if(x.fip)m.fip=true;}return m;}
-  $("f").onsubmit=function(e){e.preventDefault();var item=S.meals[parseInt($("name").value,10)],msg=$("fmsg");if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}msg.hidden=true;var en=add(item.name,item.kcal,mealM(item));addedNote(item.name,en);$("name").focus();};
+  /* Portions: a saved meal keeps its whole-recipe totals and how many portions the recipe makes (n, 1 if missing).
+     Logging adds one portion's share, or the number of portions chosen. */
+  function mealN(m){return okNum(m.n)&&m.n>0?m.n:1;}
+  function portionOf(m,k){var r=k/mealN(m),o={kcal:Math.round(m.kcal*r),p:Math.round(m.p*r),c:Math.round(m.c*r),f:Math.round(m.f*r)};if(typeof m.fi==="number"){o.fi=Math.round(m.fi*r*10)/10;if(m.fip)o.fip=true;}return o;}
+  function porName(name,k){return k===1?name:name+" ("+(Math.round(k*100)/100)+" portions)";}
+  function porVal(){var v=parseFloat($("lpor").value);return v>=0.1&&v<=100?v:NaN;}
+  $("lpor").oninput=function(){$("pormsg").hidden=true;drawMealQ();};
+  $("f").onsubmit=function(e){
+    e.preventDefault();var item=S.meals[parseInt($("name").value,10)],msg=$("fmsg"),k=porVal();
+    if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}
+    if(!(k>0)){$("pormsg").hidden=false;$("lpor").focus();return;}
+    $("pormsg").hidden=true;msg.hidden=true;
+    var o=portionOf(item,k),nm=porName(item.name,k),en=add(nm,o.kcal,mealM(o));addedNote(nm,en);$("name").focus();
+  };
   /* What to log: a saved meal, a single food, or a quick add. */
   function setMode(md){
     [].forEach.call($("lmode").children,function(b){b.setAttribute("aria-pressed",b.dataset.m===md?"true":"false");});
-    $("f").hidden=md!=="meal";$("lfood").hidden=md!=="food";$("lquick").hidden=md!=="quick";$("fmsg").hidden=true;drawMealQ();
+    $("f").hidden=md!=="meal";$("porrow").hidden=md!=="meal";$("pormsg").hidden=true;$("lfood").hidden=md!=="food";$("lquick").hidden=md!=="quick";$("fmsg").hidden=true;drawMealQ();
   }
   [].forEach.call($("lmode").children,function(b){b.onclick=function(){setMode(b.dataset.m);};});
   /* Recent foods come straight from the log (last 4 weeks, newest first, one per name and calorie value); nothing extra is stored. */
@@ -811,13 +847,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       box.appendChild(b);
     });
   }
-  /* Copy a past day, or one meal slot of it, into today. Copies get new ids; the past day is not changed. */
+  /* Copy a past day, or one item from it, into today. Copies get new ids and today's time; the past day is not changed. */
   var pendingCopy=null;
-  function askCopy(d,s){
-    var src=(S.days[d]||[]).filter(function(e){return !s||slotOf(e)===s;});if(!src.length)return;
-    var kc=Math.round(src.reduce(function(a,b){return a+b.kcal;},0)),p=d.split("-"),dt=new Date(+p[0],+p[1]-1,+p[2]);
+  function askCopy(d,id){
+    var src=(S.days[d]||[]).filter(function(e){return id==null||e.id===id;});if(!src.length)return;
+    var kc=Math.round(src.reduce(function(a,b){return a+b.kcal;},0)),p=d.split("-"),dt=new Date(+p[0],+p[1]-1,+p[2]),day=dt.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"});
     pendingCopy={d:d,ids:src.map(function(e){return e.id;})};
-    $("copyText").textContent="Copy "+(s?SLOTN[s].toLowerCase()+" from ":"everything from ")+dt.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"})+" ("+src.length+(src.length===1?" item, ":" items, ")+kc+" kcal) into today\u2019s log? That day stays as it is.";
+    $("copyText").textContent=(id==null?"Copy everything from "+day+" ("+src.length+(src.length===1?" item, ":" items, ")+kc+" kcal)":"Copy \u201c"+src[0].name+"\u201d from "+day+" ("+kc+" kcal)")+" into today\u2019s log? That day stays as it is.";
     $("copyBox").hidden=false;$("copyYes").focus();
   }
   function cancelCopy(){pendingCopy=null;$("copyBox").hidden=true;}
@@ -825,10 +861,10 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("copyNo").onclick=function(){cancelCopy();$("copyAll").focus();};
   $("copyYes").onclick=function(){
     var pc=pendingCopy;cancelCopy();if(!pc)return;
-    var src=(S.days[pc.d]||[]).filter(function(e){return pc.ids.indexOf(e.id)>=0;}).sort(function(a,b){return a.id-b.id;});
+    var src=(S.days[pc.d]||[]).filter(function(e){return pc.ids.indexOf(e.id)>=0;}).sort(function(a,b){return -byNewest(a,b);});
     if(!src.length)return;
-    var tk=key(new Date()),base=Date.now(),list=S.days[tk]=S.days[tk]||[],fallback=curSlot();
-    src.forEach(function(e,i){var s=slotOf(e),c={id:base+i+Math.random()*0.5,name:e.name,kcal:e.kcal,s:s==="o"?fallback:s};if(e.m)c.m=JSON.parse(JSON.stringify(e.m));list.push(c);});
+    var tk=key(new Date()),base=Date.now(),list=S.days[tk]=S.days[tk]||[];
+    src.forEach(function(e,i){var c={id:base+i+Math.random()*0.5,name:e.name,kcal:e.kcal,at:base+i};if(e.m)c.m=JSON.parse(JSON.stringify(e.m));list.push(c);});
     cur=new Date();save();animateWheels=true;render();
     var m=$("fmsg");m.textContent="Copied "+src.length+(src.length===1?" item":" items")+" to today.";m.hidden=false;
   };
@@ -877,7 +913,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var n=new Date();return {start:new Date(n.getFullYear(),n.getMonth(),1),limit:null};
   }
   function scoreCol(t){var r=rgbOf(colv("danger")),y=rgbOf(colv("warn")),g=rgbOf(colv("accent"));return t<0.5?hueMix(r,y,t*2):hueMix(y,g,(t-0.5)*2);}
-  /* Small progress ring for a date: red at 0% through yellow at 50% to green at 100%, darker towards the leading edge, with the same outline round the head as the calorie ring. */
+  /* Small progress ring for a date, all in one colour picked from the day's score: red at 0%, yellow at 50%, green at 100%
+     (the same in every theme), with the same outline round the head as the calorie ring. */
   function miniRing(pct){
     var cv=document.createElement("canvas"),Z=34,dpr=window.devicePixelRatio||1;
     cv.width=cv.height=Math.round(Z*dpr);cv.setAttribute("aria-hidden","true");
@@ -886,14 +923,14 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     x.lineWidth=w;x.strokeStyle=colv("track");x.beginPath();x.arc(c,c,R,0,TAU);x.stroke();
     if(!(pct>0))return cv;
     var q=Math.min(pct,100)/100,n=Math.max(2,Math.ceil(q*60));
-    function col(p,dk){return rgbs(mixa(scoreCol(p),black,dk));}
+    var one=rgbs(scoreCol(q));
     function pt(p){var a=TOP+p*TAU;return [c+R*Math.cos(a),c+R*Math.sin(a)];}
     var head=pt(q),tail=pt(0);
     x.fillStyle=colv("surface");x.beginPath();x.arc(head[0],head[1],w/2+Math.max(0.8,Z*0.03),0,TAU);x.fill();
     x.lineCap="butt";
-    for(i=0;i<n;i++){var s0=q*i/n,s1=q*(i+1)/n,mid=(s0+s1)/2;x.strokeStyle=col(mid,0.3*mid/q);x.beginPath();x.arc(c,c,R,TOP+s0*TAU,TOP+s1*TAU+(i<n-1?0.02:0));x.stroke();}
-    x.fillStyle=col(0,0);x.beginPath();x.arc(tail[0],tail[1],w/2,0,TAU);x.fill();
-    x.fillStyle=col(q,0.3);x.beginPath();x.arc(head[0],head[1],w/2,0,TAU);x.fill();
+    x.strokeStyle=one;x.beginPath();x.arc(c,c,R,TOP,TOP+q*TAU);x.stroke();
+    x.fillStyle=one;x.beginPath();x.arc(tail[0],tail[1],w/2,0,TAU);x.fill();
+    x.beginPath();x.arc(head[0],head[1],w/2,0,TAU);x.fill();
     return cv;
   }
   /* Calendar opening stays quick with years of history: every day button is built straight away (cheap),
@@ -911,6 +948,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       b.type="button";b.textContent=day;
       b.disabled=!inWindow(d)||(limit&&d<limit);
       if(kk===key(cur)){b.className="sel";b.setAttribute("aria-current","date");}
+      if(daysAgo(d)===0)b.dataset.today="1";
       if(S.days[kk]&&S.days[kk].length)b.className+=" has";
       var pct=0;
       if(d<=todayS){pct=scoreFor(kk,daysAgo(d)===0);rings.push([b,pct]);}
@@ -936,6 +974,9 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       secs.forEach(function(s){if(s._draw)calObs.observe(s);});
     }else secs.forEach(function(s){s._draw();});
     $("cal").hidden=false;box.scrollTop=box.scrollHeight;$("calClose").focus();
+    /* The first time today's Calendar ring is seen full, it gets the same small celebration as the other rings (once a day per device). */
+    var tk=key(t),tc=box.querySelector("button[data-today] canvas");
+    if(tc&&scoreFor(tk,true)>=100){var done=null;try{done=localStorage.getItem("calorie-tracker-cal-done");}catch(e){}if(done!==tk&&!reducedMotion()){pulse(tc);try{localStorage.setItem("calorie-tracker-cal-done",tk);}catch(e){}}}
   }
   function closeCal(){if(calObs){calObs.disconnect();calObs=null;}$("cal").hidden=true;$("calBtn").focus();}
   $("calBtn").onclick=openCal;
@@ -975,7 +1016,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
      Matches are ranked: exact name, starts with the text, every word starts a word, then every word appears anywhere. Scanned ingredients come before basic ones on ties. */
   var pickers=[],scCount=0;
   function makePicker(o){
-    var P={sel:null,act:-1,rows:[]},inp=$(o.search),ul=$(o.list),hint=$(o.hint),amt=$(o.amt),unit=$(o.unit),amsg=$(o.amsg);
+    var P={sel:null,act:-1,rows:[]},inp=$(o.search),ul=$(o.list),hint=$(o.hint),amt=$(o.amt),unit=$(o.unit),amsg=$(o.amsg),ewrow=$(o.ewrow),ew=$(o.ew),ewsave=$(o.ewsave),ewsl=$(o.ewsl);
     function matches(){
       var q=inp.value.toLowerCase().trim(),words=q.split(/\s+/).filter(Boolean),rows=[];
       ALL.forEach(function(f,i){
@@ -1026,8 +1067,21 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       for(var i=0;i<ALL.length;i++)if(ALL[i][0].toLowerCase()===t){P.sel=i;units();return ALL[i];}
       return null;
     }
-    function units(){var f=P.sel!==null?ALL[P.sel]:null;unit.innerHTML="";if(!f)return;opt(unit,"u",f[5]||"g");if(f[6])opt(unit,"e","each (≈"+f[6]+"g)");}
+    function units(){
+      var f=P.sel!==null?ALL[P.sel]:null,base;unit.innerHTML="";ewrow.hidden=true;if(!f)return;base=f[5]||"g";
+      if(f[6])opt(unit,"e","each (≈"+f[6]+base+")");
+      opt(unit,"u",base);
+      if(base==="g")opt(unit,"lb","lb");
+      if(!f[6])opt(unit,"x","each (set "+base+")");
+      unit.value=f[6]?"e":"u";
+    }
+    /* No reliable item weight: ask for one instead of guessing. A saved ingredient can remember it. */
+    unit.onchange=function(){
+      var f=P.sel!==null?ALL[P.sel]:null;amsg.hidden=true;ewrow.hidden=unit.value!=="x";
+      if(unit.value==="x"&&f){ewrow.querySelector("label").textContent=(f[5]==="ml"?"ml":"Grams")+" per item";ewsl.hidden=!(P.sel<scCount);ew.focus();}
+    };
     amt.addEventListener("input",function(){amsg.hidden=true;});
+    ew.addEventListener("input",function(){amsg.hidden=true;});
     inp.onfocus=function(){this.select();open();};
     inp.onclick=function(){if(ul.hidden)open();};
     inp.onblur=close;
@@ -1038,32 +1092,58 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       else if(e.key==="Enter"){if(!ul.hidden&&P.act>=0){e.preventDefault();pick(P.rows[P.act].i);}}
       else if(e.key==="Escape"){if(!ul.hidden){e.preventDefault();e.stopPropagation();close();}}
     };
-    P.name=function(){return P.sel!==null&&ALL[P.sel]?ALL[P.sel][0]:null;};
-    /* After the food list is rebuilt (a scan or a sync), keep the same food chosen. */
-    P.restore=function(name){P.sel=null;if(name)for(var i=0;i<ALL.length;i++)if(ALL[i][0]===name){P.sel=i;break;}if(!ul.hidden)draw();units();};
+    P.key=function(){return P.sel!==null&&ALL[P.sel]?ALL[P.sel][9]:null;};
+    /* After the food list is rebuilt (a scan, an edit or a sync), keep the same food chosen. */
+    P.restore=function(k){var u=unit.value;P.sel=null;if(k)for(var i=0;i<ALL.length;i++)if(ALL[i][9]===k){P.sel=i;break;}if(!ul.hidden)draw();units();if(P.sel!==null&&[].some.call(unit.options,function(x){return x.value===u;})){unit.value=u;ewrow.hidden=u!=="x";}};
     /* The chosen food and amount as an ingredient row, or null after showing what is missing. Amounts must be 0.1 to 100,000. */
     P.read=function(){
-      var f=current(),a=parseFloat(amt.value);
+      var f=current(),a=parseFloat(amt.value),u=unit.value,per=null,idx=P.sel;
       if(!f){hint.hidden=false;inp.focus();return null;}
-      var each=unit.value==="e",r=(each?a*f[6]:a)/100;
-      if(!(a>=0.1)||!isFinite(a)||a>100000||!isFinite(r*f[1]+r*f[2]+r*f[3]+r*f[4])){amsg.hidden=false;amt.focus();return null;}
+      function bad(t,el){amsg.textContent=t;amsg.hidden=false;el.focus();return null;}
+      if(!(a>=0.1)||!isFinite(a)||a>100000)return bad("Enter an amount between 0.1 and 100,000.",amt);
+      if(u==="e")per=f[6];
+      else if(u==="x"){per=parseFloat(ew.value);if(!(per>=0.1&&per<=100000))return bad("Enter how much one item weighs (0.1 to 100,000"+(f[5]==="ml"?"ml":"g")+"), or choose another unit.",ew);}
+      var w=u==="lb"?a*LB_G:per!==null?a*per:a;
+      var row=amountRow(f,a,u==="x"?"e":u,w);
+      if(!row||!isFinite(row.k+row.p+row.c+row.f))return bad("Enter an amount between 0.1 and 100,000.",amt);
       amsg.hidden=true;
-      return {name:f[0],label:each?a+" each":a+(f[5]||"g"),k:f[1]*r,p:f[2]*r,c:f[3]*r,f:f[4]*r,fi:(typeof f[7]==="number")?f[7]*r:null};
+      /* Remember a typed item weight on a saved ingredient, if asked (it becomes that ingredient's "each"). */
+      if(u==="x"&&ewsave.checked&&idx<scCount)setItemWeight(f[9],per);
+      return row;
     };
-    P.clear=function(){amt.value="";inp.value="";P.sel=null;units();};
+    P.clear=function(){amt.value="";ew.value="";inp.value="";P.sel=null;units();};
     pickers.push(P);
     return P;
   }
+  /* An ingredient's identity: its barcode when it has one, otherwise its source/search name (the display name for older records).
+     Two saved ingredients with different barcodes are never treated as the same, even with the same display name. */
+  function ingKey(x){return x.code?"c:"+x.code:"n:"+String(x.sn||x.name).toLowerCase();}
+  var LB_G=453.59237;
+  /* ALL rows: [display name, kcal, protein, carbs, fat (per 100), unit, grams each, fibre, rating, key] */
   function buildFoods(){
-    var prev=pickers.map(function(p){return p.name();});
+    var prev=pickers.map(function(p){return p.key();});
     if(!S.ings)S.ings=[];
-    var sc=S.ings.map(function(x){return [x.name,x.k,x.p,x.c,x.f,"g",x.e,typeof x.fi==="number"?x.fi:null,x.rating||null];});
+    var sc=S.ings.map(function(x){return [x.name,x.k,x.p,x.c,x.f,"g",x.e,typeof x.fi==="number"?x.fi:null,x.rating||null,ingKey(x)];});
     scCount=sc.length;
-    ALL=sc.concat(BASIC.map(function(b){return [b[1],b[2],b[3],b[4],b[5],b[6],b[7],typeof FIBRE[b[1]]==="number"?FIBRE[b[1]]:null];}));
+    ALL=sc.concat(BASIC.map(function(b){return [b[1],b[2],b[3],b[4],b[5],b[6],b[7],typeof FIBRE[b[1]]==="number"?FIBRE[b[1]]:null,null,"b:"+b[1].toLowerCase()];}));
     pickers.forEach(function(p,i){p.restore(prev[i]);});
+    drawReview();
   }
-  var cookPicker=makePicker({search:"fsearch",list:"flist",hint:"fhint",amt:"amt",unit:"unit",amsg:"amtmsg",prefix:"fo-"});
-  var logPicker=makePicker({search:"lsearch",list:"llist",hint:"lhint",amt:"lamt",unit:"lunit",amsg:"lamtmsg",prefix:"lo-"});
+  function foodByKey(k){for(var i=0;i<ALL.length;i++)if(ALL[i][9]===k)return ALL[i];return null;}
+  /* One ingredient row from a food and an amount: a = amount typed, u = "g"/"ml"/"u" (the food's own unit), "lb" or "e" (items), w = grams (or ml) used. */
+  function amountRow(f,a,u,w){
+    if(!f||!(w>0))return null;
+    var r=w/100,base=f[5]||"g",uu=u==="u"?base:u;
+    return {name:f[0],key:f[9],a:a,u:uu,w:w,label:uu==="lb"?a+" lb":uu==="e"?a+" each":a+base,k:f[1]*r,p:f[2]*r,c:f[3]*r,f:f[4]*r,fi:(typeof f[7]==="number")?f[7]*r:null};
+  }
+  /* Save an item weight on a saved ingredient (a new id, so this newest version wins when devices merge). */
+  function setItemWeight(k,per){
+    var i=S.ings.findIndex(function(x){return ingKey(x)===k;});if(i<0)return;
+    var old=S.ings[i],nw=JSON.parse(JSON.stringify(old));nw.e=Math.round(per*10)/10;nw.id=Date.now();
+    S.ings[i]=nw;(S.del=S.del||{})[old.id]=Date.now();save();buildFoods();drawIngs();
+  }
+  var cookPicker=makePicker({search:"fsearch",list:"flist",hint:"fhint",amt:"amt",unit:"unit",amsg:"amtmsg",ewrow:"ewrow",ew:"ew",ewsave:"ewsave",ewsl:"ewsl",prefix:"fo-"});
+  var logPicker=makePicker({search:"lsearch",list:"llist",hint:"lhint",amt:"lamt",unit:"lunit",amsg:"lamtmsg",ewrow:"lewrow",ew:"lew",ewsave:"lewsave",ewsl:"lewsl",prefix:"lo-"});
   buildFoods();
   /* Daily log: one food from the same lists, stored like a meal (macros rounded the same way; unknown fibre stays unknown). */
   $("lgo").onclick=function(){
@@ -1071,7 +1151,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var t=totals([row]),name=row.name+" ("+row.label+")";
     var e=add(name,t.k,mealM(t));logPicker.clear();addedNote(name,e);
   };
-  $("lamt").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("lgo").click();}};
+  ["lamt","lew"].forEach(function(id){$(id).onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("lgo").click();}};});
   /* Quick add: calories required; name and macros optional. No macros typed means the entry has none.
      If some are typed, blank protein, carbs or fat count as 0 and blank fibre stays unknown. */
   var QF=[["p","qp"],["c","qc"],["f","qf"],["fi","qfi"]];
@@ -1130,7 +1210,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var ul=$("ings");ul.innerHTML="";
     if(!ings.length){var e=document.createElement("div");e.className="empty";e.textContent="Choose an ingredient and an amount, then add it to your meal.";ul.appendChild(e);}
     ings.forEach(function(it,idx){var li=document.createElement("li"),n=document.createElement("div");n.className="n";n.textContent=it.name;var s=document.createElement("small");s.textContent=it.label;n.appendChild(s);var c=document.createElement("span");c.className="k";c.textContent=Math.round(it.k)+" kcal";var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);x.onclick=function(){ings.splice(idx,1);drawCook();};li.append(n,c,x);ul.appendChild(li);});
-    var t=totals();$("cm").innerHTML="<span><b>"+t.k+"</b> kcal</span><span><b>"+t.p+"g</b> protein</span><span><b>"+t.c+"g</b> carbs</span><span><b>"+t.f+"g</b> fat</span>"+fibreHtml(t);
+    var t=totals(),n=cookN()||1,per=portionOf({kcal:t.k,p:t.p,c:t.c,f:t.f,fi:t.fiState==="none"?undefined:t.fi,n:n},1);
+    function line(x,fi){return "<span><b>"+x.kcal+"</b> kcal</span><span><b>"+x.p+"g</b> protein</span><span><b>"+x.c+"g</b> carbs</span><span><b>"+x.f+"g</b> fat</span>"+fibreHtml({fiState:t.fiState,fi:fi});}
+    $("cm").innerHTML=(n!==1?"<span class=\"lbl\">Per portion</span>":"")+line(n!==1?per:{kcal:t.k,p:t.p,c:t.c,f:t.f},n!==1?per.fi:t.fi);
+    $("cmT").hidden=n===1||!ings.length;
+    $("cmT").innerHTML="<span class=\"lbl\">Whole recipe ("+r1(n)+" portions)</span>"+line({kcal:t.k,p:t.p,c:t.c,f:t.f},t.fi);
+    $("logMeal").textContent=n!==1?"Add 1 portion to my log":"Add this meal to my log";
     var box=$("cq");box.innerHTML="";box.hidden=!ings.length;
     if(ings.length){
       var q=mealQuality(t.raw.k,t.raw.p,t.raw.c,t.raw.f,t.raw.fi,t.fiState);
@@ -1142,16 +1227,16 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   var mealsSig=null;
   function drawSavedMeals(){
     var daily=$("name");
-    var sig=JSON.stringify(S.meals.map(function(m){var q=qualityOfMeal(m);return [m.name,m.kcal,q&&q.g,q&&q.p];}));
+    var sig=JSON.stringify(S.meals.map(function(m){var q=qualityOfMeal(m);return [m.name,m.kcal,mealN(m),q&&q.g,q&&q.p];}));
     if(sig===mealsSig&&daily.options.length>0)return;
-    mealsSig=sig;
+    mealsSig=sig;drawMealEdit();
     function chosen(s){var o=s.options[s.selectedIndex];return o&&o.dataset?o.dataset.name||null:null;}
     var k2=chosen(daily);
     daily.innerHTML="";
     if(!S.meals.length){opt(daily,"","Save a meal in Home cooking first");daily.disabled=true;$("fsubmit").disabled=true;drawMealQ();return;}
     daily.disabled=false;$("fsubmit").disabled=false;
     opt(daily,"","Choose a saved meal");daily.options[0].disabled=true;daily.options[0].selected=true;
-    S.meals.forEach(function(m,i){var q=qualityOfMeal(m);opt(daily,String(i),m.name+" \u00b7 "+m.kcal+" kcal"+(q?" \u00b7 est. "+q.g:""));daily.options[daily.options.length-1].dataset.name=m.name.toLowerCase();});
+    S.meals.forEach(function(m,i){var q=qualityOfMeal(m),n=mealN(m);opt(daily,String(i),m.name+" \u00b7 "+portionOf(m,1).kcal+" kcal"+(n!==1?" a portion":"")+(q?" \u00b7 est. "+q.g:""));daily.options[daily.options.length-1].dataset.name=m.name.toLowerCase();});
     [[daily,k2]].forEach(function(p){if(!p[1])return;for(var i=1;i<p[0].options.length;i++)if(p[0].options[i].dataset.name===p[1]){p[0].selectedIndex=i;break;}});
     drawMealQ();
   }
@@ -1159,6 +1244,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function drawMealQ(){
     var box=$("mealq"),m=S.meals[parseInt($("name").value,10)];
     box.innerHTML="";
+    var k=porVal(),n=m?mealN(m):1;
+    $("porinfo").textContent=!m?"":!(k>0)?"":(n!==1?"of "+r1(n)+" \u00b7 ":"")+portionOf(m,k).kcal+" kcal";
     if(!m||$("f").hidden||$("logbox").hidden){box.hidden=true;return;}
     box.hidden=false;box.appendChild(qualityNode(qualityOfMeal(m),null));
   }
@@ -1171,24 +1258,37 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var row=cookPicker.read();if(!row)return;
     ings.push(row);cookPicker.clear();drawCook();
   };
+  /* Portions made: more than 0 (up to 100). */
+  function cookN(){var v=parseFloat($("mpor").value);return v>0&&v<=100?v:NaN;}
+  $("mpor").oninput=function(){$("mpormsg").hidden=true;drawCook();};
+  function badN(){if(cookN()>0)return false;$("mpormsg").hidden=false;$("mpor").focus();return true;}
+  function resetCook(){ings=[];$("mname").value="";$("mpor").value="1";$("medit").value="";$("meditmsg").hidden=true;drawCook();}
+  /* The meal being built, as a saved meal: whole-recipe totals, portions made, and its ingredient list (so it can be edited,
+     and checked when an ingredient changes). */
+  function mealFrom(name,rows,n){
+    var t=totals(rows),meal={name:name,kcal:t.k,p:t.p,c:t.c,f:t.f,t:Date.now(),n:n},q=mealQuality(t.raw.k,t.raw.p,t.raw.c,t.raw.f,t.raw.fi,t.fiState);
+    if(t.fiState!=="none"){meal.fi=t.fi;if(t.fiState==="partial")meal.fip=true;}
+    if(q)meal.q=q;
+    meal.i=rows.map(function(r){return {k:r.key,n:r.name,a:r.a,u:r.u,w:Math.round(r.w*100)/100};});
+    return meal;
+  }
   $("logMeal").onclick=function(){
     if(!ings.length){$("fsearch").focus();return;}
-    var t=totals();
-    var nm=$("mname").value.trim()||"Home-cooked meal",e=add(nm,t.k,mealM(t));
-    ings=[];$("mname").value="";drawCook();tab("log");addedNote(nm,e);
+    if(badN())return;
+    var nm=$("mname").value.trim()||"Home-cooked meal",o=portionOf(mealFrom(nm,ings,cookN()),1),e=add(nm,o.kcal,mealM(o));
+    resetCook();tab("log");addedNote(nm,e);
   };
   var pendingMeal=null;
   function commitMeal(meal){
     var idx=S.meals.findIndex(function(m){return m.name.toLowerCase()===meal.name.toLowerCase();});
     if(idx>=0)S.meals[idx]=meal;else S.meals.push(meal);
-    S.meals.sort(function(a,b){return a.name.localeCompare(b.name);});save();drawSavedMeals();
+    S.meals.sort(function(a,b){return a.name.localeCompare(b.name);});save();drawSavedMeals();drawReview();
   }
   $("saveMeal").onclick=function(){
     if(!ings.length){$("fsearch").focus();return;}
     var name=$("mname").value.trim();if(!name){$("mname").focus();return;}
-    var t=totals(),meal={name:name,kcal:t.k,p:t.p,c:t.c,f:t.f,t:Date.now()},q=mealQuality(t.raw.k,t.raw.p,t.raw.c,t.raw.f,t.raw.fi,t.fiState);
-    if(t.fiState!=="none"){meal.fi=t.fi;if(t.fiState==="partial")meal.fip=true;}
-    if(q)meal.q=q;
+    if(badN())return;
+    var meal=mealFrom(name,ings,cookN());
     var existing=S.meals.find(function(m){return m.name.toLowerCase()===name.toLowerCase();});
     if(existing){pendingMeal=meal;$("replaceText").textContent="A saved meal called \u201c"+existing.name+"\u201d already exists. Replace it with this one?";$("replaceBox").hidden=false;return;}
     commitMeal(meal);
@@ -1196,6 +1296,63 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("replaceYes").onclick=function(){if(pendingMeal)commitMeal(pendingMeal);pendingMeal=null;$("replaceBox").hidden=true;};
   $("replaceNo").onclick=function(){pendingMeal=null;$("replaceBox").hidden=true;};
   $("mname").oninput=function(){pendingMeal=null;$("replaceBox").hidden=true;};
+  /* Edit a saved meal: loads its name, portions and ingredients (with today's ingredient values) into the builder.
+     Saving under the same name asks before replacing, as before. Meals saved before v9 didn't keep their ingredients. */
+  function rowFromItem(it){var f=foodByKey(it.k);return f&&okNum(it.w)?amountRow(f,it.a,it.u==="g"||it.u==="ml"?"u":it.u,it.w):null;}
+  function drawMealEdit(){
+    var s=$("medit"),cur=s.value;s.innerHTML="";opt(s,"",S.meals.length?"Start a new meal":"No saved meals yet");
+    S.meals.forEach(function(m){opt(s,m.name.toLowerCase(),m.name);});
+    s.value=[].some.call(s.options,function(o){return o.value===cur;})?cur:"";s.disabled=!S.meals.length;
+  }
+  $("medit").onchange=function(){
+    var v=this.value,msg=$("meditmsg"),m=S.meals.find(function(x){return x.name.toLowerCase()===v;});
+    pendingMeal=null;$("replaceBox").hidden=true;
+    if(!m){ings=[];$("mname").value="";$("mpor").value="1";msg.hidden=true;drawCook();return;}
+    $("mname").value=m.name;$("mpor").value=String(mealN(m));$("mpormsg").hidden=true;ings=[];
+    if(!Array.isArray(m.i)||!m.i.length){msg.textContent="This meal was saved before ingredients were kept with meals, so add its ingredients again to edit it.";msg.hidden=false;drawCook();return;}
+    var miss=[];m.i.forEach(function(it){var r=rowFromItem(it);if(r)ings.push(r);else miss.push(it.n||"an ingredient");});
+    msg.textContent=miss.length?listOf(miss)+(miss.length===1?" is":" are")+" no longer saved, so "+(miss.length===1?"it was":"they were")+" left out.":"Loaded with today\u2019s ingredient values. Save to replace the saved meal.";
+    msg.hidden=false;drawCook();
+  };
+  /* Saved meals whose ingredients have changed since the meal was saved. Nothing changes until the user chooses;
+     "keep" is remembered on this device for those exact values, so a later change to the ingredient flags it again. */
+  var KEEPK="calorie-tracker-meal-keep",keepMap={};
+  try{keepMap=JSON.parse(localStorage.getItem(KEEPK)||"{}")||{};}catch(e){keepMap={};}
+  function recalcMeal(m){
+    if(!Array.isArray(m.i)||!m.i.length)return null;
+    var rows=[],miss=[];m.i.forEach(function(it){var r=rowFromItem(it);if(r)rows.push(r);else miss.push(it.n||"an ingredient");});
+    if(miss.length)return null;
+    var t=totals(rows),fi=t.fiState==="none"?undefined:t.fi,fip=t.fiState==="partial";
+    return {rows:rows,t:t,sig:JSON.stringify([t.k,t.p,t.c,t.f,fi,fip]),same:t.k===m.kcal&&t.p===m.p&&t.c===m.c&&t.f===m.f&&fi===m.fi&&fip===!!m.fip};
+  }
+  function staleMeals(){return S.meals.filter(function(m){var r=recalcMeal(m);return r&&!r.same&&keepMap[m.name.toLowerCase()]!==r.sig;});}
+  function drawReview(){
+    var box=$("review");if(!box||!keepMap)return;var list=staleMeals();box.innerHTML="";box.hidden=!list.length;if(!list.length)return;
+    var h=document.createElement("h2"),n=document.createElement("p");h.textContent="Saved meals to check";n.className="note";
+    n.textContent="An ingredient in "+(list.length===1?"this meal":"these meals")+" has changed since "+(list.length===1?"it was":"they were")+" saved. The saved values haven\u2019t been changed, and nothing already in your log will change. Check each one and choose whether to update it.";
+    box.append(h,n);
+    list.forEach(function(m){
+      var rc=recalcMeal(m),t=rc.t,nn=mealN(m),d=document.createElement("div"),b=document.createElement("b"),tb=document.createElement("table"),ul=document.createElement("ul");
+      d.className="rv";b.textContent=m.name+(nn!==1?" (whole recipe, "+r1(nn)+" portions)":"");
+      var oq=qualityOfMeal(m),nq=mealQuality(t.raw.k,t.raw.p,t.raw.c,t.raw.f,t.raw.fi,t.fiState);
+      function fib(fi,fip){return typeof fi==="number"?r1(fi)+"g"+(fip?"+":""):"unknown";}
+      [["","Saved","Now"],["Calories",m.kcal+" kcal",t.k+" kcal"],["Protein",m.p+"g",t.p+"g"],["Carbs",m.c+"g",t.c+"g"],["Fat",m.f+"g",t.f+"g"],
+       ["Fibre",fib(m.fi,m.fip),t.fiState==="none"?"unknown":fib(t.fi,t.fiState==="partial")],["Quality",oq?oq.g+(oq.p?" (partial)":""):"\u2014",nq?nq.g+(nq.p?" (partial)":""):"\u2014"]].forEach(function(r,i){
+        var tr=document.createElement("tr");r.forEach(function(c){var x=document.createElement(i?"td":"th");x.textContent=c;tr.appendChild(x);});tb.appendChild(tr);});
+      rc.rows.forEach(function(r){var li=document.createElement("li");li.textContent=r.name+", "+r.label+": "+Math.round(r.k)+" kcal";ul.appendChild(li);});
+      var row=document.createElement("div"),up=document.createElement("button"),kp=document.createElement("button");row.className="row2";
+      up.type=kp.type="button";up.className=kp.className="btn";up.textContent="Update this meal";kp.textContent="Keep saved values";
+      up.setAttribute("aria-label","Update "+m.name+" with the new values");kp.setAttribute("aria-label","Keep the saved values for "+m.name);
+      up.onclick=function(){
+        var i=S.meals.indexOf(m);if(i<0)return;
+        var nm=mealFrom(m.name,rc.rows,nn);S.meals[i]=nm;delete keepMap[m.name.toLowerCase()];saveKeep();
+        save();mealsSig=null;drawSavedMeals();drawReview();
+      };
+      kp.onclick=function(){keepMap[m.name.toLowerCase()]=rc.sig;saveKeep();drawReview();};
+      row.append(up,kp);d.append(b,tb,ul,row);box.appendChild(d);
+    });
+  }
+  function saveKeep(){try{localStorage.setItem(KEEPK,JSON.stringify(keepMap));}catch(e){}}
   /* Macro targets */
   ensureTargets();
   if(!S.mig1){["p","c","f"].forEach(function(k){S.targets[k].on=true;});S.mig1=1;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -1270,7 +1427,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function pname(brand,name){var a=String(brand||"").split(",")[0].trim(),b=String(name||"").trim();return (a&&b.toLowerCase().indexOf(a.toLowerCase())!==0?a+" "+b:b||a).trim().slice(0,80);}
   function getJSON(url){
     var ac=window.AbortController?new AbortController():null,t=ac?setTimeout(function(){ac.abort();},10000):0;
-    return fetch(url,ac?{signal:ac.signal}:undefined).then(function(r){clearTimeout(t);if(r.status===404)return null;if(!r.ok)throw new Error("HTTP "+r.status);return r.json();},function(e){clearTimeout(t);throw e;});
+    return fetch(url,ac?{signal:ac.signal}:undefined).then(function(r){clearTimeout(t);if(r.status===404)return null;if(!r.ok){var er=new Error("HTTP "+r.status);er.status=r.status;throw er;}return r.json();},function(e){clearTimeout(t);throw e;});
   }
   function grade(g,src){g=String(g||"").toLowerCase();return /^[a-e]$/.test(g)?{value:g.toUpperCase(),scheme:"Nutri-Score",source:src}:null;}
   var SOURCES=[
@@ -1304,17 +1461,19 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function listOf(a){return a.length<2?a.join(""):a.slice(0,-1).join(", ")+" or "+a[a.length-1];}
   function missingOf(p){return [["k","calories"],["p","protein"],["c","carbs"],["f","fat"]].filter(function(x){return p[x[0]]==null;}).map(function(x){return x[1];});}
   function lookup(code){
-    var my=++lookupId,best=null,failed=[],i=0;
+    var my=++lookupId,best=null,failed=[],limited=[],i=0;
     code=String(code).replace(/\D/g,"");
     $("prod").hidden=true;
     if(code.length<8||code.length>14){bcMsg("That doesn't look like a valid barcode. Barcodes have 8 to 14 digits.",true);return;}
     function finish(){
       if(my!==lookupId)return;
       if(best){bcMsg("");showProd(best,null,true);return;}
-      var tried=SOURCES.map(function(x){return x.name;}).filter(function(n){return failed.indexOf(n)<0;});
-      if(!tried.length){bcMsg("Couldn't reach the product databases. Check your connection and try again, or add the ingredient manually.",true);return;}
-      bcMsg("Barcode "+code+" wasn't found in "+listOf(tried)+"."+(failed.length?" Couldn't reach "+listOf(failed)+".":"")+" You can enter the values from the pack label below.",true);
-      showProd(null,"Enter the values per 100g from the pack label.",true);
+      /* A source that is rate-limited (too many lookups this hour) is reported as busy, not as "not found". */
+      var busy=limited.length?" "+listOf(limited)+(limited.length===1?" has":" have")+" had too many lookups this hour, so "+(limited.length===1?"it was":"they were")+" skipped. Try again later.":"";
+      var tried=SOURCES.map(function(x){return x.name;}).filter(function(n){return failed.indexOf(n)<0&&limited.indexOf(n)<0;});
+      if(!tried.length){bcMsg((failed.length?"Couldn't reach "+listOf(failed)+".":"")+busy+(failed.length&&!limited.length?" Check your connection and try again,":"")+" You can add the ingredient manually.",true);showProd({code:code},"Enter the values per 100g from the pack label.",true);return;}
+      bcMsg("Barcode "+code+" wasn't found in "+listOf(tried)+"."+(failed.length?" Couldn't reach "+listOf(failed)+".":"")+busy+" You can enter the values from the pack label below.",true);
+      showProd({code:code},"Enter the values per 100g from the pack label.",true);
     }
     function step(){
       if(my!==lookupId)return;
@@ -1323,37 +1482,68 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       bcMsg("Looking up "+code+" in "+src.name+"...");
       src.get(code).then(function(p){
         if(my!==lookupId)return;
-        if(p){p.src=src.name;p.missing=missingOf(p);if(!p.missing.length){best=p;finish();return;}if(!best||p.missing.length<best.missing.length)best=p;}
+        if(p){p.src=src.name;p.code=code;p.missing=missingOf(p);if(!p.missing.length){best=p;finish();return;}if(!best||p.missing.length<best.missing.length)best=p;}
         step();
-      },function(){if(my!==lookupId)return;failed.push(src.name);step();});
+      },function(e){if(my!==lookupId)return;(e&&e.status===429?limited:failed).push(src.name);step();});
     }
     step();
   }
-  function showProd(p,msg,scanned){
-    var box=$("prod"),found=!!p,note=msg||"Found in "+p.src+". Check the values against the pack before saving.";p=p||{};
+  /* A display name suggested from the database/pack name: drops pack sizes and multipack counts, and tames ALL CAPS. Editable. */
+  function suggestName(sn){
+    var t=String(sn||"").replace(/\s+/g," ").trim().replace(/\b\d+(\.\d+)?\s?(g|kg|ml|cl|l|oz|lb)\b/gi,"").replace(/\b\d+\s?x\b/gi,"").replace(/\(\s*\)/g,"").replace(/\s{2,}/g," ").replace(/[\s,\-\u2013]+$/,"").trim();
+    if(t&&t===t.toUpperCase()&&/[A-Z]/.test(t))t=t.toLowerCase().replace(/(^|[\s(\-])([a-z])/g,function(m,a,b){return a+b.toUpperCase();});
+    t=t.split(" ").map(function(w){return /^[A-Z][A-Z']{3,}$/.test(w)?w.charAt(0)+w.slice(1).toLowerCase():w;}).join(" ");
+    return t.slice(0,80);
+  }
+  /* The ingredient form. The source name is what the product database or pack calls it (used to match it); the display name is
+     what the app shows. A barcode product keeps its barcode, which is how it's matched. edit = the saved record being edited. */
+  function showProd(p,msg,scanned,edit){
+    var box=$("prod"),found=!!(p&&p.src)&&!edit;p=p||{};
+    var note=msg||(found?"Found in "+p.src+". Check the values against the pack before saving.":"");
     var fields=[["k","pk","calories"],["p","pp","protein"],["c","pc","carbs"],["f","pf","fat"]];
     var absent=found?fields.filter(function(x){var v=p[x[0]];return v==null||isNaN(v);}).map(function(x){return x[2];}):[];
     if(absent.length)note="Found in "+p.src+", but no product database provided: "+absent.join(", ")+". Enter a value for each before saving (type 0 only if the product really has none).";
-    box.hidden=false;
-    box.innerHTML='<p class="note"></p><label>Name<input id="pn" maxlength="80"></label><div class="g4"><label>kcal per 100g<input id="pk" type="number" step="any" min="0"></label><label>Protein<input id="pp" type="number" step="any" min="0"></label><label>Carbs<input id="pc" type="number" step="any" min="0"></label><label>Fat<input id="pf" type="number" step="any" min="0"></label></div><div class="g4"><label>Fibre per 100g (optional)<input id="pi" type="number" step="any" min="0"></label><label>Grams per item (optional)<input id="pe" type="number" step="any" min="1"></label></div><p class="note" id="pmsg" role="alert" hidden></p><button type="button" class="btn" id="pgo">Save ingredient</button>';
+    var have=!edit&&p.code?S.ings.find(function(x){return x.code===p.code;}):null;
+    if(edit)note="Editing \u201c"+edit.name+"\u201d. Saved meals that use it will be flagged for you to check; nothing already in your log changes.";
+    else if(have)note+=" You already have this barcode saved as \u201c"+have.name+"\u201d, so saving updates it.";
+    $("ingNote").hidden=true;box.hidden=false;
+    box.innerHTML='<p class="note"></p><label>Name in the product database or on the pack<input id="psn" maxlength="120"></label><p class="note" id="psnnote" hidden></p><label>Display name in this app<input id="pn" maxlength="80"></label><div class="g4"><label>kcal per 100g<input id="pk" type="number" step="any" min="0"></label><label>Protein<input id="pp" type="number" step="any" min="0"></label><label>Carbs<input id="pc" type="number" step="any" min="0"></label><label>Fat<input id="pf" type="number" step="any" min="0"></label></div><div class="g4"><label>Fibre per 100g (optional)<input id="pi" type="number" step="any" min="0"></label><label>Grams per item (optional)<input id="pe" type="number" step="any" min="1"></label></div><p class="note" id="pcode" hidden></p><p class="note" id="pmsg" role="alert" hidden></p><div class="row2"><button type="button" class="btn" id="pgo">Save ingredient</button><button type="button" class="btn" id="pcancel">Cancel</button></div>';
     box.querySelector(".note").textContent=note;
-    $("pn").value=p.name||"";
+    var touched=!!(edit||have);
+    $("psn").value=edit?(edit.sn||edit.name):(p.name||"");
+    $("pn").value=edit?edit.name:have?have.name:suggestName($("psn").value);
+    /* Without a barcode, the source name is how saved meals find the ingredient, so it stays fixed when editing. */
+    if(edit&&!edit.code){$("psn").readOnly=true;$("psnnote").textContent="Saved meals find this ingredient by this name, so it can\u2019t be changed. You can change the display name.";$("psnnote").hidden=false;}
+    $("psn").oninput=function(){if(!touched)$("pn").value=suggestName(this.value);};
+    $("pn").oninput=function(){touched=true;};
+    if(p.code){$("pcode").textContent="Barcode "+p.code;$("pcode").hidden=false;}
     fields.forEach(function(x){var v=p[x[0]],el=$(x[1]);el.value=(v==null||isNaN(v))?"":Math.round(v*10)/10;if(el.value===""&&found)el.classList.add("miss");el.oninput=function(){el.classList.remove("miss");};});
     $("pi").value=(typeof p.fi==="number"&&!isNaN(p.fi))?Math.round(p.fi*10)/10:"";
-    $("pe").value=p.sv>0?Math.round(p.sv):"";
+    $("pe").value=p.sv>0?Math.round(p.sv*10)/10:"";
+    $("pcancel").onclick=function(){box.hidden=true;};
     $("pgo").onclick=function(){
-      var nm=$("pn").value.trim(),pm=$("pmsg"),miss=[];
+      var nm=$("pn").value.trim(),sn=$("psn").value.trim()||nm,pm=$("pmsg"),miss=[];
       if(!nm){$("pn").focus();return;}
       fields.forEach(function(x){var el=$(x[1]),v=parseFloat(el.value);if(isNaN(v)||v<0){miss.push(x[2]);el.classList.add("miss");}});
       if(miss.length){pm.textContent="Enter "+miss.join(", ")+" before saving (type 0 if the product has none).";pm.hidden=false;return;}
-      var it={id:Date.now(),name:nm,k:parseFloat($("pk").value),p:parseFloat($("pp").value),c:parseFloat($("pc").value),f:parseFloat($("pf").value),scanned:scanned===true},e=parseFloat($("pe").value),fi=parseFloat($("pi").value);
+      var it={id:Date.now(),name:nm,sn:sn,k:parseFloat($("pk").value),p:parseFloat($("pp").value),c:parseFloat($("pc").value),f:parseFloat($("pf").value),scanned:edit?!!edit.scanned:scanned===true},e=parseFloat($("pe").value),fi=parseFloat($("pi").value);
+      if(p.code)it.code=p.code;
       if(e>0)it.e=e;
       if(!isNaN(fi)&&fi>=0)it.fi=fi;
       if(p.rating)it.rating=p.rating;
       if(p.src)it.src=p.src;
-      S.ings=S.ings.filter(function(x){return x.name.toLowerCase()!==nm.toLowerCase();});
+      /* Replaces the record being edited and any with the same identity; the old ids get deletion markers so they don't come back in a sync. */
+      var k=ingKey(it),gone=S.ings.filter(function(x){return ingKey(x)===k||(edit&&x.id===edit.id);});
+      gone.forEach(function(x){(S.del=S.del||{})[x.id]=Date.now();});
+      S.ings=S.ings.filter(function(x){return gone.indexOf(x)<0;});
       S.ings.push(it);S.ings.sort(function(a,b){return a.name.localeCompare(b.name);});
-      save();box.hidden=true;$("bc").value="";bcMsg("");drawIngs();buildFoods();
+      save();box.hidden=true;$("bc").value="";bcMsg("");buildFoods();drawIngs();
+      var used=staleMeals().filter(function(m){return m.i.some(function(x){return x.k===k;});});
+      var inote=$("ingNote");inote.innerHTML="";
+      var t=document.createElement("span");t.textContent=used.length?used.length+(used.length===1?" saved meal uses":" saved meals use")+" \u201c"+nm+"\u201d and may now be out of date. "+(used.length===1?"Its":"Their")+" saved values haven\u2019t changed.":"Saved \u201c"+nm+"\u201d.";
+      inote.appendChild(t);
+      if(used.length){var go=document.createElement("button");go.type="button";go.className="linkbtn";go.textContent="Review in Home cooking";go.onclick=function(){tab("cook");$("review").scrollIntoView&&$("review").scrollIntoView({block:"start"});var b0=$("review").querySelector("button");if(b0)b0.focus();};inote.appendChild(go);}
+      inote.hidden=false;
     };
   }
   var openIngs={};
@@ -1388,9 +1578,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       n.appendChild(ratingNode(it.rating));
       var dt=document.createElement("details"),sm=document.createElement("summary"),dl=document.createElement("dl");
       dt.className="nut";sm.textContent="Nutrition per 100g";dt.appendChild(sm);
-      [["Calories",r(it.k)+" kcal"],["Protein",r(it.p)+"g"],["Carbohydrates",r(it.c)+"g"],["Fat",r(it.f)+"g"],["Fibre",typeof it.fi==="number"?r(it.fi)+"g":"not recorded"]].concat(it.e?[["One item",it.e+"g"]]:[]).concat(it.src?[["Source",it.src]]:[]).forEach(function(row){var a=document.createElement("dt"),b=document.createElement("dd");a.textContent=row[0];b.textContent=row[1];dl.append(a,b);});
+      [["Calories",r(it.k)+" kcal"],["Protein",r(it.p)+"g"],["Carbohydrates",r(it.c)+"g"],["Fat",r(it.f)+"g"],["Fibre",typeof it.fi==="number"?r(it.fi)+"g":"not recorded"]].concat(it.e?[["One item",it.e+"g"]]:[]).concat(it.sn&&it.sn!==it.name?[["Source name",it.sn]]:[]).concat(it.code?[["Barcode",it.code]]:[]).concat(it.src?[["Source",it.src]]:[]).forEach(function(row){var a=document.createElement("dt"),b=document.createElement("dd");a.textContent=row[0];b.textContent=row[1];dl.append(a,b);});
       dt.appendChild(dl);dt.open=!!openIngs[it.id];dt.ontoggle=function(){openIngs[it.id]=dt.open;};
       n.appendChild(dt);
+      var ed=document.createElement("button");ed.type="button";ed.className="linkbtn";ed.textContent="Edit";ed.setAttribute("aria-label","Edit "+it.name);
+      ed.onclick=function(){lookupId++;bcMsg("");showProd({name:it.sn||it.name,k:it.k,p:it.p,c:it.c,f:it.f,fi:it.fi,sv:it.e,code:it.code,src:it.src,rating:it.rating},null,!!it.scanned,it);if($("prod").scrollIntoView)$("prod").scrollIntoView({block:"start"});$("pn").focus();};
+      n.appendChild(ed);
       var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
       x.onclick=function(){S.ings=S.ings.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();drawIngs();buildFoods();};
       li.append(n,x);ul.appendChild(li);
@@ -1647,6 +1840,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function optNum(v){return v===undefined||okNum(v);}
   function optBool(v){return v===undefined||typeof v==="boolean";}
   function okMacros(m){return !!m&&typeof m==="object"&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optBool(m.fip);}
+  /* A saved meal's ingredient list: [{k: ingredient key, n: name, a: amount, u: unit, w: grams or ml}] */
+  function okItems(l){return Array.isArray(l)&&l.every(function(x){return x&&typeof x==="object"&&typeof x.k==="string"&&okNum(x.w)&&x.w>0&&optNum(x.a)&&(x.u===undefined||/^(g|ml|lb|e)$/.test(x.u));});}
   function okQ(q){return !!q&&typeof q==="object"&&okNum(q.v)&&/^[A-E]$/.test(q.g)&&optBool(q.p);}
   function validBackup(d){
     if(!d||typeof d!=="object"||Array.isArray(d)||!d.days||typeof d.days!=="object"||Array.isArray(d.days))return false;
@@ -1654,10 +1849,10 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var days=Object.keys(d.days);
     for(var i=0;i<days.length;i++){
       if(!/^\d{4}-\d{2}-\d{2}$/.test(days[i])||!Array.isArray(d.days[days[i]]))return false;
-      if(!d.days[days[i]].every(function(e){return e&&typeof e==="object"&&typeof e.name==="string"&&okNum(e.kcal)&&okNum(e.id)&&(e.m===undefined||okMacros(e.m))&&(e.s===undefined||/^[blds]$/.test(e.s));}))return false;
+      if(!d.days[days[i]].every(function(e){return e&&typeof e==="object"&&typeof e.name==="string"&&okNum(e.kcal)&&okNum(e.id)&&(e.m===undefined||okMacros(e.m))&&(e.s===undefined||/^[blds]$/.test(e.s))&&optNum(e.at);}))return false;
     }
-    if(d.meals!==undefined&&!(Array.isArray(d.meals)&&d.meals.every(function(m){return m&&typeof m.name==="string"&&okNum(m.kcal)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optBool(m.fip)&&(m.q===undefined||okQ(m.q));})))return false;
-    if(d.ings!==undefined&&!(Array.isArray(d.ings)&&d.ings.every(function(m){return m&&typeof m.name==="string"&&okNum(m.id)&&okNum(m.k)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optNum(m.e);})))return false;
+    if(d.meals!==undefined&&!(Array.isArray(d.meals)&&d.meals.every(function(m){return m&&typeof m.name==="string"&&okNum(m.kcal)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optBool(m.fip)&&(m.q===undefined||okQ(m.q))&&(m.n===undefined||(okNum(m.n)&&m.n>0&&m.n<=100))&&(m.i===undefined||okItems(m.i));})))return false;
+    if(d.ings!==undefined&&!(Array.isArray(d.ings)&&d.ings.every(function(m){return m&&typeof m.name==="string"&&okNum(m.id)&&okNum(m.k)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optNum(m.e)&&(m.sn===undefined||typeof m.sn==="string")&&(m.code===undefined||/^\d{6,14}$/.test(m.code));})))return false;
     /* Targets may be partly missing (the app fills in defaults), but any target that is there must be usable. */
     if(d.targets!==undefined){
       if(!d.targets||typeof d.targets!=="object"||Array.isArray(d.targets))return false;
@@ -1717,7 +1912,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     [a.scores,b.scores].forEach(function(o){for(k in (o||{})){var e=o[k],c=sc[k];if(!e)continue;if(!c||(e.f&&!c.f)||(!!e.f===!!c.f&&(e.t||0)>(c.t||0)))sc[k]=e;}});
     M.scores=sc;
     var im={};
-    (a.ings||[]).concat(b.ings||[]).forEach(function(i){if(del[i.id])return;var n=i.name.toLowerCase(),o=im[n];if(!o||i.id>o.id)im[n]=i;});
+    /* Ingredients by identity (barcode, else source/search name, else name), newest id wins. */
+    (a.ings||[]).concat(b.ings||[]).forEach(function(i){if(del[i.id])return;var n=ingKey(i),o=im[n];if(!o||i.id>o.id)im[n]=i;});
     M.ings=Object.keys(im).map(function(n){return im[n];}).sort(function(x,y){return x.name.localeCompare(y.name);});
     var mm={};
     (a.meals||[]).concat(b.meals||[]).forEach(function(m){var n=m.name.toLowerCase(),o=mm[n];if(!o||(m.t||0)>(o.t||0))mm[n]=m;});
@@ -1771,12 +1967,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)sync();});
   window.addEventListener("online",function(){if(syncFailed&&user){amsg("Back online. Syncing...");sync();}});
   document.addEventListener("visibilitychange",function(){if(!document.hidden){dayCheck();if(Date.now()-lastSync>5000)sync();}});
-  /* If the app is left open past midnight, move on to the new day (yesterday then freezes as normal) and keep the default slot current. */
-  function dayCheck(){if(renderedToday&&renderedToday!==key(new Date())){cur=new Date();render();}else if(renderedToday)autoSlot();}
+  /* If the app is left open past midnight, move on to the new day (yesterday then freezes as normal). */
+  function dayCheck(){if(renderedToday&&renderedToday!==key(new Date())){cur=new Date();render();}}
   setInterval(dayCheck,60000);
   drawAcct();
   $("ver").textContent=VERSION;$("build").textContent=" \u00b7 built "+BUILD;
-  drawCook();drawSavedMeals();drawIngs();
+  drawCook();drawSavedMeals();drawIngs();drawReview();
   applyTheme();syncPickers();drawThemeUi();
   render();
 })();
