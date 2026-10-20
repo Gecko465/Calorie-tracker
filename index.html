@@ -1,5 +1,3 @@
-sb_publishable_o9SiM0CmxuyHfW3NIxtlGA_c_2Vjuyi
-https://supabase.com/dashboard/project/ckxzayzkcmqddspxipwf
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -256,11 +254,72 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 .rate.mq .mqn{flex-basis:100%;text-align:center;font-weight:400;color:var(--muted);font-size:.75rem}
 #mealq{margin:-.1rem 0 .5rem}
 #mealq .rate.mq{justify-content:flex-start;padding-left:.25rem}
+/* v8 */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.seg{display:flex;gap:.25rem;padding:.25rem;background:var(--surface);border:1px solid var(--line);border-radius:2rem}
+.seg button{flex:1;min-height:2.5rem;border:0;background:none;border-radius:1.5rem;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;padding:.3rem .4rem}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+#logbox{margin:1.25rem 0 .5rem}
+.slotrow{display:flex;align-items:center;gap:.6rem;margin:.65rem .15rem 0;font-size:.9rem;color:var(--muted)}
+.slotrow select{min-height:2.6rem;padding:.4rem .6rem;border:1px solid var(--line);border-radius:.75rem;background:var(--surface);color:var(--ink);font-weight:600}
+#logbox #f{margin-top:.65rem}
+#logbox .card{margin:.65rem 0 .5rem}
+#lwrap{position:relative}
+.cbx{position:absolute;left:0;right:0;top:100%;z-index:12;max-height:14rem;overflow-y:auto;margin:.25rem 0 0;padding:.25rem;background:var(--surface);border:1px solid var(--line);border-radius:.75rem;box-shadow:0 10px 28px #18241b26}
+.cbx li{display:flex;align-items:center;justify-content:space-between;gap:.5rem;min-height:2.6rem;padding:.45rem .7rem;border:0;border-radius:.55rem;cursor:pointer;font-size:.92rem}
+.cbx li[aria-selected=true]{background:var(--bg);box-shadow:inset 3px 0 0 var(--accent)}
+.cbx li small{margin:0;font-size:.7rem;color:var(--muted);flex:none}
+.cbx li .nm{flex:1;min-width:0;overflow-wrap:anywhere}
+.cbx li .meta{display:flex;align-items:center;gap:.4rem;flex:none}
+.cbx li .grade{font-size:.75rem;font-weight:700;color:var(--ink)}
+.cbx li.none{cursor:default;color:var(--muted);font-size:.85rem}
+.hint{margin:0;color:var(--danger)}
+.qa{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem}
+.qa label{display:grid;gap:.2rem;font-size:.75rem}
+.qa input{font-weight:400}
+#list .slot li:last-child{border-bottom:0}
+#fmsg{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.4rem .15rem}
+#fmsg[hidden]{display:none}
+#fmsg .linkbtn{padding:.25rem .5rem;flex:none}
+#recentBox h3,.slot h3{margin:0;font-size:.9rem;letter-spacing:-.01em}
+#recentBox{margin:.75rem 0 0}
+#recentBox h3{margin:0 .15rem .2rem;color:var(--muted);font-weight:700}
+#recent{padding-bottom:.25rem}
+#recent button{display:flex;align-items:center;gap:.35rem;min-height:2.5rem;color:var(--ink)}
+#recent button span{max-width:13rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#recent button b{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
+#list{border:0;background:none;padding:0;overflow:visible;display:grid;grid-template-columns:minmax(0,1fr);gap:.8rem}
+#list .empty{border:1px solid var(--line);border-radius:1rem;background:var(--surface);padding:1rem .95rem}
+.slot ul{border:1px solid var(--line);border-radius:1rem;background:var(--surface);padding:0 .95rem;overflow:hidden}
+.sloth{display:flex;align-items:center;gap:.5rem;margin:0 .15rem .35rem;min-height:2rem}
+.sloth h3{flex:1}
+.sloth span{color:var(--muted);font-size:.82rem;font-variant-numeric:tabular-nums}
+.sloth .linkbtn{padding:.2rem 0 .2rem .4rem;font-size:.82rem}
+#copyrow{display:flex;justify-content:center;margin:.75rem 0 0}
+#copyBox{margin:.75rem 0 0}
+#pg-prog .seg{margin:0 0 .75rem}
+.chart{display:block;width:100%;height:12rem}
+.legend{display:flex;flex-wrap:wrap;gap:.25rem 1rem;margin:0 0 .4rem;font-size:.8rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:.35rem}
+.legend canvas{width:26px;height:10px}
+.csum{margin:.5rem 0 0}
+.wrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.5rem;align-items:end}
+.wrow .win{display:flex;gap:.5rem}
+.wrow label{display:grid;gap:.2rem;font-size:.8rem;color:var(--muted);flex:1;min-width:0}
+.wrow input,#adapt select{min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--line);border-radius:.75rem;background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.wrow .btn{margin:0}
+#wunit{margin:.6rem 0 0;max-width:12rem}
+#wnow{display:flex;align-items:center;flex-wrap:wrap;gap:.25rem .75rem;margin:.6rem 0 0;color:var(--ink);font-size:.9rem}
+#wnow .linkbtn{padding:0}
+#adapt dl{display:grid;grid-template-columns:auto 1fr;gap:.2rem .9rem;margin:.5rem 0;font-size:.9rem}
+#adapt dt{color:var(--muted)}#adapt dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+#adapt label{display:grid;gap:.2rem;font-size:.85rem;color:var(--muted);font-weight:700}
+@media(max-width:420px){.tabs{gap:.15rem;padding:.25rem}.tabs button{font-size:.7rem;padding:.4rem .1rem;letter-spacing:-.01em}.qa{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <main>
-  <nav class="tabs" aria-label="Pages"><button id="t-log" aria-selected="true">Daily log</button><button id="t-cook" aria-selected="false">Home cooking</button><button id="t-ing" aria-selected="false">Ingredients</button><button id="t-set" aria-selected="false">Settings</button></nav>
+  <nav class="tabs" aria-label="Pages"><button id="t-log" aria-selected="true">Daily log</button><button id="t-prog" aria-selected="false">Progress</button><button id="t-cook" aria-selected="false">Home cooking</button><button id="t-ing" aria-selected="false">Ingredients</button><button id="t-set" aria-selected="false">Settings</button></nav>
   <div id="pg-log" data-glance="TODAY AT A GLANCE">
   <div class="nav">
     <button class="icon" id="prev" aria-label="Previous day">&lsaquo;</button>
@@ -279,24 +338,66 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
   <div class="score" id="score" role="status"><div><span class="sl">Daily score</span><small id="scoreL"></small></div><b id="scoreV">0%</b></div>
   
 
+  <div id="logbox">
+  <div class="seg" id="lmode" role="group" aria-label="What to log"><button type="button" data-m="meal" aria-pressed="true">Saved meal</button><button type="button" data-m="food" aria-pressed="false">Food</button><button type="button" data-m="quick" aria-pressed="false">Quick add</button></div>
+  <div class="slotrow"><label for="slot">Add to</label><select id="slot"></select></div>
   <form id="f">
     <select id="name" aria-label="Choose a saved meal"></select>
     <button id="fsubmit" type="submit">Add meal</button>
   </form>
   <div id="mealq" hidden></div>
+  <div class="card" id="lfood" hidden>
+    <label for="lsearch">Food</label>
+    <div id="lwrap"><input id="lsearch" type="text" role="combobox" aria-expanded="false" aria-controls="llist" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search ingredients, e.g. banana"><ul id="llist" class="cbx" role="listbox" aria-label="Matching foods" hidden></ul></div>
+    <p class="note hint" id="lhint" role="status" hidden>Choose a food from the list first.</p>
+    <div class="row2"><div><label for="lamt">Amount</label><input id="lamt" type="number" min="0.1" step="any" inputmode="decimal"></div><div><label for="lunit">Unit</label><select id="lunit"></select></div></div>
+    <p class="note" id="lamtmsg" role="alert" hidden>Enter an amount between 0.1 and 100,000.</p>
+    <button class="btn" id="lgo" type="button">Log this food</button>
+  </div>
+  <div class="card" id="lquick" hidden>
+    <label for="qname">Name (optional)</label><input id="qname" maxlength="80" placeholder="Quick add">
+    <label for="qk">Calories (kcal)</label><input id="qk" type="number" min="1" max="20000" step="any" inputmode="decimal">
+    <div class="qa"><label>Protein g<input id="qp" type="number" min="0" step="any" inputmode="decimal" placeholder="optional"></label><label>Carbs g<input id="qc" type="number" min="0" step="any" inputmode="decimal" placeholder="optional"></label><label>Fat g<input id="qf" type="number" min="0" step="any" inputmode="decimal" placeholder="optional"></label><label>Fibre g<input id="qfi" type="number" min="0" step="any" inputmode="decimal" placeholder="optional"></label></div>
+    <p class="note" id="qmsg" role="alert" hidden></p>
+    <button class="btn" id="qgo" type="button">Log quick add</button>
+  </div>
   <p class="note" id="fmsg" role="status" hidden></p>
+  <div id="recentBox" hidden><h3 id="recentH">Recent foods</h3><div class="chips" id="recent" role="group" aria-labelledby="recentH"></div></div>
+  </div>
   <p class="note ro" id="ro" role="status" hidden>This day is read-only. Go back to today to add or remove foods.</p>
   <div class="list-head"><h2 id="lhead">Today’s log</h2><span id="count"></span></div>
-  <ul id="list"></ul>
+  <div id="list"></div>
+  <div id="copyrow" hidden><button type="button" class="calbtn" id="copyAll">Copy this whole day to today</button></div>
+  <div id="copyBox" class="notice" role="alert" hidden><span id="copyText"></span><div class="row2"><button class="btn" id="copyYes" type="button">Copy to today</button><button class="btn" id="copyNo" type="button">Cancel</button></div></div>
   <div class="sum"><span id="avg"></span></div>
   </div>
   </div>
+  <section id="pg-prog" hidden>
+    <div class="sc" id="wcard"><h2>Weight</h2>
+      <div class="wrow"><div class="win" id="wkgIn"><label>Today's weight (kg)<input id="wkg" type="number" min="20" max="400" step="0.1" inputmode="decimal"></label></div><div class="win" id="wstIn" hidden><label>Stones<input id="wst" type="number" min="0" max="62" step="1" inputmode="numeric"></label><label>Pounds<input id="wlb" type="number" min="0" max="13.9" step="0.1" inputmode="decimal"></label></div><button class="btn" id="wgo" type="button">Save</button></div>
+      <p class="note" id="wmsg" role="alert" hidden></p>
+      <p id="wnow" role="status"></p>
+      <div class="seg" id="wunit" role="group" aria-label="Weight unit"><button type="button" data-u="kg" aria-pressed="true">kg</button><button type="button" data-u="st" aria-pressed="false">st and lb</button></div>
+      <p class="note">Weigh in at the same time each day if you can. The trend smooths out day-to-day ups and downs. Your unit choice is remembered on this device.</p>
+    </div>
+    <div class="seg" id="rng" role="group" aria-label="Chart period"><button type="button" data-r="28" aria-pressed="true">4 weeks</button><button type="button" data-r="91" aria-pressed="false">3 months</button><button type="button" data-r="365" aria-pressed="false">1 year</button></div>
+    <div class="sc"><h2>Calories</h2><div class="legend" id="lgCal"></div><canvas class="chart" id="chCal" aria-hidden="true"></canvas><p class="note csum" id="sumCal"></p></div>
+    <div class="sc"><h2>Macros</h2><div class="legend" id="lgMac"></div><canvas class="chart" id="chMac" aria-hidden="true"></canvas><p class="note csum" id="sumMac"></p></div>
+    <div class="sc"><h2>Weight trend</h2><div class="legend" id="lgW"></div><canvas class="chart" id="chW" aria-hidden="true"></canvas><p class="note csum" id="sumW"></p></div>
+    <div class="sc" id="adapt"><h2>Adaptive calorie target</h2>
+      <p class="note">Estimates how much you really burn each day from what you logged and how your weight trend changed over the last 4 weeks (about 7,700 kcal per kg). Only days you logged count.</p>
+      <label for="arate">Aim<select id="arate"></select></label>
+      <div id="aout" role="status"></div>
+      <button class="btn" id="ause" type="button" hidden>Use this goal</button>
+      <div id="aBox" class="notice" role="alert" hidden><span id="aText"></span><div class="row2"><button class="btn" id="aYes" type="button">Change goal</button><button class="btn" id="aNo" type="button">Keep my goal</button></div></div>
+    </div>
+  </section>
   <section id="pg-cook" hidden>
     <div class="card">
       <h2>Create New Meal</h2>
       <label for="mname">Meal name</label><input id="mname" maxlength="80" placeholder="e.g. Chicken pasta">
       <label for="fsearch">Ingredient</label>
-      <div id="fwrap"><input id="fsearch" type="text" role="combobox" aria-expanded="false" aria-controls="flist" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search ingredients, e.g. chicken"><ul id="flist" role="listbox" aria-label="Matching ingredients" hidden></ul></div>
+      <div id="fwrap"><input id="fsearch" type="text" role="combobox" aria-expanded="false" aria-controls="flist" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search ingredients, e.g. chicken"><ul id="flist" class="cbx" role="listbox" aria-label="Matching ingredients" hidden></ul></div>
       <p class="note" id="fhint" role="status" hidden>Choose an ingredient from the list first.</p>
       <div class="row2"><div><label for="amt">Amount used</label><input id="amt" type="number" min="0.1" step="any" inputmode="decimal"></div><div><label for="unit">Unit</label><select id="unit"></select></div></div>
       <p class="note" id="amtmsg" role="alert" hidden>Enter an amount between 0.1 and 100,000.</p>
@@ -330,7 +431,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
         <div class="scanbar" style="grid-template-columns:auto auto;margin-top:0"><button type="button" class="btn" id="asy" style="margin:0">Sync now</button><button type="button" class="btn" id="aso" style="margin:0">Sign out</button></div></div>
     </div>
     <div class="sc"><h2>Calorie goal</h2>
-      <div class="goal"><label for="goal">Daily goal</label><input id="goal" type="number" min="500" step="50" inputmode="numeric"><span>kcal</span></div>
+      <div class="goal"><label for="goal">Daily goal</label><input id="goal" type="number" min="500" max="10000" step="50" inputmode="numeric"><span>kcal</span></div>
     </div>
     <div class="sc"><h2>Macro targets</h2>
       <p class="note">Tick a macro to show its ring on the Daily log, then set your daily target in grams.</p>
@@ -355,8 +456,8 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v7-wip";
-var BUILD="20 Oct 10:50";
+var VERSION="v8-wip";
+var BUILD="20 Oct 11:48";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 /* USDA FoodData Central key for barcode fallback lookups. DEMO_KEY works without sign-up but is limited to 30 lookups an hour;
    a free personal key from api.data.gov raises that. It is a public, read-only key, safe to keep in the page. */
@@ -463,6 +564,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     TC={};
     if(note){note.hidden=!adj;note.textContent=adj?"Your accent colour was darkened or lightened a little so it stays readable against your card and page colours.":"";}
     if(typeof paintRing==="function"&&$("ring")){paintRing(ringShown);repaintMacros();}
+    if(typeof drawProgress==="function"&&$("pg-prog"))drawProgress();
     drawThemeUi();
   }
   function drawThemeUi(){
@@ -548,7 +650,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     function step(now){if(run!==ringRun)return;var p=Math.min((now-start)/3000,1),e=1-Math.pow(1-p,3);ringShown=p>=1?v:from+(v-from)*e;paintRing(ringShown);if(p<1)requestAnimationFrame(step);else ringAnimTo=null;}
     requestAnimationFrame(step);
   }
-  window.addEventListener("resize",function(){paintRing(ringShown);repaintMacros();});
+  window.addEventListener("resize",function(){paintRing(ringShown);repaintMacros();if(typeof drawProgress==="function")drawProgress();});
   /* Past days are read-only and only today plus the previous 7 days can be opened (older records stay stored and synced). */
   var WINDOW=7;
   function sod(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
@@ -601,8 +703,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var k=key(cur), items=S.days[k]||[], total=Math.round(items.reduce(function(a,b){return a+b.kcal;},0));
     var today=daysAgo(cur)===0;
     navHead();
-    $("f").hidden=!today;if(!today)$("fmsg").hidden=true;drawMealQ();
+    $("logbox").hidden=!today;if(!today)$("fmsg").hidden=true;drawMealQ();
+    if(today){autoSlot();drawRecent();}
     $("ro").hidden=today;
+    $("copyrow").hidden=today||!items.length;
+    if(pendingCopy&&(today||pendingCopy.d!==k))cancelCopy();
+    renderedToday=today?key(new Date()):null;
     $("pg-log").dataset.glance=today?"TODAY AT A GLANCE":"PAST DAY \u00b7 READ-ONLY";
     $("lhead").textContent=today?"Today\u2019s log":"Log for "+cur.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"});
     var oldTotal=parseFloat($("eaten").textContent)||0,fromCal=ringShown;
@@ -620,29 +726,114 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     
     ringTo(total,animate);
     $("goal").value=S.goal;
-    var ul=$("list"); ul.innerHTML="";
-    if(!items.length){var e=document.createElement("li");e.className="empty";e.textContent=today?"Nothing logged yet. Choose a saved meal above.":"Nothing was logged on this day.";ul.appendChild(e);}
-    /* Newest first on screen; the saved order is unchanged. */
-    items.slice().sort(function(a,b){return b.id-a.id;}).forEach(function(it){
-      var li=document.createElement("li");
-      var n=document.createElement("div");n.className="n";n.textContent=it.name;
-      if(it.m){var s=document.createElement("small");s.textContent="P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g, Fibre "+(typeof it.m.fi==="number"?r1(it.m.fi)+"g"+(it.m.fip?"+ (partial)":""):"unknown");n.appendChild(s);}
-      var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
-      var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
-      x.onclick=function(){if(daysAgo(cur)!==0)return;S.days[k]=items.filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
-      if(today)li.append(n,c,x);else li.append(n,c);
-      ul.appendChild(li);
+    var box=$("list"); box.innerHTML="";
+    if(!items.length){var e=document.createElement("p");e.className="empty";e.textContent=today?"Nothing logged yet. Add a saved meal, a food or a quick add above.":"Nothing was logged on this day.";box.appendChild(e);}
+    /* Grouped by meal slot, each with its subtotal. Newest first within a slot on screen; the saved order is unchanged. */
+    var groups={};items.forEach(function(it){var s=slotOf(it);(groups[s]=groups[s]||[]).push(it);});
+    SLOT_ORDER.forEach(function(s){
+      var g=groups[s];if(!g)return;
+      var sec=document.createElement("section"),hd=document.createElement("div"),h=document.createElement("h3"),sub=document.createElement("span"),ul=document.createElement("ul");
+      sec.className="slot";sec.dataset.slot=s;hd.className="sloth";h.textContent=SLOTN[s];
+      sub.textContent=Math.round(g.reduce(function(a,b){return a+b.kcal;},0))+" kcal";
+      hd.append(h,sub);
+      if(!today){var cb=document.createElement("button");cb.type="button";cb.className="linkbtn";cb.textContent="Copy to today";cb.setAttribute("aria-label","Copy "+SLOTN[s].toLowerCase()+" to today");cb.onclick=function(){askCopy(k,s);};hd.appendChild(cb);}
+      g.slice().sort(function(a,b){return b.id-a.id;}).forEach(function(it){
+        var li=document.createElement("li");
+        var n=document.createElement("div");n.className="n";n.textContent=it.name;
+        if(it.m){var sm=document.createElement("small");sm.textContent="P "+it.m.p+"g, C "+it.m.c+"g, F "+it.m.f+"g, Fibre "+(typeof it.m.fi==="number"?r1(it.m.fi)+"g"+(it.m.fip?"+ (partial)":""):"unknown");n.appendChild(sm);}
+        var c=document.createElement("span");c.className="k";c.textContent=it.kcal+" kcal";
+        var x=document.createElement("button");x.textContent="\u00d7";x.setAttribute("aria-label","Remove "+it.name);
+        /* Works from the list as it is now, so an entry merged in by a sync since this was drawn isn't dropped. */
+        x.onclick=function(){if(daysAgo(cur)!==0)return;S.days[k]=(S.days[k]||[]).filter(function(i){return i.id!==it.id;});(S.del=S.del||{})[it.id]=Date.now();save();render();};
+        if(today)li.append(n,c,x);else li.append(n,c);
+        ul.appendChild(li);
+      });
+      sec.append(hd,ul);box.appendChild(sec);
     });
     $("count").textContent=items.length+(items.length===1?" item":" items");
     var keys=Object.keys(S.days).filter(function(d){return S.days[d].length;});
     if(keys.length>1){var t=keys.reduce(function(a,d){return a+S.days[d].reduce(function(x,y){return x+y.kcal;},0);},0);$("avg").textContent="Average "+Math.round(t/keys.length)+" kcal/day";}else $("avg").textContent="";
+    drawProgress();
   }
-  function add(name,kcal,m){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();}
-  function addedNote(name){var m=$("fmsg"),t=key(cur)===key(new Date());m.textContent="Added \u201c"+name+"\u201d to "+(t?"today's log":cur.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"})+" (not today)")+".";m.hidden=false;}
+  /* Meal slots. The default follows the time of day; a slot the user picks stays until the time-of-day default moves on. */
+  var SLOTS=[["b","Breakfast"],["l","Lunch"],["d","Dinner"],["s","Snacks"]],SLOTN={o:"Other"},SLOT_ORDER=["b","l","d","s","o"],slotPick=null,renderedToday=null;
+  SLOTS.forEach(function(x){SLOTN[x[0]]=x[1];opt($("slot"),x[0],x[1]);});
+  function slotAt(d){var h=d.getHours()+d.getMinutes()/60;return h>=4&&h<11?"b":h>=11&&h<15?"l":h>=17&&h<21.5?"d":"s";}
+  /* Entries saved before slots existed are placed by the time they were logged (their id is that time). This is for display only; nothing is saved. */
+  function slotOf(e){if(e.s&&SLOTN[e.s]&&e.s!=="o")return e.s;var t=Number(e.id);return t>946684800000&&t<4102444800000?slotAt(new Date(t)):"o";}
+  function autoSlot(){var a=slotAt(new Date());if(slotPick&&slotPick.base!==a)slotPick=null;$("slot").value=slotPick?slotPick.s:a;}
+  function curSlot(){autoSlot();return $("slot").value;}
+  $("slot").onchange=function(){slotPick={s:this.value,base:slotAt(new Date())};};
+  function add(name,kcal,m,s){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur);var e={id:Date.now()+Math.random(),name:name,kcal:kcal,s:s||curSlot()};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();return e;}
+  /* "Added ..." with an Undo for the newest entry, so a mistaken tap is easy to take back. */
+  var lastAdded=null;
+  function addedNote(name,e){
+    var m=$("fmsg"),t=document.createElement("span"),u=document.createElement("button");
+    m.innerHTML="";t.textContent="Added \u201c"+name+"\u201d to "+SLOTN[slotOf(e)].toLowerCase()+".";
+    lastAdded={id:e.id,k:key(new Date()),name:name};
+    u.type="button";u.className="linkbtn";u.textContent="Undo";u.setAttribute("aria-label","Undo adding "+name);
+    u.onclick=undoAdd;m.append(t,u);m.hidden=false;
+  }
+  function undoAdd(){
+    var la=lastAdded;lastAdded=null;if(!la)return;
+    var list=S.days[la.k]||[];if(!list.some(function(i){return i.id===la.id;}))return;
+    S.days[la.k]=list.filter(function(i){return i.id!==la.id;});(S.del=S.del||{})[la.id]=Date.now();save();render();
+    var m=$("fmsg");m.textContent="Removed \u201c"+la.name+"\u201d.";m.hidden=false;
+  }
   function mealM(x){var m={p:x.p,c:x.c,f:x.f};if(x.fiState){if(x.fiState!=="none"){m.fi=x.fi;if(x.fiState==="partial")m.fip=true;}}else if(typeof x.fi==="number"){m.fi=x.fi;if(x.fip)m.fip=true;}return m;}
-  $("f").onsubmit=function(e){e.preventDefault();var item=S.meals[parseInt($("name").value,10)],msg=$("fmsg");if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}msg.hidden=true;add(item.name,item.kcal,mealM(item));addedNote(item.name);$("name").focus();};
+  $("f").onsubmit=function(e){e.preventDefault();var item=S.meals[parseInt($("name").value,10)],msg=$("fmsg");if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}msg.hidden=true;var en=add(item.name,item.kcal,mealM(item));addedNote(item.name,en);$("name").focus();};
+  /* What to log: a saved meal, a single food, or a quick add. */
+  function setMode(md){
+    [].forEach.call($("lmode").children,function(b){b.setAttribute("aria-pressed",b.dataset.m===md?"true":"false");});
+    $("f").hidden=md!=="meal";$("lfood").hidden=md!=="food";$("lquick").hidden=md!=="quick";$("fmsg").hidden=true;drawMealQ();
+  }
+  [].forEach.call($("lmode").children,function(b){b.onclick=function(){setMode(b.dataset.m);};});
+  /* Recent foods come straight from the log (last 4 weeks, newest first, one per name and calorie value); nothing extra is stored. */
+  var recentGuard={};
+  function recentFoods(){
+    var t=sod(new Date()),from=key(new Date(t.getFullYear(),t.getMonth(),t.getDate()-28)),to=key(t),all=[],seen={},out=[];
+    Object.keys(S.days).forEach(function(d){if(d>=from&&d<=to)all=all.concat(S.days[d]||[]);});
+    all.sort(function(a,b){return b.id-a.id;});
+    for(var i=0;i<all.length&&out.length<8;i++){var e=all[i],sig=String(e.name).toLowerCase()+"|"+e.kcal;if(seen[sig])continue;seen[sig]=1;out.push(e);}
+    return out;
+  }
+  function drawRecent(){
+    var box=$("recent"),list=recentFoods();box.innerHTML="";$("recentBox").hidden=!list.length;
+    list.forEach(function(e){
+      var b=document.createElement("button"),t=document.createElement("span"),kc=document.createElement("b"),sig=String(e.name).toLowerCase()+"|"+e.kcal;
+      b.type="button";t.textContent=e.name;kc.textContent=e.kcal+" kcal";b.append(t,kc);
+      b.setAttribute("aria-label","Log "+e.name+", "+e.kcal+" kcal, again today");
+      b.onclick=function(){
+        /* A quick double tap logs it once. */
+        var now=Date.now();if(recentGuard.sig===sig&&now-recentGuard.t<800)return;recentGuard={sig:sig,t:now};
+        var n=add(e.name,e.kcal,e.m?JSON.parse(JSON.stringify(e.m)):null);addedNote(e.name,n);
+      };
+      box.appendChild(b);
+    });
+  }
+  /* Copy a past day, or one meal slot of it, into today. Copies get new ids; the past day is not changed. */
+  var pendingCopy=null;
+  function askCopy(d,s){
+    var src=(S.days[d]||[]).filter(function(e){return !s||slotOf(e)===s;});if(!src.length)return;
+    var kc=Math.round(src.reduce(function(a,b){return a+b.kcal;},0)),p=d.split("-"),dt=new Date(+p[0],+p[1]-1,+p[2]);
+    pendingCopy={d:d,ids:src.map(function(e){return e.id;})};
+    $("copyText").textContent="Copy "+(s?SLOTN[s].toLowerCase()+" from ":"everything from ")+dt.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"})+" ("+src.length+(src.length===1?" item, ":" items, ")+kc+" kcal) into today\u2019s log? That day stays as it is.";
+    $("copyBox").hidden=false;$("copyYes").focus();
+  }
+  function cancelCopy(){pendingCopy=null;$("copyBox").hidden=true;}
+  $("copyAll").onclick=function(){askCopy(key(cur),null);};
+  $("copyNo").onclick=function(){cancelCopy();$("copyAll").focus();};
+  $("copyYes").onclick=function(){
+    var pc=pendingCopy;cancelCopy();if(!pc)return;
+    var src=(S.days[pc.d]||[]).filter(function(e){return pc.ids.indexOf(e.id)>=0;}).sort(function(a,b){return a.id-b.id;});
+    if(!src.length)return;
+    var tk=key(new Date()),base=Date.now(),list=S.days[tk]=S.days[tk]||[],fallback=curSlot();
+    src.forEach(function(e,i){var s=slotOf(e),c={id:base+i+Math.random()*0.5,name:e.name,kcal:e.kcal,s:s==="o"?fallback:s};if(e.m)c.m=JSON.parse(JSON.stringify(e.m));list.push(c);});
+    cur=new Date();save();animateWheels=true;render();
+    var m=$("fmsg");m.textContent="Copied "+src.length+(src.length===1?" item":" items")+" to today.";m.hidden=false;
+  };
   $("name").onchange=function(){$("fmsg").hidden=true;drawMealQ();};
-  $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500){S.goal=g;S.sUpdated=Date.now();save();}render();};
+  $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500&&g<=10000){S.goal=g;S.sUpdated=Date.now();save();}render();};
   /* The date heading and arrows stay put and update straight away; only the day's content slides. */
   function navHead(){
     var today=daysAgo(cur)===0;
@@ -780,88 +971,129 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   "Banana":2.6,"Apple":2.4,"Orange":2.4,"Strawberries":2,"Blueberries":2.4,"Grapes":0.9,"Avocado":6.7,
   "Onion":1.7,"Carrot":2.8,"Tomato":1.2,"Tinned chopped tomatoes":1,"Broccoli":2.6,"Pepper":2,"Mushrooms":1,"Spinach":2.2,"Cauliflower":2,"Courgette":1,"Cabbage":2.5,"Peas, frozen":5,"Sweetcorn, tinned":1.8,"Lettuce":1.2,
   "Olive oil":0,"Vegetable oil":0,"Sugar":0,"Plain flour":3,"Honey":0.2,"Peanut butter":6,"Coconut milk, tinned":0,"Soy sauce":0.8,"Tomato ketchup":0.3,"Mayonnaise":0,"Baked beans, tinned":3.7};
-  var foodSel=null,foodAct=-1,foodRows=[],scCount=0;
+  /* The ingredient search combobox, shared by Home cooking and the Daily log's Food option. Each picker keeps its own state.
+     Matches are ranked: exact name, starts with the text, every word starts a word, then every word appears anywhere. Scanned ingredients come before basic ones on ties. */
+  var pickers=[],scCount=0;
+  function makePicker(o){
+    var P={sel:null,act:-1,rows:[]},inp=$(o.search),ul=$(o.list),hint=$(o.hint),amt=$(o.amt),unit=$(o.unit),amsg=$(o.amsg);
+    function matches(){
+      var q=inp.value.toLowerCase().trim(),words=q.split(/\s+/).filter(Boolean),rows=[];
+      ALL.forEach(function(f,i){
+        var nm=f[0].toLowerCase(),r;
+        if(!words.length)r=4;
+        else if(nm===q)r=0;
+        else if(nm.indexOf(q)===0)r=1;
+        else{
+          var toks=nm.split(/[^a-z0-9%]+/);
+          if(words.every(function(w){return toks.some(function(t){return t.indexOf(w)===0;});}))r=2;
+          else if(words.every(function(w){return nm.indexOf(w)>=0;}))r=3;
+          else return;
+        }
+        rows.push({i:i,r:r});
+      });
+      rows.sort(function(a,b){return a.r-b.r||((a.i<scCount?0:1)-(b.i<scCount?0:1))||a.i-b.i;});
+      return rows;
+    }
+    function setAct(n){
+      P.act=n;
+      [].forEach.call(ul.querySelectorAll("li[role=option]"),function(li,j){li.setAttribute("aria-selected",j===n?"true":"false");if(j===n&&li.scrollIntoView)li.scrollIntoView({block:"nearest"});});
+      if(n>=0)inp.setAttribute("aria-activedescendant",o.prefix+n);else inp.removeAttribute("aria-activedescendant");
+    }
+    function draw(){
+      ul.innerHTML="";P.rows=matches();
+      if(!P.rows.length){var li=document.createElement("li");li.className="none";li.setAttribute("role","presentation");li.textContent="No ingredients match your search. Edit or clear the search to see options again.";ul.appendChild(li);}
+      P.rows.forEach(function(r,n){
+        var li=document.createElement("li"),nm=document.createElement("span"),tg=document.createElement("small");
+        li.setAttribute("role","option");li.id=o.prefix+n;nm.textContent=ALL[r.i][0];tg.textContent=r.i<scCount?"Scanned":"Basic";
+        nm.className="nm";
+        var meta=document.createElement("span"),rb=r.i<scCount?ratingBar(ALL[r.i][8],true):null;
+        meta.className="meta";
+        if(rb){var gr=document.createElement("span");gr.className="grade";gr.textContent=rb.grade;meta.append(rb.bar,gr);}
+        meta.appendChild(tg);
+        li.append(nm,meta);
+        li.onmousedown=function(e){e.preventDefault();};
+        li.onclick=function(){pick(r.i);};
+        ul.appendChild(li);
+      });
+      setAct(P.rows.length?0:-1);
+    }
+    function open(){ul.hidden=false;inp.setAttribute("aria-expanded","true");draw();}
+    function close(){ul.hidden=true;inp.setAttribute("aria-expanded","false");inp.removeAttribute("aria-activedescendant");}
+    function pick(i){P.sel=i;inp.value=ALL[i][0];hint.hidden=true;units();close();amt.focus();}
+    function current(){
+      if(P.sel!==null&&ALL[P.sel])return ALL[P.sel];
+      var t=inp.value.trim().toLowerCase();if(!t)return null;
+      for(var i=0;i<ALL.length;i++)if(ALL[i][0].toLowerCase()===t){P.sel=i;units();return ALL[i];}
+      return null;
+    }
+    function units(){var f=P.sel!==null?ALL[P.sel]:null;unit.innerHTML="";if(!f)return;opt(unit,"u",f[5]||"g");if(f[6])opt(unit,"e","each (≈"+f[6]+"g)");}
+    amt.addEventListener("input",function(){amsg.hidden=true;});
+    inp.onfocus=function(){this.select();open();};
+    inp.onclick=function(){if(ul.hidden)open();};
+    inp.onblur=close;
+    inp.oninput=function(){P.sel=null;units();hint.hidden=true;open();};
+    inp.onkeydown=function(e){
+      if(e.key==="ArrowDown"){e.preventDefault();if(ul.hidden)open();else if(P.rows.length)setAct(Math.min(P.act+1,P.rows.length-1));}
+      else if(e.key==="ArrowUp"){e.preventDefault();if(P.rows.length)setAct(Math.max(P.act-1,0));}
+      else if(e.key==="Enter"){if(!ul.hidden&&P.act>=0){e.preventDefault();pick(P.rows[P.act].i);}}
+      else if(e.key==="Escape"){if(!ul.hidden){e.preventDefault();e.stopPropagation();close();}}
+    };
+    P.name=function(){return P.sel!==null&&ALL[P.sel]?ALL[P.sel][0]:null;};
+    /* After the food list is rebuilt (a scan or a sync), keep the same food chosen. */
+    P.restore=function(name){P.sel=null;if(name)for(var i=0;i<ALL.length;i++)if(ALL[i][0]===name){P.sel=i;break;}if(!ul.hidden)draw();units();};
+    /* The chosen food and amount as an ingredient row, or null after showing what is missing. Amounts must be 0.1 to 100,000. */
+    P.read=function(){
+      var f=current(),a=parseFloat(amt.value);
+      if(!f){hint.hidden=false;inp.focus();return null;}
+      var each=unit.value==="e",r=(each?a*f[6]:a)/100;
+      if(!(a>=0.1)||!isFinite(a)||a>100000||!isFinite(r*f[1]+r*f[2]+r*f[3]+r*f[4])){amsg.hidden=false;amt.focus();return null;}
+      amsg.hidden=true;
+      return {name:f[0],label:each?a+" each":a+(f[5]||"g"),k:f[1]*r,p:f[2]*r,c:f[3]*r,f:f[4]*r,fi:(typeof f[7]==="number")?f[7]*r:null};
+    };
+    P.clear=function(){amt.value="";inp.value="";P.sel=null;units();};
+    pickers.push(P);
+    return P;
+  }
   function buildFoods(){
-    var prevName=foodSel!==null&&ALL[foodSel]?ALL[foodSel][0]:null;
+    var prev=pickers.map(function(p){return p.name();});
     if(!S.ings)S.ings=[];
     var sc=S.ings.map(function(x){return [x.name,x.k,x.p,x.c,x.f,"g",x.e,typeof x.fi==="number"?x.fi:null,x.rating||null];});
     scCount=sc.length;
     ALL=sc.concat(BASIC.map(function(b){return [b[1],b[2],b[3],b[4],b[5],b[6],b[7],typeof FIBRE[b[1]]==="number"?FIBRE[b[1]]:null];}));
-    foodSel=null;
-    if(prevName)for(var i=0;i<ALL.length;i++)if(ALL[i][0]===prevName){foodSel=i;break;}
-    if(!$("flist").hidden)drawFoodList();
-    units();
+    pickers.forEach(function(p,i){p.restore(prev[i]);});
   }
-  /* Matches are ranked: exact name, starts with the text, every word starts a word, then every word appears anywhere. Scanned ingredients come before basic ones on ties. */
-  function foodMatches(){
-    var q=$("fsearch").value.toLowerCase().trim(),words=q.split(/\s+/).filter(Boolean),rows=[];
-    ALL.forEach(function(f,i){
-      var nm=f[0].toLowerCase(),r;
-      if(!words.length)r=4;
-      else if(nm===q)r=0;
-      else if(nm.indexOf(q)===0)r=1;
-      else{
-        var toks=nm.split(/[^a-z0-9%]+/);
-        if(words.every(function(w){return toks.some(function(t){return t.indexOf(w)===0;});}))r=2;
-        else if(words.every(function(w){return nm.indexOf(w)>=0;}))r=3;
-        else return;
-      }
-      rows.push({i:i,r:r});
-    });
-    rows.sort(function(a,b){return a.r-b.r||((a.i<scCount?0:1)-(b.i<scCount?0:1))||a.i-b.i;});
-    return rows;
-  }
-  function setFoodAct(n){
-    foodAct=n;
-    [].forEach.call($("flist").querySelectorAll("li[role=option]"),function(li,j){li.setAttribute("aria-selected",j===n?"true":"false");if(j===n&&li.scrollIntoView)li.scrollIntoView({block:"nearest"});});
-    if(n>=0)$("fsearch").setAttribute("aria-activedescendant","fo-"+n);else $("fsearch").removeAttribute("aria-activedescendant");
-  }
-  function drawFoodList(){
-    var ul=$("flist");ul.innerHTML="";foodRows=foodMatches();
-    if(!foodRows.length){var li=document.createElement("li");li.className="none";li.setAttribute("role","presentation");li.textContent="No ingredients match your search. Edit or clear the search to see options again.";ul.appendChild(li);}
-    foodRows.forEach(function(r,n){
-      var li=document.createElement("li"),nm=document.createElement("span"),tg=document.createElement("small");
-      li.setAttribute("role","option");li.id="fo-"+n;nm.textContent=ALL[r.i][0];tg.textContent=r.i<scCount?"Scanned":"Basic";
-      nm.className="nm";
-      var meta=document.createElement("span"),rb=r.i<scCount?ratingBar(ALL[r.i][8],true):null;
-      meta.className="meta";
-      if(rb){var gr=document.createElement("span");gr.className="grade";gr.textContent=rb.grade;meta.append(rb.bar,gr);}
-      meta.appendChild(tg);
-      li.append(nm,meta);
-      li.onmousedown=function(e){e.preventDefault();};
-      li.onclick=function(){pickFood(r.i);};
-      ul.appendChild(li);
-    });
-    setFoodAct(foodRows.length?0:-1);
-  }
-  function openFood(){$("flist").hidden=false;$("fsearch").setAttribute("aria-expanded","true");drawFoodList();}
-  function closeFood(){$("flist").hidden=true;$("fsearch").setAttribute("aria-expanded","false");$("fsearch").removeAttribute("aria-activedescendant");}
-  function pickFood(i){foodSel=i;$("fsearch").value=ALL[i][0];$("fhint").hidden=true;units();closeFood();$("amt").focus();}
-  function currentFood(){
-    if(foodSel!==null&&ALL[foodSel])return ALL[foodSel];
-    var t=$("fsearch").value.trim().toLowerCase();if(!t)return null;
-    for(var i=0;i<ALL.length;i++)if(ALL[i][0].toLowerCase()===t){foodSel=i;units();return ALL[i];}
-    return null;
-  }
-  $("amt").addEventListener("input",function(){$("amtmsg").hidden=true;});
-  $("fsearch").onfocus=function(){this.select();openFood();};
-  $("fsearch").onclick=function(){if($("flist").hidden)openFood();};
-  $("fsearch").onblur=closeFood;
-  $("fsearch").oninput=function(){foodSel=null;units();$("fhint").hidden=true;openFood();};
-  $("fsearch").onkeydown=function(e){
-    if(e.key==="ArrowDown"){e.preventDefault();if($("flist").hidden)openFood();else if(foodRows.length)setFoodAct(Math.min(foodAct+1,foodRows.length-1));}
-    else if(e.key==="ArrowUp"){e.preventDefault();if(foodRows.length)setFoodAct(Math.max(foodAct-1,0));}
-    else if(e.key==="Enter"){if(!$("flist").hidden&&foodAct>=0){e.preventDefault();pickFood(foodRows[foodAct].i);}}
-    else if(e.key==="Escape"){if(!$("flist").hidden){e.preventDefault();e.stopPropagation();closeFood();}}
-  };
+  var cookPicker=makePicker({search:"fsearch",list:"flist",hint:"fhint",amt:"amt",unit:"unit",amsg:"amtmsg",prefix:"fo-"});
+  var logPicker=makePicker({search:"lsearch",list:"llist",hint:"lhint",amt:"lamt",unit:"lunit",amsg:"lamtmsg",prefix:"lo-"});
   buildFoods();
-  function units(){var f=foodSel!==null?ALL[foodSel]:null,u=$("unit");u.innerHTML="";if(!f)return;opt(u,"u",f[5]||"g");if(f[6])opt(u,"e","each (\u2248"+f[6]+"g)");}
-  function tab(w){["log","cook","ing","set"].forEach(function(k){$("pg-"+k).hidden=w!==k;$("t-"+k).setAttribute("aria-selected",w===k);});if(w!=="ing")stopCam();if(w==="log"){paintRing(ringShown);repaintMacros();}}
+  /* Daily log: one food from the same lists, stored like a meal (macros rounded the same way; unknown fibre stays unknown). */
+  $("lgo").onclick=function(){
+    var row=logPicker.read();if(!row)return;
+    var t=totals([row]),name=row.name+" ("+row.label+")";
+    var e=add(name,t.k,mealM(t));logPicker.clear();addedNote(name,e);
+  };
+  $("lamt").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("lgo").click();}};
+  /* Quick add: calories required; name and macros optional. No macros typed means the entry has none.
+     If some are typed, blank protein, carbs or fat count as 0 and blank fibre stays unknown. */
+  var QF=[["p","qp"],["c","qc"],["f","qf"],["fi","qfi"]];
+  $("qgo").onclick=function(){
+    var msg=$("qmsg"),k=parseFloat($("qk").value),m=null,badEl=null;
+    function bad(t,el){msg.textContent=t;msg.hidden=false;el.focus();}
+    if(!(k>=1&&k<=20000)){bad("Enter calories between 1 and 20,000.",$("qk"));return;}
+    QF.forEach(function(x){var el=$(x[1]);if(el.value.trim()==="")return;var n=parseFloat(el.value);if(!(n>=0&&n<=5000)){badEl=badEl||el;return;}m=m||{p:0,c:0,f:0};m[x[0]]=x[0]==="fi"?Math.round(n*10)/10:Math.round(n);});
+    if(badEl){bad("Macros must be between 0 and 5,000g.",badEl);return;}
+    msg.hidden=true;
+    var name=$("qname").value.trim()||"Quick add",e=add(name,Math.round(k),m);
+    ["qname","qk"].concat(QF.map(function(x){return x[1];})).forEach(function(id){$(id).value="";});
+    addedNote(name,e);
+  };
+  ["qname","qk"].concat(QF.map(function(x){return x[1];})).forEach(function(id){$(id).onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("qgo").click();}};});
+  function tab(w){["log","prog","cook","ing","set"].forEach(function(k){$("pg-"+k).hidden=w!==k;$("t-"+k).setAttribute("aria-selected",w===k);});if(w!=="ing")stopCam();if(w==="log"){paintRing(ringShown);repaintMacros();}if(w==="prog")showProgress();}
   function r1(x){return Math.round(x*10)/10;}
-  function totals(){
+  function totals(list){
+    list=list||ings;
     var t={k:0,p:0,c:0,f:0,fi:0},n=1,known=0;
-    ings.forEach(function(i){t.k+=i.k;t.p+=i.p;t.c+=i.c;t.f+=i.f;if(typeof i.fi==="number"){t.fi+=i.fi;known++;}});
-    return {k:Math.round(t.k/n),p:Math.round(t.p/n),c:Math.round(t.c/n),f:Math.round(t.f/n),fi:Math.round(t.fi/n*10)/10,fiState:!ings.length?"all":(!known?"none":(known<ings.length?"partial":"all")),raw:t,known:known,count:ings.length};
+    list.forEach(function(i){t.k+=i.k;t.p+=i.p;t.c+=i.c;t.f+=i.f;if(typeof i.fi==="number"){t.fi+=i.fi;known++;}});
+    return {k:Math.round(t.k/n),p:Math.round(t.p/n),c:Math.round(t.c/n),f:Math.round(t.f/n),fi:Math.round(t.fi/n*10)/10,fiState:!list.length?"all":(!known?"none":(known<list.length?"partial":"all")),raw:t,known:known,count:list.length};
   }
   /* Estimated meal quality, 0-100 and graded A-E. It works from the meal's totals, so every ingredient counts by the
      amount used, and compares each nutrient with the meal's calories, so a bigger batch of the same recipe gets the same grade.
@@ -927,27 +1159,23 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function drawMealQ(){
     var box=$("mealq"),m=S.meals[parseInt($("name").value,10)];
     box.innerHTML="";
-    if(!m||$("f").hidden){box.hidden=true;return;}
+    if(!m||$("f").hidden||$("logbox").hidden){box.hidden=true;return;}
     box.hidden=false;box.appendChild(qualityNode(qualityOfMeal(m),null));
   }
   $("t-log").onclick=function(){tab("log");};
+  $("t-prog").onclick=function(){tab("prog");};
   $("t-cook").onclick=function(){tab("cook");};
   $("t-ing").onclick=function(){tab("ing");};
   $("t-set").onclick=function(){tab("set");};
   $("addIng").onclick=function(){
-    var f=currentFood(),a=parseFloat($("amt").value);
-    if(!f){$("fhint").hidden=false;$("fsearch").focus();return;}
-    var each=$("unit").value==="e",r=(each?a*f[6]:a)/100;
-    if(!(a>=0.1)||!isFinite(a)||a>100000||!isFinite(r*f[1]+r*f[2]+r*f[3]+r*f[4])){$("amtmsg").hidden=false;$("amt").focus();return;}
-    $("amtmsg").hidden=true;
-    ings.push({name:f[0],label:each?a+" each":a+(f[5]||"g"),k:f[1]*r,p:f[2]*r,c:f[3]*r,f:f[4]*r,fi:(typeof f[7]==="number")?f[7]*r:null});
-    $("amt").value="";$("fsearch").value="";foodSel=null;units();drawCook();
+    var row=cookPicker.read();if(!row)return;
+    ings.push(row);cookPicker.clear();drawCook();
   };
   $("logMeal").onclick=function(){
     if(!ings.length){$("fsearch").focus();return;}
     var t=totals();
-    add($("mname").value.trim()||"Home-cooked meal",t.k,mealM(t));
-    ings=[];$("mname").value="";drawCook();tab("log");
+    var nm=$("mname").value.trim()||"Home-cooked meal",e=add(nm,t.k,mealM(t));
+    ings=[];$("mname").value="";drawCook();tab("log");addedNote(nm,e);
   };
   var pendingMeal=null;
   function commitMeal(meal){
@@ -970,7 +1198,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("mname").oninput=function(){pendingMeal=null;$("replaceBox").hidden=true;};
   /* Macro targets */
   ensureTargets();
-  if(!S.mig1){MAC_ALL=["p","c","f"];MAC_ALL.forEach(function(k){S.targets[k].on=true;});S.mig1=1;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+  if(!S.mig1){["p","c","f"].forEach(function(k){S.targets[k].on=true;});S.mig1=1;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
   var MAC=[["p","Protein"],["c","Carbs"],["f","Fat"],["fi","Fibre"]];
   MAC.forEach(function(x){
     var k=x[0],r=document.createElement("div");r.className="trow";r.id="tr-"+k;
@@ -1196,6 +1424,222 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       document.head.appendChild(sc);
     }
   };
+  /* Weight log. Readings are stored in kg (S.weights, synced); the unit shown is a per-device choice (its own key, not synced).
+     Only today's weight can be entered or removed, like the rest of the log. */
+  var UKEY="calorie-tracker-units",wUnit="kg",KG_LB=0.45359237;
+  try{if(localStorage.getItem(UKEY)==="st")wUnit="st";}catch(e){}
+  function parseKey(k){var p=k.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+  /* Weight readings: S.weights={"YYYY-MM-DD":{kg,t}}, kg null for a removed reading. Created on the first save, so startup never changes the saved shape. */
+  function wts(){return S.weights&&typeof S.weights==="object"&&!Array.isArray(S.weights)?S.weights:{};}
+  function wList(){var W=wts();return Object.keys(W).filter(function(d){var w=W[d];return /^\d{4}-\d{2}-\d{2}$/.test(d)&&w&&okNum(w.kg);}).sort().map(function(d){return {d:d,kg:W[d].kg};});}
+  /* Trend: an exponentially weighted moving average of the readings, moving 10% of the way to each day's reading.
+     A gap of several days counts as that many days of smoothing, so the trend catches up after a break. Worked out each time, never stored. */
+  function wTrend(){
+    var out=[],tr=null,prev=null;
+    wList().forEach(function(r){var dt=parseKey(r.d);if(tr===null)tr=r.kg;else{var gap=Math.max(1,Math.round((dt-prev)/864e5));tr+=(1-Math.pow(0.9,gap))*(r.kg-tr);}prev=dt;out.push({d:r.d,kg:r.kg,tr:tr});});
+    return out;
+  }
+  function stlb(kg){var lb=kg/KG_LB,st=Math.floor(lb/14),rem=Math.round((lb-st*14)*10)/10;if(rem>=14){st++;rem=0;}return [st,rem];}
+  function fmtW(kg){if(wUnit==="st"){var s=stlb(kg);return s[0]+" st "+s[1]+" lb";}return (Math.round(kg*10)/10).toFixed(1)+" kg";}
+  function fmtDW(kg){var a=Math.abs(kg),sg=kg<0?"−":"+";return sg+(wUnit==="st"?(Math.round(a/KG_LB*10)/10)+" lb":(Math.round(a*10)/10).toFixed(1)+" kg");}
+  function shortDate(k){return parseKey(k).toLocaleDateString(undefined,{day:"numeric",month:"short"});}
+  function drawWeight(fill){
+    $("wkgIn").hidden=wUnit!=="kg";$("wstIn").hidden=wUnit!=="st";
+    [].forEach.call($("wunit").children,function(b){b.setAttribute("aria-pressed",b.dataset.u===wUnit?"true":"false");});
+    var tk=key(new Date()),w=wts()[tk],has=!!(w&&okNum(w.kg)),tl=wTrend(),last=tl[tl.length-1],box=$("wnow");
+    $("wgo").textContent=has?"Update":"Save";
+    if(fill){$("wkg").value=has?Math.round(w.kg*10)/10:"";var s=has?stlb(w.kg):null;$("wst").value=s?s[0]:"";$("wlb").value=s?s[1]:"";}
+    box.innerHTML="";
+    var t=document.createElement("span");
+    if(has)t.textContent="Today: "+fmtW(w.kg)+" · trend "+fmtW(last.tr);
+    else t.textContent=last?"Not weighed today. Trend "+fmtW(last.tr)+", last weighed "+shortDate(last.d)+".":"No weight logged yet.";
+    box.appendChild(t);
+    if(has){var rm=document.createElement("button");rm.type="button";rm.className="linkbtn";rm.textContent="Remove today’s weight";
+      rm.onclick=function(){S.weights=wts();S.weights[key(new Date())]={kg:null,t:Date.now()};save();$("wmsg").hidden=true;drawWeight(true);drawCharts(false);drawAdapt();};box.appendChild(rm);}
+  }
+  $("wgo").onclick=function(){
+    var msg=$("wmsg"),kg;
+    if(wUnit==="st"){var a=$("wst").value.trim(),b=$("wlb").value.trim(),s=parseFloat(a||"0"),l=parseFloat(b||"0");kg=(a===""&&b==="")||!(s>=0)||!(l>=0&&l<14)?NaN:(s*14+l)*KG_LB;}
+    else kg=parseFloat($("wkg").value);
+    if(!(kg>=20&&kg<=400)){msg.textContent=wUnit==="st"?"Enter a weight between 3 st 3 lb and 62 st 13 lb (pounds 0 to 13.9).":"Enter a weight between 20 and 400 kg.";msg.hidden=false;return;}
+    msg.hidden=true;S.weights=wts();S.weights[key(new Date())]={kg:Math.round(kg*100)/100,t:Date.now()};save();drawWeight(true);drawCharts(false);drawAdapt();
+  };
+  ["wkg","wst","wlb"].forEach(function(id){$(id).onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("wgo").click();}};$(id).oninput=function(){$("wmsg").hidden=true;};});
+  [].forEach.call($("wunit").children,function(b){b.onclick=function(){wUnit=b.dataset.u;try{localStorage.setItem(UKEY,wUnit);}catch(e){}$("wmsg").hidden=true;fillRates();drawWeight(true);drawCharts(false);drawAdapt();};});
+  /* Progress charts: drawn on canvas in the theme's colours, each with a short text summary. Any history can be shown;
+     only opening days is limited. The period is 4 weeks or 3 months by day, or a year by week (averages of logged days). */
+  var RANGE=28,chartAnim=0,FONT=null;
+  [].forEach.call($("rng").children,function(b){b.onclick=function(){RANGE=parseInt(b.dataset.r,10);[].forEach.call($("rng").children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});drawCharts(true);};});
+  function rangeName(){return RANGE===28?"the last 4 weeks":RANGE===91?"the last 3 months":"the last 12 months";}
+  function progRows(){
+    var t=sod(new Date()),rows=[];
+    for(var i=RANGE-1;i>=0;i--){var d=new Date(t.getFullYear(),t.getMonth(),t.getDate()-i),k=key(d),it=S.days[k]||[];
+      if(!it.length){rows.push({k:k,logged:false});continue;}
+      var st=dayStats(it);rows.push({k:k,logged:true,kcal:st.total,m:st.m,hasM:it.some(function(e){return !!e.m;})});}
+    return rows;
+  }
+  /* For the year view, days are grouped into weeks ending today; each week shows the average of the days logged in it. */
+  function buckets(rows){
+    if(RANGE<=91)return rows.map(function(r){return {k:r.k,logged:r.logged,kcal:r.kcal,p:r.hasM?r.m.p:null,c:r.hasM?r.m.c:null,f:r.hasM?r.m.f:null};});
+    var out=[],av=function(list,f){return list.length?list.reduce(function(a,r){return a+f(r);},0)/list.length:null;};
+    for(var e=rows.length;e>0;e-=7){
+      var ch=rows.slice(Math.max(0,e-7),e),lg=ch.filter(function(r){return r.logged;}),wm=lg.filter(function(r){return r.hasM;});
+      out.unshift({k:ch[0].k,logged:lg.length>0,kcal:lg.length?Math.round(av(lg,function(r){return r.kcal;})):null,p:av(wm,function(r){return r.m.p;}),c:av(wm,function(r){return r.m.c;}),f:av(wm,function(r){return r.m.f;})});
+    }
+    return out;
+  }
+  function canv(cv){
+    var w=cv.clientWidth||300,h=cv.clientHeight||192,dpr=window.devicePixelRatio||1;
+    if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+    var x=cv.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);
+    if(!FONT)FONT=getComputedStyle(document.body).fontFamily;x.font="11px "+FONT;
+    return {x:x,w:w,h:h};
+  }
+  function niceStep(v){var e=Math.pow(10,Math.floor(Math.log(v)/Math.LN10)),f=v/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e;}
+  /* Recessive grid and axis labels shared by all three charts; returns the plot area and value-to-y mapping. */
+  function frame(c,lo,hi,fmt,n,labels){
+    var x=c.x,step=niceStep((hi-lo)/4||1),y0=Math.floor(lo/step)*step,y1=Math.ceil(hi/step)*step;if(y1<=y0)y1=y0+step;
+    var ticks=[];for(var v=y0;v<=y1+step/2;v+=step)ticks.push(v);
+    var L=6+Math.max.apply(null,ticks.map(function(v){return x.measureText(fmt(v)).width;})),R=8,T=8,B=c.h-20,W=c.w-L-R;
+    function Y(v){return B-(v-y0)/(y1-y0)*(B-T);}
+    x.lineWidth=1;x.strokeStyle=colv("line");x.fillStyle=colv("muted");x.textAlign="right";x.textBaseline="middle";
+    ticks.forEach(function(v){var y=Math.round(Y(v))+0.5;x.beginPath();x.moveTo(L,y);x.lineTo(L+W,y);x.stroke();x.fillText(fmt(v),L-5,y);});
+    x.textBaseline="alphabetic";x.textAlign="left";x.fillText(labels[0],L,c.h-4);x.textAlign="right";x.fillText(labels[1],L+W,c.h-4);
+    return {L:L,W:W,T:T,B:B,Y:Y,X:function(i){return L+W*(i+0.5)/n;},sw:W/n};
+  }
+  function empty(c,t){var x=c.x;x.fillStyle=colv("muted");x.textAlign="center";x.textBaseline="middle";x.font="13px "+FONT;x.fillText(t,c.w/2,c.h/2);}
+  function endLabels(rows){return [shortDate(rows[0].k),"Today"];}
+  function legendItem(box,label,draw){
+    var s=document.createElement("span"),cv=document.createElement("canvas"),dpr=window.devicePixelRatio||1,t=document.createElement("span");
+    cv.width=26*dpr;cv.height=10*dpr;cv.setAttribute("aria-hidden","true");var x=cv.getContext("2d");x.scale(dpr,dpr);draw(x);
+    t.textContent=label;s.append(cv,t);box.appendChild(s);
+  }
+  var MSTY=[["p","Protein","accent",[]],["c","Carbs","muted",[6,4]],["f","Fat","over",[2,3]]];
+  /* The "over" colour, unless the theme's accent is so close to it (e.g. a custom orange accent) that the two can't be told apart; then ink is used. */
+  function ovc(){
+    var a=rgbOf(colv("accent")),o=rgbOf(colv("over")),A=rgb2hsl(a),O=rgb2hsl(o),dh=Math.abs(A[0]-O[0]);dh=Math.min(dh,360-dh);
+    var d=Math.sqrt(Math.pow(a[0]-o[0],2)+Math.pow(a[1]-o[1],2)+Math.pow(a[2]-o[2],2));
+    return (A[1]>0.25&&dh<40)||d<90?colv("ink"):colv("over");
+  }
+  function mcol(n){return n==="over"?ovc():colv(n);}
+  function drawLegends(){
+    var a=$("lgCal"),b=$("lgMac"),c=$("lgW");a.innerHTML=b.innerHTML=c.innerHTML="";
+    legendItem(a,"Within goal",function(x){x.fillStyle=colv("accent");x.fillRect(8,1,10,9);});
+    legendItem(a,"Over goal",function(x){x.fillStyle=ovc();x.fillRect(8,1,10,9);});
+    legendItem(a,"Goal",function(x){x.strokeStyle=colv("ink");x.globalAlpha=.65;x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(1,5);x.lineTo(25,5);x.stroke();});
+    MSTY.forEach(function(m){legendItem(b,m[1],function(x){x.strokeStyle=mcol(m[2]);x.lineWidth=2;x.lineCap="round";x.setLineDash(m[3]);x.beginPath();x.moveTo(2,5);x.lineTo(24,5);x.stroke();});});
+    legendItem(c,"Daily reading",function(x){x.fillStyle=colv("muted");x.beginPath();x.arc(13,5,3.5,0,Math.PI*2);x.fill();});
+    legendItem(c,"Trend",function(x){x.strokeStyle=colv("accent");x.lineWidth=2;x.beginPath();x.moveTo(2,5);x.lineTo(24,5);x.stroke();});
+  }
+  function fmtK(v){return v>=1000?(Math.round(v/100)/10)+"k":String(Math.round(v));}
+  function num(v){return Math.round(v).toLocaleString();}
+  function drawCal(p,rows,bk){
+    var c=canv($("chCal")),g=S.goal||2000,lg=rows.filter(function(r){return r.logged;});
+    var hi=Math.max(g*1.2,Math.max.apply(null,[0].concat(bk.map(function(b){return b.kcal||0;})))*1.05);
+    var F=frame(c,0,hi,fmtK,bk.length,endLabels(rows)),x=c.x,bw=Math.max(1,F.sw-(F.sw>6?2:F.sw>3?1:0)),rad=Math.min(4,bw/2);
+    bk.forEach(function(b,i){
+      if(!b.logged||!(b.kcal>0))return;
+      var h=(F.B-F.Y(b.kcal))*p,x0=F.X(i)-bw/2;if(h<0.5)return;
+      x.fillStyle=b.kcal>g?ovc():colv("accent");x.beginPath();
+      if(x.roundRect)x.roundRect(x0,F.B-h,bw,h,[Math.min(rad,h),Math.min(rad,h),0,0]);else x.rect(x0,F.B-h,bw,h);
+      x.fill();
+    });
+    var gy=Math.round(F.Y(g))+0.5;x.save();x.strokeStyle=colv("ink");x.globalAlpha=.65;x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(F.L,gy);x.lineTo(F.L+F.W,gy);x.stroke();x.restore();
+    if(!lg.length)empty(c,"No days logged in this period");
+    var over=lg.filter(function(r){return r.kcal>g;}).length,avg=lg.length?lg.reduce(function(a,r){return a+r.kcal;},0)/lg.length:0;
+    $("sumCal").textContent=!lg.length?"No days logged in "+rangeName()+".":
+      "Over "+rangeName()+" you logged "+lg.length+" of "+rows.length+" days, averaging "+num(avg)+" kcal a day against a goal of "+num(g)+" kcal. "+over+(over===1?" logged day was":" logged days were")+" over goal."+(RANGE>91?" Bars are weekly averages.":"");
+  }
+  function drawMac(p,rows,bk){
+    var c=canv($("chMac")),x=c.x,wm=rows.filter(function(r){return r.logged&&r.hasM;}),hi=10;
+    bk.forEach(function(b){MSTY.forEach(function(m){if(b[m[0]]!=null)hi=Math.max(hi,b[m[0]]*1.1);});});
+    var F=frame(c,0,hi,function(v){return Math.round(v)+"g";},bk.length,endLabels(rows)),clipW=F.L+F.W*p;
+    x.save();x.beginPath();x.rect(0,0,clipW+4,c.h);x.clip();
+    MSTY.forEach(function(m){
+      var k=m[0];x.strokeStyle=x.fillStyle=mcol(m[2]);x.lineWidth=2;x.lineCap="round";x.lineJoin="round";x.setLineDash(m[3]);
+      var on=false;x.beginPath();
+      bk.forEach(function(b,i){var v=b[k];if(v==null){on=false;return;}var px=F.X(i),py=F.Y(v);if(on)x.lineTo(px,py);else x.moveTo(px,py);on=true;});
+      x.stroke();x.setLineDash([]);
+      /* A day with no logged neighbours would draw nothing, so it gets a dot. */
+      bk.forEach(function(b,i){var v=b[k];if(v==null)return;var l=i>0&&bk[i-1][k]!=null,r=i<bk.length-1&&bk[i+1][k]!=null;if(!l&&!r){x.beginPath();x.arc(F.X(i),F.Y(v),3,0,Math.PI*2);x.fill();}});
+    });
+    x.restore();
+    if(!wm.length){empty(c,"No macros logged in this period");$("sumMac").textContent="No days with macros logged in "+rangeName()+".";return;}
+    var parts=MSTY.map(function(m){var k=m[0],a=wm.reduce(function(s,r){return s+r.m[k];},0)/wm.length,t=S.targets[k];return m[1].toLowerCase()+" "+Math.round(a)+"g"+(t&&t.on?" (target "+t.g+"g)":"");});
+    $("sumMac").textContent="On the "+wm.length+" days with macros in "+rangeName()+", you averaged "+parts.slice(0,2).join(", ")+" and "+parts[2]+" a day."+(RANGE>91?" Lines are weekly averages.":"");
+  }
+  function drawWt(p,rows){
+    var c=canv($("chW")),x=c.x,start=rows[0].k,s0=parseKey(start),tl=wTrend(),inR=tl.filter(function(r){return r.d>=start;});
+    var cv=wUnit==="st"?function(kg){return kg/KG_LB;}:function(kg){return kg;};
+    var fmt=wUnit==="st"?function(lb){var st=Math.floor(Math.round(lb)/14);return st+"st "+(Math.round(lb)-st*14);}:function(v){return (Math.round(v*10)/10)+"";};
+    if(!inR.length){empty(c,"No weight readings in this period");
+      $("sumW").textContent=tl.length?"No weight readings in "+rangeName()+". Your last reading was on "+shortDate(tl[tl.length-1].d)+".":"No weight readings yet. Log today’s weight above to start your trend.";return;}
+    var vals=[];inR.forEach(function(r){vals.push(cv(r.kg),cv(r.tr));});
+    var lo=Math.min.apply(null,vals),hi=Math.max.apply(null,vals),pad=Math.max((hi-lo)*0.15,wUnit==="st"?1:0.5);
+    var F=frame(c,lo-pad,hi+pad,fmt,rows.length,endLabels(rows));
+    function idx(d){return Math.round((parseKey(d)-s0)/864e5);}
+    x.save();x.beginPath();x.rect(0,0,F.L+F.W*p+4,c.h);x.clip();
+    inR.forEach(function(r){x.fillStyle=colv("surface");x.beginPath();x.arc(F.X(idx(r.d)),F.Y(cv(r.kg)),5,0,Math.PI*2);x.fill();x.fillStyle=colv("muted");x.beginPath();x.arc(F.X(idx(r.d)),F.Y(cv(r.kg)),3.5,0,Math.PI*2);x.fill();});
+    x.strokeStyle=colv("accent");x.lineWidth=2;x.lineJoin="round";x.lineCap="round";x.beginPath();
+    inR.forEach(function(r,i){var px=F.X(idx(r.d)),py=F.Y(cv(r.tr));if(i)x.lineTo(px,py);else x.moveTo(px,py);});
+    x.stroke();x.restore();
+    var a=inR[0],b=inR[inR.length-1];
+    $("sumW").textContent=inR.length+(inR.length===1?" reading":" readings")+" in "+rangeName()+". "+(inR.length>1?"Your trend went from "+fmtW(a.tr)+" to "+fmtW(b.tr)+" ("+fmtDW(b.tr-a.tr)+").":"Your trend is "+fmtW(b.tr)+".");
+  }
+  /* animate: grow the bars and draw the lines in from the left (not with reduced motion). A background redraw never restarts
+     a running animation; each frame reads the current data, so it ends up right anyway. */
+  function drawCharts(animate){
+    if($("pg-prog").hidden)return;
+    if(!animate&&chartAnim)return;
+    var run=++chartAnim;
+    function frameAt(p){var rows=progRows(),bk=buckets(rows);drawCal(p,rows,bk);drawMac(p,rows,bk);drawWt(p,rows);}
+    if(!animate||reducedMotion()){chartAnim=0;frameAt(1);return;}
+    var t0=performance.now();
+    (function step(now){if(run!==chartAnim)return;var q=Math.min((now-t0)/450,1);frameAt(1-Math.pow(1-q,3));if(q<1)requestAnimationFrame(step);else chartAnim=0;})(t0);
+  }
+  /* Adaptive calorie target: real daily burn = average intake on logged days minus the weight-trend change in kcal (7,700 per kg),
+     over the last 4 weeks. Needs 14 logged days (today is left out, as it isn't finished) and weigh-ins at least 14 days apart.
+     It only ever suggests; the goal changes only when you confirm. */
+  var RATES=[-1,-0.75,-0.5,-0.25,0,0.25,0.5],aPending=null;
+  function curRate(){var r=S.targets&&S.targets.rate;return RATES.indexOf(r)>=0?r:0;}
+  function rateLabel(r){if(!r)return "Keep my weight steady";var a=Math.abs(r);return (r<0?"Lose ":"Gain ")+(wUnit==="st"?(Math.round(a/KG_LB*10)/10)+" lb":a+" kg")+" a week";}
+  function fillRates(){var s=$("arate");s.innerHTML="";RATES.forEach(function(r){opt(s,String(r),rateLabel(r));});s.value=String(curRate());}
+  $("arate").onchange=function(){var r=parseFloat(this.value);if(RATES.indexOf(r)<0)return;S.targets.rate=r;S.sUpdated=Date.now();save();aPending=null;$("aBox").hidden=true;drawAdapt();};
+  function estimate(){
+    var t=sod(new Date()),n=0,sum=0;
+    for(var i=1;i<=28;i++){var it=S.days[key(new Date(t.getFullYear(),t.getMonth(),t.getDate()-i))];if(it&&it.length){n++;sum+=dayStats(it).total;}}
+    var from=key(new Date(t.getFullYear(),t.getMonth(),t.getDate()-28)),tl=wTrend().filter(function(r){return r.d>=from;}),res={n:n};
+    if(n<14){res.why="days";return res;}
+    if(tl.length<2){res.why="weights";return res;}
+    var a=tl[0],b=tl[tl.length-1],span=Math.round((parseKey(b.d)-parseKey(a.d))/864e5);res.span=span;
+    if(span<14){res.why="span";return res;}
+    res.intake=sum/n;res.perDay=(b.tr-a.tr)/span;res.burn=res.intake-res.perDay*7700;res.ok=true;
+    return res;
+  }
+  function drawAdapt(){
+    var e=estimate(),box=$("aout"),dl,p;box.innerHTML="";$("ause").hidden=true;
+    function note(t){var q=document.createElement("p");q.className="note";q.textContent=t;box.appendChild(q);}
+    if(!e.ok){
+      note(e.why==="days"?"You’ve logged "+e.n+" of the last 28 days. The estimate needs at least 14 logged days, so keep logging and it will appear here.":
+        e.why==="weights"?"Log your weight on at least two days, 14 or more days apart, within the last 4 weeks to get an estimate.":
+        "Your weigh-ins in the last 4 weeks are "+e.span+(e.span===1?" day":" days")+" apart. The estimate needs them at least 14 days apart.");
+      aPending=null;$("aBox").hidden=true;return;
+    }
+    var rate=curRate(),sug=Math.round((e.burn+rate*7700/7)/50)*50,low=sug<1200;if(low)sug=1200;
+    dl=document.createElement("dl");
+    [["Average intake",num(e.intake)+" kcal a day ("+e.n+" logged days)"],["Weight trend",fmtDW(e.perDay*7)+" a week"],["Estimated burn",num(Math.round(e.burn/10)*10)+" kcal a day"],["Suggested goal",num(sug)+" kcal a day"]].forEach(function(r){var a=document.createElement("dt"),b=document.createElement("dd");a.textContent=r[0];b.textContent=r[1];dl.append(a,b);});
+    box.appendChild(dl);
+    if(e.burn<1200||e.burn>5000)note("This estimate looks unusual. That often means some days weren’t fully logged or a weigh-in was off.");
+    if(low)note("That’s the lowest goal this app suggests (1,200 kcal a day).");
+    if(sug===S.goal){note("That’s already your goal.");aPending=null;$("aBox").hidden=true;}
+    else{p=$("ause");p.hidden=false;p.textContent="Use "+num(sug)+" kcal as my goal";p.dataset.g=sug;}
+  }
+  $("ause").onclick=function(){var g=parseInt(this.dataset.g,10);if(!(g>=500&&g<=10000))return;aPending=g;$("aText").textContent="Change your daily goal from "+num(S.goal)+" to "+num(g)+" kcal? You can change it again in Settings at any time.";$("aBox").hidden=false;$("aYes").focus();};
+  $("aYes").onclick=function(){var g=aPending;aPending=null;$("aBox").hidden=true;if(!(g>=500&&g<=10000))return;S.goal=g;S.sUpdated=Date.now();save();render();drawAdapt();$("ause").focus();};
+  $("aNo").onclick=function(){aPending=null;$("aBox").hidden=true;$("ause").focus();};
+  function showProgress(){fillRates();drawLegends();drawWeight(true);drawAdapt();drawCharts(true);}
+  /* Background refresh (after a sync, a theme change or a resize): never touches what is being typed. */
+  function drawProgress(){if(!$("pg-prog")||$("pg-prog").hidden)return;drawLegends();drawWeight(false);drawAdapt();drawCharts(false);}
   /* Export / import */
   $("exp").onclick=function(){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="calorie-tracker-"+key(new Date())+".json";a.click();};
   $("imp").onclick=function(){$("impf").click();};
@@ -1210,7 +1654,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var days=Object.keys(d.days);
     for(var i=0;i<days.length;i++){
       if(!/^\d{4}-\d{2}-\d{2}$/.test(days[i])||!Array.isArray(d.days[days[i]]))return false;
-      if(!d.days[days[i]].every(function(e){return e&&typeof e==="object"&&typeof e.name==="string"&&okNum(e.kcal)&&okNum(e.id)&&(e.m===undefined||okMacros(e.m));}))return false;
+      if(!d.days[days[i]].every(function(e){return e&&typeof e==="object"&&typeof e.name==="string"&&okNum(e.kcal)&&okNum(e.id)&&(e.m===undefined||okMacros(e.m))&&(e.s===undefined||/^[blds]$/.test(e.s));}))return false;
     }
     if(d.meals!==undefined&&!(Array.isArray(d.meals)&&d.meals.every(function(m){return m&&typeof m.name==="string"&&okNum(m.kcal)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optBool(m.fip)&&(m.q===undefined||okQ(m.q));})))return false;
     if(d.ings!==undefined&&!(Array.isArray(d.ings)&&d.ings.every(function(m){return m&&typeof m.name==="string"&&okNum(m.id)&&okNum(m.k)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optNum(m.e);})))return false;
@@ -1218,9 +1662,11 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(d.targets!==undefined){
       if(!d.targets||typeof d.targets!=="object"||Array.isArray(d.targets))return false;
       if(Object.keys(TDEF).some(function(k){var t=d.targets[k];return t!==undefined&&!(t&&typeof t==="object"&&typeof t.on==="boolean"&&okNum(t.g)&&t.g>0);}))return false;
+      if(d.targets.rate!==undefined&&!(okNum(d.targets.rate)&&Math.abs(d.targets.rate)<=2))return false;
     }
     if(d.del!==undefined&&(!d.del||typeof d.del!=="object"||Object.keys(d.del).some(function(k){return !okNum(d.del[k]);})))return false;
     if(d.scores!==undefined&&(!d.scores||typeof d.scores!=="object"||Object.keys(d.scores).some(function(k){return !d.scores[k]||!okNum(d.scores[k].v);})))return false;
+    if(d.weights!==undefined&&(!d.weights||typeof d.weights!=="object"||Array.isArray(d.weights)||Object.keys(d.weights).some(function(k){var w=d.weights[k];return !/^\d{4}-\d{2}-\d{2}$/.test(k)||!w||typeof w!=="object"||!okNum(w.t)||!(w.kg===null||(okNum(w.kg)&&w.kg>=20&&w.kg<=400));})))return false;
     return true;
   }
   var pendingImport=null;
@@ -1231,7 +1677,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     r.onload=function(){
       try{var d=JSON.parse(r.result);if(!validBackup(d))throw 0;
         pendingImport=d;var n=Object.keys(d.days).filter(function(k){return d.days[k].length;}).length;
-        $("impText").textContent="This backup has "+n+" logged "+(n===1?"day":"days")+" and "+(d.meals||[]).length+" saved meals. Merge keeps everything on this device and adds the backup. Replace deletes what is on this device first.";
+        var nw=Object.keys(d.weights||{}).filter(function(k){return okNum(d.weights[k].kg);}).length;
+        $("impText").textContent="This backup has "+n+" logged "+(n===1?"day":"days")+", "+(d.meals||[]).length+" saved meals and "+nw+(nw===1?" weight reading":" weight readings")+". Merge keeps everything on this device and adds the backup. Replace deletes what is on this device first.";
         $("impBox").hidden=false;
       }catch(e){pendingImport=null;$("impBox").hidden=true;alert("That file isn't a valid backup.");}
       inp.value="";
@@ -1275,6 +1722,10 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var mm={};
     (a.meals||[]).concat(b.meals||[]).forEach(function(m){var n=m.name.toLowerCase(),o=mm[n];if(!o||(m.t||0)>(o.t||0))mm[n]=m;});
     M.meals=Object.keys(mm).map(function(n){return mm[n];}).sort(function(x,y){return x.name.localeCompare(y.name);});
+    /* Weights by date: the newest reading wins, and a removal ({kg:null}) is a reading too, so it syncs like any other. */
+    var wt={};
+    [a.weights,b.weights].forEach(function(o){for(k in (o||{})){var e=o[k];if(!e||typeof e!=="object"||!okNum(e.t))continue;if(!wt[k]||e.t>wt[k].t)wt[k]=e;}});
+    M.weights=wt;
     return M;
   }
   /* MERGE END */
@@ -1319,10 +1770,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("spw").onchange=function(){$("apw").type=this.checked?"text":"password";};
   if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)sync();});
   window.addEventListener("online",function(){if(syncFailed&&user){amsg("Back online. Syncing...");sync();}});
-  document.addEventListener("visibilitychange",function(){if(!document.hidden&&Date.now()-lastSync>5000)sync();});
+  document.addEventListener("visibilitychange",function(){if(!document.hidden){dayCheck();if(Date.now()-lastSync>5000)sync();}});
+  /* If the app is left open past midnight, move on to the new day (yesterday then freezes as normal) and keep the default slot current. */
+  function dayCheck(){if(renderedToday&&renderedToday!==key(new Date())){cur=new Date();render();}else if(renderedToday)autoSlot();}
+  setInterval(dayCheck,60000);
   drawAcct();
   $("ver").textContent=VERSION;$("build").textContent=" \u00b7 built "+BUILD;
-  units();drawCook();drawSavedMeals();drawIngs();
+  drawCook();drawSavedMeals();drawIngs();
   applyTheme();syncPickers();drawThemeUi();
   render();
 })();
