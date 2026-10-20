@@ -362,6 +362,56 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 #adapt dt{color:var(--muted)}#adapt dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
 #adapt label{display:grid;gap:.2rem;font-size:.85rem;color:var(--muted);font-weight:700}
 @media(max-width:420px){.tabs{gap:.15rem;padding:.25rem}.tabs button{font-size:.7rem;padding:.4rem .1rem;letter-spacing:-.01em}.qa{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* v11 */
+#dayHow{margin:0 0 .4rem}
+.mtog{display:flex;flex-wrap:wrap;gap:.35rem;margin:0 0 .6rem}
+.mtog button{display:flex;align-items:center;gap:.35rem;min-height:2.5rem;padding:.3rem .75rem;border:1px solid var(--line);border-radius:2rem;background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer}
+.mtog button[aria-pressed=true]{border-color:var(--accent);color:var(--ink);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+.mtog button[aria-pressed=true]:before{content:"\2713";color:var(--accent);font-weight:800}
+.mtog button[aria-pressed=false] canvas{opacity:.35}
+.mtog canvas{width:22px;height:10px;flex:none}
+#dayChart canvas#chDay{height:13rem;margin-bottom:.25rem;touch-action:pan-y;cursor:crosshair}
+#dayRead{margin:0 0 .25rem;min-height:1.2rem}
+.ftog{display:flex;align-items:center;gap:.35rem;width:100%;min-height:2.4rem;padding:0;border:0;background:none;color:var(--ink);font:inherit;font-weight:700;font-size:.95rem;text-align:left;cursor:pointer;overflow-wrap:anywhere}
+.ftog:before{content:"\25BE";flex:none;width:1em;color:var(--muted)}
+.ftog[aria-expanded=false]:before{content:"\25B8"}
+/* The quality bar sits in the middle of the whole ingredient block: the padding balances the remove button on the right. */
+#mylist .rate{justify-content:center;padding-left:2.65rem}
+.wtgt{margin-top:1rem;padding-top:.85rem;border-top:1px solid var(--line)}
+.wtgt h3{margin:0 0 .25rem;font-size:.95rem}
+#wtgtSum{margin:0 0 .6rem;font-size:.9rem}
+.btn.sec{background:var(--bg);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.setupbox{width:min(32rem,100%);max-height:min(94vh,48rem)}
+#setup .calhead{align-items:flex-start;padding-top:1rem}
+#setup .calhead h2{outline:none;margin-top:.1rem}
+#suStep{margin:0;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.7rem}
+#setup .calbody{gap:.85rem}
+#setup section{display:grid;gap:.75rem;min-width:0}
+#setup section p{margin:0}
+#setup label{display:grid;gap:.25rem;font-size:.85rem;color:var(--muted);font-weight:700}
+#setup label.chk{display:flex;font-weight:400;margin:0}
+#setup input:not([type=checkbox]):not([type=radio]),#setup select{min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--line);border-radius:.75rem;background:var(--bg);color:var(--ink);font-weight:400;width:100%;min-width:0}
+#setup fieldset{border:0;margin:0;padding:0;display:grid;gap:.5rem;min-width:0}
+#setup legend{font-weight:700;padding:0;margin-bottom:.45rem}
+#setup .fcard{grid-template-columns:auto minmax(0,1fr);gap:.15rem .65rem;align-items:start;padding:.8rem .9rem;border:2px solid var(--line);border-radius:.9rem;background:var(--surface);cursor:pointer;color:var(--ink)}
+.fcard input{grid-row:1/3;width:1.2rem;height:1.2rem;margin:.15rem 0 0;accent-color:var(--accent)}
+.fcard b{font-size:1rem}
+.fcard small{color:var(--muted);font-weight:400;font-size:.82rem}
+.fcard:has(input:checked){border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.fcard:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.sugrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+.exb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
+.exb button{min-height:3rem;border:2px solid var(--line);border-radius:.9rem;background:var(--surface);color:var(--ink);font-weight:600;cursor:pointer;padding:.4rem .5rem}
+.exb button[aria-pressed=true]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface));box-shadow:0 0 0 1px var(--accent)}
+.exb button[aria-pressed=true]:before{content:"\2713\00a0";color:var(--accent);font-weight:800}
+.sufoot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:.6rem;padding:.75rem 1rem .35rem;border-top:1px solid var(--line)}
+.sufoot:has(#suBack[hidden]){grid-template-columns:minmax(0,1fr)}
+.sufoot .btn{margin:0}
+.sulinks{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:0 1rem .5rem}
+.sut,.sutest,.sc.testonly h2{color:var(--danger)}
+.sut{margin:0;padding:.5rem .7rem;border:1px dashed var(--danger);border-radius:.6rem;font-size:.8rem;font-weight:700}
+.sc.testonly{border:1px dashed var(--danger)}
+#suChg{font-size:.85rem}
 </style>
 </head>
 <body>
@@ -420,8 +470,10 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
   <div id="copyBox" class="notice" role="alert" hidden><span id="copyText"></span><div class="row2"><button class="btn" id="copyYes" type="button">Copy to today</button><button class="btn" id="copyNo" type="button">Cancel</button></div></div>
   <div class="sum"><span id="avg"></span></div>
   <div class="sc" id="dayChart"><h2>How the day built up</h2>
-    <div class="legend" id="lgDayK"></div><canvas class="chart" id="chDayK" aria-hidden="true"></canvas>
-    <div class="legend" id="lgDayM"></div><canvas class="chart" id="chDayM" aria-hidden="true"></canvas>
+    <p class="note" id="dayHow">Each line is the share of your daily goal or target reached so far. Choose what to compare:</p>
+    <div class="mtog" id="dayTog" role="group" aria-label="Show on the chart and in the table"></div>
+    <canvas class="chart" id="chDay" aria-hidden="true"></canvas>
+    <p class="note" id="dayRead" aria-hidden="true" hidden></p>
     <p class="note" id="sumDay" role="status"></p><p class="note" id="dayNote" hidden></p>
     <details class="nut" id="dayTblBox"><summary>Show as a table</summary><div class="tblwrap"><table id="dayTbl"></table></div></details>
   </div>
@@ -434,6 +486,12 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
       <p id="wnow" role="status"></p>
       <div class="seg" id="wunit" role="group" aria-label="Weight unit"><button type="button" data-u="kg" aria-pressed="true">kg</button><button type="button" data-u="st" aria-pressed="false">st and lb</button></div>
       <p class="note">Weigh in at the same time each day if you can. The trend smooths out day-to-day ups and downs. Your unit choice is remembered on this device.</p>
+      <div class="wtgt" id="wtgt"><h3>Target weight</h3>
+        <p id="wtgtSum" role="status"></p>
+        <div class="wrow"><div class="win" id="tkgIn"><label>Target (kg)<input id="tkg" type="number" min="20" max="400" step="0.1" inputmode="decimal"></label></div><div class="win" id="tstIn" hidden><label>Stones<input id="tst" type="number" min="0" max="62" step="1" inputmode="numeric"></label><label>Pounds<input id="tlb" type="number" min="0" max="13.9" step="0.1" inputmode="decimal"></label></div><button class="btn" id="tgo" type="button">Save target</button></div>
+        <p class="note" id="tmsg" role="alert" hidden></p>
+        <button type="button" class="linkbtn" id="trm" hidden>Remove target</button>
+      </div>
     </div>
     <div class="seg" id="rng" role="group" aria-label="Chart period"><button type="button" data-r="28" aria-pressed="true">4 weeks</button><button type="button" data-r="91" aria-pressed="false">3 months</button><button type="button" data-r="365" aria-pressed="false">1 year</button></div>
     <div class="sc"><h2>Calories</h2><div class="legend" id="lgCal"></div><canvas class="chart" id="chCal" aria-hidden="true"></canvas><p class="note csum" id="sumCal"></p></div>
@@ -452,6 +510,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     <div class="card">
       <h2>Create New Meal</h2>
       <p class="note" id="meditmsg" role="status" hidden></p>
+      <button type="button" class="linkbtn" id="mstop" hidden>Stop editing (the saved meal stays as it is)</button>
       <label for="mname">Meal name</label><input id="mname" maxlength="80" placeholder="e.g. Chicken pasta">
       <label for="fsearch">Ingredient</label>
       <div id="fwrap"><input id="fsearch" type="text" role="combobox" aria-expanded="false" aria-controls="flist" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search ingredients, e.g. chicken"><ul id="flist" class="cbx" role="listbox" aria-label="Matching ingredients" hidden></ul></div>
@@ -482,6 +541,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     <div id="ingNote" class="notice" role="status" hidden></div>
     <div class="fhd"><h2>Saved ingredients</h2><button type="button" class="linkbtn" id="newIF">New folder</button></div>
     <div id="mylist"></div>
+    <p class="sr" id="fstat" role="status"></p>
     <p class="note">Saved ingredients appear at the top of the food list on the Home cooking page.</p>
   </section>
   <section id="pg-set" hidden>
@@ -513,15 +573,73 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
       <input type="file" id="impf" accept="application/json" hidden>
       <div id="impBox" class="notice" role="alert" hidden><span id="impText"></span><div class="row2"><button class="btn" id="impMerge" type="button">Merge with my data</button><button class="btn" id="impReplace" type="button">Replace my data</button></div><button class="linkbtn" id="impCancel" type="button">Cancel</button></div>
     </div>
+    <div class="sc testonly" id="testTools" hidden><h2>Testing tools (temporary)</h2>
+      <p class="note">Only on test builds (a version ending in “-wip”). They’re switched off in released versions.</p>
+      <button type="button" class="btn" id="rerun">Run setup again (test)</button>
+    </div>
   </section>
 <div id="cal" class="calwrap" hidden><div class="calbox" role="dialog" aria-modal="true" aria-labelledby="caltitle"><div class="calhead"><h2 id="caltitle">Calendar</h2><button type="button" class="icon" id="calClose" aria-label="Close calendar">&times;</button></div><p class="note">You can open today and the previous 7 days. Older days stay saved but can't be opened.</p><div class="calbody" id="calbody"></div></div></div>
+<div id="setup" class="calwrap" hidden><div class="calbox setupbox" role="dialog" aria-modal="true" aria-labelledby="suT">
+<div class="calhead"><div><p class="note" id="suStep"></p><h2 id="suT" tabindex="-1"></h2></div></div>
+<div class="calbody">
+<p class="sut" id="suTestNote" hidden>Test run (temporary testing tool). Nothing changes unless you confirm at the end.</p>
+<section data-s="acct">
+  <p>An account keeps your log in the cloud, so you can use it on any device. You can also carry on without one and sign in later in Settings.</p>
+  <div id="suOut"><label>Email<input id="suEm" type="email" autocomplete="email"></label><label>Password (6+ characters)<input id="suPw" type="password" autocomplete="current-password" minlength="6"></label>
+    <label class="chk"><input type="checkbox" id="suSpw"> Show password</label>
+    <div class="row2"><button type="button" class="btn" id="suSi">Sign in</button><button type="button" class="btn" id="suSu">Create account</button></div></div>
+  <p id="suWho" hidden></p>
+  <p class="note" id="suAmsg" role="status"></p>
+  <div id="suHas" class="notice" role="alert" hidden><span>Welcome back. Your account already has a log and settings, so you may not need setup.</span><div class="row2"><button type="button" class="btn" id="suKeep">Keep my settings</button><button type="button" class="btn sec" id="suGoOn">Continue setup</button></div></div>
+</section>
+<section data-s="focus" hidden>
+  <fieldset><legend>What’s your main focus?</legend>
+    <label class="fcard"><input type="radio" name="sufocus" value="cut"><b>Lose weight (cut)</b><small>Eat a little less than you burn, so you lose fat gradually while keeping protein high.</small></label>
+    <label class="fcard"><input type="radio" name="sufocus" value="bulk"><b>Build muscle (bulk)</b><small>Eat a little more than you burn, to fuel training and muscle growth with less fat gain.</small></label>
+  </fieldset>
+  <p class="note">The calories and macros suggested at the end are estimates. You can change them before saving, and at any time in Settings.</p>
+</section>
+<section data-s="weight" hidden>
+  <div class="seg" id="suWu" role="group" aria-label="Weight unit"><button type="button" data-u="kg" aria-pressed="true">kg</button><button type="button" data-u="st" aria-pressed="false">st and lb</button></div>
+  <fieldset><legend>Current weight</legend><div id="suCkg"><label>Kilograms<input id="suCk" type="number" min="20" max="400" step="0.1" inputmode="decimal"></label></div><div class="sugrid" id="suCst" hidden><label>Stones<input id="suCs" type="number" min="0" max="62" step="1" inputmode="numeric"></label><label>Pounds<input id="suCl" type="number" min="0" max="13.9" step="0.1" inputmode="decimal"></label></div></fieldset>
+  <fieldset><legend>Target weight (optional)</legend><div id="suTkg"><label>Kilograms<input id="suTk" type="number" min="20" max="400" step="0.1" inputmode="decimal"></label></div><div class="sugrid" id="suTst" hidden><label>Stones<input id="suTs" type="number" min="0" max="62" step="1" inputmode="numeric"></label><label>Pounds<input id="suTl" type="number" min="0" max="13.9" step="0.1" inputmode="decimal"></label></div></fieldset>
+  <p class="note" id="suWdir" role="status" hidden></p>
+  <p class="note">Leave the target blank if you don’t want one. You can set or change it later on the Progress page. Your current weight is saved as today’s weigh-in when you finish.</p>
+</section>
+<section data-s="about" hidden>
+  <p>These help estimate how much you burn each day. They’re saved to your profile (and your account, if you’re signed in) so you can update them later.</p>
+  <div class="sugrid"><label>Age (years)<input id="suAge" type="number" min="1" max="120" step="1" inputmode="numeric"></label><label>Sex<select id="suSex"><option value="">Choose</option><option value="f">Female</option><option value="m">Male</option><option value="x">Prefer not to say</option></select></label></div>
+  <div class="seg" id="suHu" role="group" aria-label="Height unit"><button type="button" data-u="cm" aria-pressed="true">cm</button><button type="button" data-u="ft" aria-pressed="false">ft and in</button></div>
+  <div id="suHcmB"><label>Height (cm)<input id="suHcm" type="number" min="100" max="250" step="1" inputmode="numeric"></label></div><div class="sugrid" id="suHftB" hidden><label>Feet<input id="suHft" type="number" min="3" max="8" step="1" inputmode="numeric"></label><label>Inches<input id="suHin" type="number" min="0" max="11.9" step="0.5" inputmode="decimal"></label></div>
+  <label class="chk"><input type="checkbox" id="suPreg"> I’m pregnant or breastfeeding</label>
+  <p class="note">Leave anything blank to skip the estimate and set your own targets at the end. “Prefer not to say” uses the average of the male and female equations. Pregnancy isn’t saved.</p>
+</section>
+<section data-s="ex" hidden>
+  <fieldset><legend>How will you work towards your goal? Choose any that apply.</legend>
+    <div class="exb" id="suEx"><button type="button" data-x="lift" aria-pressed="false">Weight lifting</button><button type="button" data-x="run" aria-pressed="false">Running</button><button type="button" data-x="sport" aria-pressed="false">Sports</button><button type="button" data-x="cal" aria-pressed="false">Calisthenics</button></div>
+  </fieldset>
+  <label>How active is a typical week?<select id="suAct"><option value="">Choose</option><option value="0">Mostly sitting, little or no exercise</option><option value="1">Light: exercise 1 to 3 days a week</option><option value="2">Moderate: exercise 3 to 5 days a week</option><option value="3">Very active: exercise 6 or 7 days a week</option><option value="4">Extra active: hard daily training or a physical job</option></select></label>
+</section>
+<section data-s="review" hidden>
+  <p id="suRevIntro"></p>
+  <label>Aim<select id="suAim"></select></label>
+  <div class="sugrid"><label>Daily calories (kcal)<input id="suKc" type="number" min="500" max="10000" step="50" inputmode="numeric"></label><label>Protein (g)<input id="suP" type="number" min="1" max="1000" step="1" inputmode="numeric"></label><label>Carbs (g)<input id="suC" type="number" min="1" max="1000" step="1" inputmode="numeric"></label><label>Fat (g)<input id="suF" type="number" min="1" max="1000" step="1" inputmode="numeric"></label><label>Fibre (g)<input id="suFi" type="number" min="1" max="1000" step="1" inputmode="numeric"></label></div>
+  <p class="note" id="suHowN"></p>
+  <p class="note">These are estimates, not medical advice, and everyone is different. Treat them as a starting point: after a few weeks of logging and weighing in, the Adaptive calorie target on the Progress page can refine your goal from your real results. They’re meant for adults; if you’re managing a health condition, check with a health professional first.</p>
+  <div class="notice" id="suChg"></div>
+</section>
+<p class="note hint" id="suMsg" role="alert" hidden></p>
+</div>
+<div class="sufoot"><button type="button" class="btn sec" id="suBack">Back</button><button type="button" class="btn" id="suNext">Next</button></div>
+<div class="sulinks"><button type="button" class="linkbtn" id="suSkip">Skip setup</button><button type="button" class="linkbtn sutest" id="suPass" hidden>Pass (test)</button></div>
+</div></div>
 <div id="dlg" class="calwrap" hidden><div class="calbox" role="alertdialog" aria-modal="true" aria-labelledby="dlgT" aria-describedby="dlgD"><div class="calhead"><h2 id="dlgT"></h2></div><div class="calbody"><p id="dlgD"></p><label id="dlgIL" hidden><span></span><input id="dlgI" maxlength="40"></label><label id="dlgSL" hidden><span></span><select id="dlgS"></select></label><p class="note hint" id="dlgM" role="alert" hidden></p><div class="row2"><button class="btn" id="dlgYes" type="button"></button><button class="btn" id="dlgNo" type="button">Cancel</button></div></div></div></div>
 <p class="note" style="text-align:center;margin-top:2rem">Calorie tracker <span id="ver"></span><span id="build"></span></p>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v10-wip";
-var BUILD="20 Oct 17:20";
+var VERSION="v11-wip";
+var BUILD="20 Oct 20:15";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 /* USDA FoodData Central key for barcode fallback lookups. DEMO_KEY works without sign-up but is limited to 30 lookups an hour;
    a free personal key from api.data.gov raises that. It is a public, read-only key, safe to keep in the page. */
@@ -588,7 +706,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     function format(v){return String(Math.round(v))+(suffix||"");}
     if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=format(to);el._numTo=null;return;}
     var start=performance.now(),delta=to-from;
-    function step(now){if(el._numberAnimation!==run)return;var p=Math.min((now-start)/duration,1),ease=1-Math.pow(1-p,3);el.textContent=format(from+delta*ease);if(p<1)requestAnimationFrame(step);else el._numTo=null;}
+    function step(now){if(el._numberAnimation!==run)return;if(!ringGate){start=now;requestAnimationFrame(step);return;}var p=Math.min((now-start)/duration,1),ease=1-Math.pow(1-p,3);el.textContent=format(from+delta*ease);if(p<1)requestAnimationFrame(step);else el._numTo=null;}
     requestAnimationFrame(step);
   }
   /* Colour themes. Stored on this device only (its own key; the saved-data shape is untouched). The default green theme is the stylesheet itself. */
@@ -712,7 +830,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!animate||reduce||from===v){ringShown=v;ringAnimTo=null;paintRing(v);return;}
     ringAnimTo=v;
     var start=performance.now();
-    function step(now){if(run!==ringRun)return;var p=Math.min((now-start)/3000,1),e=1-Math.pow(1-p,3);ringShown=p>=1?v:from+(v-from)*e;paintRing(ringShown);if(p<1)requestAnimationFrame(step);else ringAnimTo=null;}
+    function step(now){if(run!==ringRun)return;if(!ringGate){start=now;requestAnimationFrame(step);return;}var p=Math.min((now-start)/3000,1),e=1-Math.pow(1-p,3);ringShown=p>=1?v:from+(v-from)*e;paintRing(ringShown);if(p<1)requestAnimationFrame(step);else ringAnimTo=null;}
     requestAnimationFrame(step);
   }
   window.addEventListener("resize",function(){paintRing(ringShown);repaintMacros();if(typeof drawProgress==="function")drawProgress();if(!$("pg-log").hidden)drawDayChart();});
@@ -722,6 +840,26 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function daysAgo(d){return Math.round((sod(new Date())-sod(d))/864e5);}
   function inWindow(d){var n=daysAgo(d);return n>=0&&n<=WINDOW;}
   function reducedMotion(){return !!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);}
+  /* v11: after logging, if the calorie and macro rings are out of view the page scrolls back to the top first, and the ring
+     animations (and their celebrations) wait until the scroll has finished, so you can watch them fill. While the gate is
+     closed the animators hold at their starting values. With reduced motion the scroll is instant and nothing waits. */
+  var ringGate=true,gateWait=[];
+  function whenRings(f){if(ringGate)f();else gateWait.push(f);}
+  function openGate(){ringGate=true;var w=gateWait;gateWait=[];w.forEach(function(f){f();});}
+  function ringsInView(){
+    if($("pg-log").hidden)return true;
+    var pl=document.querySelector(".plate"),mr=$("mrings"),a=pl.getBoundingClientRect(),b=(mr.children.length?mr:pl).getBoundingClientRect(),top=document.querySelector(".tabs").getBoundingClientRect().bottom;
+    return a.top>=top-4&&b.bottom<=window.innerHeight+4;
+  }
+  function bringRings(){
+    if(ringsInView())return;
+    if(reducedMotion()){window.scrollTo(0,0);return;}
+    ringGate=false;
+    try{window.scrollTo({top:0,behavior:"smooth"});}catch(e){window.scrollTo(0,0);}
+    var last=-1,still=0,t0=performance.now();
+    (function watch(){var y=window.scrollY;still=y===last?still+1:0;last=y;
+      if(y<=0||still>=8||performance.now()-t0>1500){openGate();return;}requestAnimationFrame(watch);})();
+  }
   /* Small confetti burst at the top of a ring when it first reaches its target */
   var hit={},fxTimers=[],lastDay=null;
   function pulse(el){if(!el||reducedMotion())return;el.classList.remove("pulse");void el.offsetWidth;el.classList.add("pulse");setTimeout(function(){el.classList.remove("pulse");},1100);}
@@ -747,11 +885,11 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function fireHits(animate,dayKey,total,m,fromCal){
     function check(id,reached,host,w,h,oy,from,to,target){
       var kk=id+"|"+dayKey,was=!!hit[kk];hit[kk]=reached;
-      if(animate&&reached&&!was&&!reducedMotion())fxTimers.push(setTimeout(function(){
+      if(animate&&reached&&!was&&!reducedMotion())whenRings(function(){fxTimers.push(setTimeout(function(){
         /* only if the user is still on that day and the ring is still full */
         if(hit[kk]!==true||key(cur)!==dayKey)return;
         var el=host();pulse(el);confetti(el,w,h,oy);
-      },crossDelay(from,to,target)));
+      },crossDelay(from,to,target)));});
     }
     check("cal",total>0&&total>=S.goal,function(){return document.querySelector(".plate");},150,110,($("ring").clientWidth||304)*0.1,fromCal,total,S.goal);
     MAC.forEach(function(x){
@@ -831,7 +969,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function loggedAt(e){if(okNum(e.at)&&e.at>=T_MIN&&e.at<=T_MAX)return e.at;var t=Number(e.id);return t>946684800000&&t<4102444800000?t:null;}
   function byNewest(a,b){var x=loggedAt(a),y=loggedAt(b);if(x===null&&y===null)return b.id-a.id;if(x===null)return 1;if(y===null)return -1;return y-x||b.id-a.id;}
   function hm(t){return new Date(t).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});}
-  function add(name,kcal,m){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur),now=Date.now();var e={id:now+Math.random(),name:name,kcal:kcal,at:now};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();animateWheels=true;render();return e;}
+  function add(name,kcal,m){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur),now=Date.now();var e={id:now+Math.random(),name:name,kcal:kcal,at:now};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();bringRings();animateWheels=true;render();return e;}
   /* "Added ..." with an Undo for the newest entry, so a mistaken tap is easy to take back. */
   var lastAdded=null;
   function addedNote(name,e){
@@ -860,7 +998,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}
     if(!(k>0)){$("pormsg").hidden=false;$("lpor").focus();return;}
     $("pormsg").hidden=true;msg.hidden=true;
-    var o=portionOf(item,k),nm=porName(item.name,k),en=add(nm,o.kcal,mealM(o));addedNote(nm,en);$("msearch").focus();
+    var o=portionOf(item,k),nm=porName(item.name,k),en=add(nm,o.kcal,mealM(o));addedNote(nm,en);$("msearch").focus({preventScroll:true});
   };
   /* What to log: a saved meal, a single food, or a quick add. */
   function setMode(md){
@@ -909,7 +1047,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!src.length)return;
     var tk=key(new Date()),base=Date.now(),list=S.days[tk]=S.days[tk]||[];
     src.forEach(function(e,i){var c={id:base+i+Math.random()*0.5,name:e.name,kcal:e.kcal,at:base+i};if(e.m)c.m=JSON.parse(JSON.stringify(e.m));list.push(c);});
-    cur=new Date();save();animateWheels=true;render();
+    cur=new Date();save();bringRings();animateWheels=true;render();
     var m=$("fmsg");m.textContent="Copied "+src.length+(src.length===1?" item":" items")+" to today.";m.hidden=false;
   };
   $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500&&g<=10000){S.goal=g;S.sUpdated=Date.now();save();}render();};
@@ -1244,17 +1382,27 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   });
   /* A list in folders (saved ingredients, saved meals): a heading per folder with Rename and Remove, then Unfiled. */
   function linkbtn(t,label){var b=document.createElement("button");b.type="button";b.className="linkbtn";b.textContent=t;if(label)b.setAttribute("aria-label",label);return b;}
-  function folderGroups(k,items,box,render,after){
+  /* coll (ingredients only): each folder's open/closed state by folder id ("_u" = Unfiled), kept while the page is open.
+     The heading is a button with aria-expanded; Rename and Remove stay available when a folder is closed. Folders start
+     closed and Unfiled starts open, so new ingredients are easy to find. */
+  function folderGroups(k,items,box,render,after,coll){
     var fs=fList(k),by={},unf=[];
     items.forEach(function(it){var f=folderOf(it.fk);(f?(by[f]=by[f]||[]):unf).push(it);});
     fs.map(function(f){return {f:f,items:by[f.id]||[]};}).concat(unf.length||!fs.length?[{f:null,items:unf}]:[]).forEach(function(g){
-      var sec=document.createElement("section"),hd=document.createElement("div"),h=document.createElement("h3"),cnt=document.createElement("span");
-      sec.className="fgrp";hd.className="fghd";h.textContent=g.f?g.f.name:"Unfiled";cnt.textContent=g.items.length+(g.items.length===1?" item":" items");hd.append(h,cnt);
+      var sec=document.createElement("section"),hd=document.createElement("div"),h=document.createElement("h3"),cnt=document.createElement("span"),body=document.createElement("div"),gid=g.f?g.f.id:"_u";
+      sec.className="fgrp";hd.className="fghd";cnt.textContent=g.items.length+(g.items.length===1?" item":" items");body.id="fg-"+k+"-"+gid;
+      if(coll){
+        var open=coll[gid]!==undefined?coll[gid]:!g.f,tb=document.createElement("button");
+        tb.type="button";tb.className="ftog";tb.dataset.fid=gid;tb.textContent=g.f?g.f.name:"Unfiled";tb.setAttribute("aria-controls",body.id);
+        var setOpen=function(o){coll[gid]=o;tb.setAttribute("aria-expanded",o?"true":"false");body.hidden=!o;};
+        setOpen(open);tb.onclick=function(){setOpen(tb.getAttribute("aria-expanded")!=="true");};h.appendChild(tb);
+      }else h.textContent=g.f?g.f.name:"Unfiled";
+      hd.append(h,cnt);
       if(g.f){var rn=linkbtn("Rename","Rename folder "+g.f.name),rm=linkbtn("Remove","Remove folder "+g.f.name);
         rn.onclick=function(){renameFolder(k,g.f,after);};rm.onclick=function(){removeFolder(k,g.f,g.items.length,after);};hd.append(rn,rm);}
-      sec.appendChild(hd);
-      if(g.items.length){var ul=document.createElement("ul");ul.className="loglist";g.items.forEach(function(it){ul.appendChild(render(it));});sec.appendChild(ul);}
-      else{var e=document.createElement("p");e.className="note";e.textContent=g.f?"Nothing in this folder yet. Use an item’s folder menu to move it here.":"Nothing here yet.";sec.appendChild(e);}
+      sec.append(hd,body);
+      if(g.items.length){var ul=document.createElement("ul");ul.className="loglist";g.items.forEach(function(it){ul.appendChild(render(it));});body.appendChild(ul);}
+      else{var e=document.createElement("p");e.className="note";e.textContent=g.f?"Nothing in this folder yet. Use an item’s folder menu to move it here.":"Nothing here yet.";body.appendChild(e);}
       box.appendChild(sec);
     });
   }
@@ -1263,7 +1411,15 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var row=document.createElement("div"),ed=linkbtn("Edit","Edit "+name),sl=document.createElement("select"),x=document.createElement("button");
     row.className="ictl";ed.onclick=onEdit;
     sl.setAttribute("aria-label","Folder for "+name);sl.dataset.fk=fk;opt(sl,"","Unfiled");fList(k).forEach(function(f){opt(sl,f.id,f.name);});sl.value=folderOf(fk)||"";
-    sl.onchange=function(){fileItem(fk,sl.value||null);save();after();var again=[].filter.call(document.querySelectorAll("select[data-fk]"),function(z){return z.dataset.fk===fk&&z.offsetParent!==null;})[0];if(again)again.focus();};
+    /* After a move the list is redrawn. Focus goes back to the item's folder menu, or, if it went into a closed folder,
+       to that folder's heading; a status message says where it went either way. */
+    sl.onchange=function(){
+      var to=sl.value||null,fname=to?(S.folders[to]||{}).name:"Unfiled";fileItem(fk,to);save();after();
+      var again=[].filter.call(document.querySelectorAll("select[data-fk]"),function(z){return z.dataset.fk===fk&&z.offsetParent!==null;})[0];
+      var head=document.querySelector('.ftog[data-fid="'+(to||"_u")+'"]');
+      if(again)again.focus();else if(head)head.focus();
+      if($("fstat"))$("fstat").textContent="Moved “"+name+"” to "+fname+(again?".":" (folder closed).");
+    };
     x.type="button";x.textContent="×";x.setAttribute("aria-label","Remove "+name);x.onclick=onRemove;
     row.append(ed,sl);return {row:row,x:x};
   }
@@ -1425,7 +1581,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function cookN(){var v=parseFloat($("mpor").value);return v>0&&v<=100?v:NaN;}
   $("mpor").oninput=function(){$("mpormsg").hidden=true;drawCook();};
   function badN(){if(cookN()>0)return false;$("mpormsg").hidden=false;$("mpor").focus();return true;}
-  function resetCook(){ings=[];$("mname").value="";$("mpor").value="1";$("meditmsg").hidden=true;drawCook();}
+  function resetCook(){ings=[];$("mname").value="";$("mpor").value="1";$("meditmsg").hidden=true;editOrig=null;$("mstop").hidden=true;drawCook();}
   /* The meal being built, as a saved meal: whole-recipe totals, portions made, and its ingredient list (so it can be edited,
      and checked when an ingredient changes). */
   function mealFrom(name,rows,n){
@@ -1438,25 +1594,50 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("logMeal").onclick=function(){
     if(!ings.length){$("fsearch").focus();return;}
     if(badN())return;
-    var nm=$("mname").value.trim()||"Home-cooked meal",o=portionOf(mealFrom(nm,ings,cookN()),1),e=add(nm,o.kcal,mealM(o));
-    resetCook();tab("log");addedNote(nm,e);
+    var nm=$("mname").value.trim()||"Home-cooked meal",o=portionOf(mealFrom(nm,ings,cookN()),1);
+    tab("log");var e=add(nm,o.kcal,mealM(o));resetCook();addedNote(nm,e);
   };
-  var pendingMeal=null;
-  function commitMeal(meal){
-    var idx=S.meals.findIndex(function(m){return m.name.toLowerCase()===meal.name.toLowerCase();});
+  /* pendingMeal: {meal, from}. editOrig: the lower-case name of the saved meal loaded with Edit, so changing the name while
+     editing renames that meal instead of saving a second copy. */
+  var pendingMeal=null,editOrig=null;
+  /* Saves a meal. from = the name of the meal being renamed (lower case), or null. A rename removes the old name (with a
+     deletion marker so other devices drop it too) and moves its folder to the new name. */
+  function commitMeal(meal,from){
+    var nl=meal.name.toLowerCase(),renamed=null;
+    if(from&&from!==nl){
+      var old=mealByName(from),fold=folderOf("m:"+from),now=Date.now();
+      renamed=old?old.name:from;
+      S.meals=S.meals.filter(function(m){return m.name.toLowerCase()!==from;});
+      (S.del=S.del||{})["m:"+from]=now;meal.t=Math.max(meal.t,now+1);
+      if((S.fileIn||{})["m:"+from])fileItem("m:"+from,null);
+      if(fold||(S.fileIn||{})["m:"+nl])fileItem("m:"+nl,fold);
+      if(keepMap[from]){delete keepMap[from];saveKeep();}
+      if(mealSel===from){mealSel=nl;$("msearch").value=meal.name;}
+    }
+    var idx=S.meals.findIndex(function(m){return m.name.toLowerCase()===nl;});
     if(idx>=0)S.meals[idx]=meal;else S.meals.push(meal);
-    S.meals.sort(function(a,b){return a.name.localeCompare(b.name);});save();$("meditmsg").hidden=true;drawSavedMeals();drawReview();
+    S.meals.sort(function(a,b){return a.name.localeCompare(b.name);});save();
+    editOrig=null;$("mstop").hidden=true;
+    var msg=$("meditmsg");msg.hidden=!renamed;if(renamed)msg.textContent="Saved. \u201c"+renamed+"\u201d is now called \u201c"+meal.name+"\u201d.";
+    drawSavedMeals();drawReview();
   }
   $("saveMeal").onclick=function(){
     if(!ings.length){$("fsearch").focus();return;}
     var name=$("mname").value.trim();if(!name){$("mname").focus();return;}
     if(badN())return;
-    var meal=mealFrom(name,ings,cookN());
-    var existing=S.meals.find(function(m){return m.name.toLowerCase()===name.toLowerCase();});
-    if(existing){pendingMeal=meal;$("replaceText").textContent="A saved meal called \u201c"+existing.name+"\u201d already exists. Replace it with this one?";$("replaceBox").hidden=false;return;}
-    commitMeal(meal);
+    var meal=mealFrom(name,ings,cookN()),nl=name.toLowerCase(),from=editOrig&&mealByName(editOrig)?editOrig:null;
+    var existing=mealByName(nl);
+    if(from&&from!==nl){
+      if(!existing){commitMeal(meal,from);return;}
+      pendingMeal={meal:meal,from:from};
+      $("replaceText").textContent="A saved meal called \u201c"+existing.name+"\u201d already exists. Replace it with the meal you\u2019re editing? \u201c"+mealByName(from).name+"\u201d will be renamed to \u201c"+name+"\u201d and the old \u201c"+existing.name+"\u201d removed. Nothing in your log changes.";
+      $("replaceBox").hidden=false;$("replaceYes").focus();return;
+    }
+    if(existing){pendingMeal={meal:meal,from:null};$("replaceText").textContent="A saved meal called \u201c"+existing.name+"\u201d already exists. Replace it with this one?";$("replaceBox").hidden=false;return;}
+    commitMeal(meal,null);
   };
-  $("replaceYes").onclick=function(){if(pendingMeal)commitMeal(pendingMeal);pendingMeal=null;$("replaceBox").hidden=true;};
+  $("mstop").onclick=function(){resetCook();$("mname").focus();};
+  $("replaceYes").onclick=function(){var pm=pendingMeal;pendingMeal=null;$("replaceBox").hidden=true;if(pm)commitMeal(pm.meal,pm.from);};
   $("replaceNo").onclick=function(){pendingMeal=null;$("replaceBox").hidden=true;};
   $("mname").oninput=function(){pendingMeal=null;$("replaceBox").hidden=true;};
   /* Edit a saved meal: loads its name, portions and ingredients (with today's ingredient values) into the builder.
@@ -1465,12 +1646,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   /* Edit: loads a saved meal's name, portions and ingredients (with today's ingredient values) into the builder. The saved meal
      only changes when it's saved again, and saving under an existing name asks before replacing. */
   function loadMealForEdit(m){
-    var msg=$("meditmsg");pendingMeal=null;$("replaceBox").hidden=true;
+    var msg=$("meditmsg");pendingMeal=null;$("replaceBox").hidden=true;editOrig=m.name.toLowerCase();$("mstop").hidden=false;
     $("mname").value=m.name;$("mpor").value=String(mealN(m));$("mpormsg").hidden=true;ings=[];
     if(!Array.isArray(m.i)||!m.i.length)msg.textContent="Editing “"+m.name+"”. It was saved before meals kept their ingredients, so add its ingredients again, then save to replace it.";
     else{
       var miss=[];m.i.forEach(function(it){var r=rowFromItem(it);if(r)ings.push(r);else miss.push(it.n||"an ingredient");});
-      msg.textContent="Editing “"+m.name+"” with today’s ingredient values"+(miss.length?". "+listOf(miss)+(miss.length===1?" is":" are")+" no longer saved, so "+(miss.length===1?"it was":"they were")+" left out":"")+". Save to replace the saved meal.";
+      msg.textContent="Editing “"+m.name+"” with today’s ingredient values"+(miss.length?". "+listOf(miss)+(miss.length===1?" is":" are")+" no longer saved, so "+(miss.length===1?"it was":"they were")+" left out":"")+". Save to update the saved meal; change the name to rename it.";
     }
     msg.hidden=false;drawCook();tab("cook");
     var card=$("mname").closest(".card");if(card&&card.scrollIntoView)card.scrollIntoView({block:"start"});$("mname").focus();
@@ -1591,6 +1772,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       var start=performance.now();
       (function step(now){
         if(mrRun[k]!==run)return;
+        if(!ringGate){start=now;requestAnimationFrame(step);return;}
         var p=Math.min((now-start)/3000,1),ease=1-Math.pow(1-p,3);
         mrShown[k]=p>=1?v:from+(v-from)*ease;paintMacro(k,mrShown[k],t,state);
         if(p<1)requestAnimationFrame(step);else mrTo[k]=null;
@@ -1777,8 +1959,9 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       n.appendChild(dt);
       var ctl=itemControls("i",o.fk,it.name,function(){lookupId++;bcMsg("");showProd({name:it.sn||it.name,k:it.k,p:it.p,c:it.c,f:it.f,fi:it.fi,sv:it.e,code:it.code,src:it.src,rating:it.rating},null,!!it.scanned,it);if($("prod").scrollIntoView)$("prod").scrollIntoView({block:"start"});$("pn").focus();},function(){removeIng(it);},ingsChanged);
       n.appendChild(ctl.row);li.append(n,ctl.x);return li;
-    },ingsChanged);
+    },ingsChanged,openF);
   }
+  var openF={};
   /* Removing an ingredient asks first. Saved meals that use it keep their totals and are listed for review; the log never changes. */
   function removeIng(it){
     var k=ingKey(it),used=S.meals.filter(function(m){return Array.isArray(m.i)&&m.i.some(function(x){return x.k===k;});});
@@ -1847,7 +2030,37 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     box.appendChild(t);
     if(has){var rm=document.createElement("button");rm.type="button";rm.className="linkbtn";rm.textContent="Remove today’s weight";
       rm.onclick=function(){S.weights=wts();S.weights[key(new Date())]={kg:null,t:Date.now()};save();$("wmsg").hidden=true;drawWeight(true);drawCharts(false);drawAdapt();};box.appendChild(rm);}
+    drawTarget(fill);
   }
+  /* v11: target weight, kept in kg as targets.tw (synced with the goal and targets; null once removed). Shown against the
+     latest reading, in the chosen unit. No target means none is shown; nothing is guessed. */
+  function okKg(kg){return okNum(kg)&&kg>=20&&kg<=400;}
+  function twKg(){var t=S.targets&&S.targets.tw;return okKg(t)?t:null;}
+  function fmtAbs(kg){var a=Math.abs(kg);return wUnit==="st"?(Math.round(a/KG_LB*10)/10)+" lb":(Math.round(a*10)/10).toFixed(1)+" kg";}
+  /* A weight typed in the current unit: kg, or stones and pounds. null when blank, NaN when it can't be read. */
+  function readW(kgId,stId,lbId){
+    if(wUnit==="st"){var a=$(stId).value.trim(),b=$(lbId).value.trim();if(a===""&&b==="")return null;var s=parseFloat(a||"0"),l=parseFloat(b||"0");return !(s>=0)||!(l>=0&&l<14)?NaN:(s*14+l)*KG_LB;}
+    var v=$(kgId).value.trim();return v===""?null:parseFloat(v);
+  }
+  function fillW(kg,kgId,stId,lbId){$(kgId).value=kg!=null?Math.round(kg*10)/10:"";var s=kg!=null?stlb(kg):null;$(stId).value=s?s[0]:"";$(lbId).value=s?s[1]:"";}
+  function drawTarget(fill){
+    var tw=twKg(),lw=wList(),last=lw.length?lw[lw.length-1]:null,s=$("wtgtSum");
+    $("tkgIn").hidden=wUnit!=="kg";$("tstIn").hidden=wUnit!=="st";
+    if(fill)fillW(tw,"tkg","tst","tlb");
+    $("tgo").textContent=tw!=null?"Update":"Save target";$("trm").hidden=tw==null;
+    if(tw==null){s.textContent="No target weight set. Add one to see how far you have to go.";return;}
+    var t="Target: "+fmtW(tw)+".";
+    if(!last)t+=" Log a weight to see how far you have to go.";
+    else{var d=last.kg-tw;t+=" Latest reading: "+fmtW(last.kg)+" ("+(last.d===key(new Date())?"today":shortDate(last.d))+"). "+(Math.abs(d)<0.05?"You’ve reached your target.":fmtAbs(d)+" to "+(d>0?"lose":"gain")+" to reach it.");}
+    s.textContent=t;
+  }
+  $("tgo").onclick=function(){
+    var kg=readW("tkg","tst","tlb"),m=$("tmsg");
+    if(!okKg(kg)){m.textContent=wUnit==="st"?"Enter a target between 3 st 3 lb and 62 st 13 lb (pounds 0 to 13.9).":"Enter a target between 20 and 400 kg.";m.hidden=false;return;}
+    m.hidden=true;S.targets.tw=Math.round(kg*100)/100;S.sUpdated=Date.now();save();drawTarget(true);drawLegends();drawCharts(false);
+  };
+  $("trm").onclick=function(){S.targets.tw=null;S.sUpdated=Date.now();save();$("tmsg").hidden=true;drawTarget(true);drawLegends();drawCharts(false);$(wUnit==="st"?"tst":"tkg").focus();};
+  ["tkg","tst","tlb"].forEach(function(id){$(id).onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("tgo").click();}};$(id).oninput=function(){$("tmsg").hidden=true;};});
   $("wgo").onclick=function(){
     var msg=$("wmsg"),kg;
     if(wUnit==="st"){var a=$("wst").value.trim(),b=$("wlb").value.trim(),s=parseFloat(a||"0"),l=parseFloat(b||"0");kg=(a===""&&b==="")||!(s>=0)||!(l>=0&&l<14)?NaN:(s*14+l)*KG_LB;}
@@ -1921,6 +2134,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     MSTY.forEach(function(m){legendItem(b,m[1],function(x){x.strokeStyle=mcol(m[2]);x.lineWidth=2;x.lineCap="round";x.setLineDash(m[3]);x.beginPath();x.moveTo(2,5);x.lineTo(24,5);x.stroke();});});
     legendItem(c,"Daily reading",function(x){x.fillStyle=colv("muted");x.beginPath();x.arc(13,5,3.5,0,Math.PI*2);x.fill();});
     legendItem(c,"Trend",function(x){x.strokeStyle=colv("accent");x.lineWidth=2;x.beginPath();x.moveTo(2,5);x.lineTo(24,5);x.stroke();});
+    if(twKg()!=null)legendItem(c,"Target",function(x){x.strokeStyle=colv("ink");x.globalAlpha=.65;x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(1,5);x.lineTo(25,5);x.stroke();});
   }
   function fmtK(v){return v>=1000?(Math.round(v/100)/10)+"k":String(Math.round(v));}
   function num(v){return Math.round(v).toLocaleString();}
@@ -1963,19 +2177,22 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var c=canv($("chW")),x=c.x,start=rows[0].k,s0=parseKey(start),tl=wTrend(),inR=tl.filter(function(r){return r.d>=start;});
     var cv=wUnit==="st"?function(kg){return kg/KG_LB;}:function(kg){return kg;};
     var fmt=wUnit==="st"?function(lb){var st=Math.floor(Math.round(lb)/14);return st+"st "+(Math.round(lb)-st*14);}:function(v){return (Math.round(v*10)/10)+"";};
+    var tw=twKg(),tsay=tw!=null?" Your target is "+fmtW(tw)+".":"";
     if(!inR.length){empty(c,"No weight readings in this period");
-      $("sumW").textContent=tl.length?"No weight readings in "+rangeName()+". Your last reading was on "+shortDate(tl[tl.length-1].d)+".":"No weight readings yet. Log today’s weight above to start your trend.";return;}
-    var vals=[];inR.forEach(function(r){vals.push(cv(r.kg),cv(r.tr));});
+      $("sumW").textContent=(tl.length?"No weight readings in "+rangeName()+". Your last reading was on "+shortDate(tl[tl.length-1].d)+".":"No weight readings yet. Log today’s weight above to start your trend.")+tsay;return;}
+    var vals=[];inR.forEach(function(r){vals.push(cv(r.kg),cv(r.tr));});if(tw!=null)vals.push(cv(tw));
     var lo=Math.min.apply(null,vals),hi=Math.max.apply(null,vals),pad=Math.max((hi-lo)*0.15,wUnit==="st"?1:0.5);
     var F=frame(c,lo-pad,hi+pad,fmt,rows.length,endLabels(rows));
     function idx(d){return Math.round((parseKey(d)-s0)/864e5);}
+    if(tw!=null){var ty=Math.round(F.Y(cv(tw)))+0.5;x.save();x.strokeStyle=colv("ink");x.globalAlpha=.65;x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(F.L,ty);x.lineTo(F.L+F.W,ty);x.stroke();x.restore();
+      x.fillStyle=colv("muted");x.textAlign="right";x.textBaseline=ty-F.T<14?"top":"bottom";x.fillText("Target",F.L+F.W,ty-F.T<14?ty+3:ty-3);}
     x.save();x.beginPath();x.rect(0,0,F.L+F.W*p+4,c.h);x.clip();
     inR.forEach(function(r){x.fillStyle=colv("surface");x.beginPath();x.arc(F.X(idx(r.d)),F.Y(cv(r.kg)),5,0,Math.PI*2);x.fill();x.fillStyle=colv("muted");x.beginPath();x.arc(F.X(idx(r.d)),F.Y(cv(r.kg)),3.5,0,Math.PI*2);x.fill();});
     x.strokeStyle=colv("accent");x.lineWidth=2;x.lineJoin="round";x.lineCap="round";x.beginPath();
     inR.forEach(function(r,i){var px=F.X(idx(r.d)),py=F.Y(cv(r.tr));if(i)x.lineTo(px,py);else x.moveTo(px,py);});
     x.stroke();x.restore();
     var a=inR[0],b=inR[inR.length-1];
-    $("sumW").textContent=inR.length+(inR.length===1?" reading":" readings")+" in "+rangeName()+". "+(inR.length>1?"Your trend went from "+fmtW(a.tr)+" to "+fmtW(b.tr)+" ("+fmtDW(b.tr-a.tr)+").":"Your trend is "+fmtW(b.tr)+".");
+    $("sumW").textContent=inR.length+(inR.length===1?" reading":" readings")+" in "+rangeName()+". "+(inR.length>1?"Your trend went from "+fmtW(a.tr)+" to "+fmtW(b.tr)+" ("+fmtDW(b.tr-a.tr)+").":"Your trend is "+fmtW(b.tr)+".")+tsay;
   }
   /* animate: grow the bars and draw the lines in from the left (not with reduced motion). A background redraw never restarts
      a running animation; each frame reads the current data, so it ends up right anyway. */
@@ -2028,17 +2245,43 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("ause").onclick=function(){var g=parseInt(this.dataset.g,10);if(!(g>=500&&g<=10000))return;aPending=g;$("aText").textContent="Change your daily goal from "+num(S.goal)+" to "+num(g)+" kcal? You can change it again in Settings at any time.";$("aBox").hidden=false;$("aYes").focus();};
   $("aYes").onclick=function(){var g=aPending;aPending=null;$("aBox").hidden=true;if(!(g>=500&&g<=10000))return;S.goal=g;S.sUpdated=Date.now();save();render();drawAdapt();$("ause").focus();};
   $("aNo").onclick=function(){aPending=null;$("aBox").hidden=true;$("ause").focus();};
-  /* How the selected day built up: cumulative calories against the goal, and each tracked macro as a share of its target,
-     stepping up at the time each item was logged (items in the same minute make one step). Missing macros count as 0g here
-     (a charting assumption, said under the chart). Items with no recorded time can't go on the timeline; they're listed in the
-     table and note. Redrawn whenever the day is drawn (add, remove, copy, sync), on theme change and on resize. */
-  var DSTY=[["p","Protein","accent",[]],["c","Carbs","muted",[6,4]],["f","Fat","over",[2,3]],["fi","Fibre","ink",[8,3,2,3]]];
+  /* How the selected day built up, on one chart: each chosen measure (calories and each tracked macro) as a share of its
+     daily goal or target, so they share one scale, stepping up at the time each item was logged (same minute = one step).
+     The time axis runs from the first item (rounded down to an even hour) to midnight at the end of the day, labelled every
+     two hours (every four or six when they wouldn't fit); today's lines stop at the current time. Toggles add or remove a
+     measure from the chart and its column from the table; the table shows the actual kcal and grams. Missing macros count
+     as 0g (said under the chart). Items with no recorded time are listed in the note and table, not on the chart.
+     Redrawn whenever the day is drawn (add, remove, copy, sync), on theme change and on resize. */
+  var DSTY=[["k","Calories","accent",[],3],["p","Protein","ink",[],2],["c","Carbs","muted",[6,4],2],["f","Fat","over",[2,3],2],["fi","Fibre","accent",[8,3,2,3],2]];
+  var dayOn={k:true,p:true,c:true,f:true,fi:true},dayTogSig="",DAY=null,dayHover=null;
+  function dayMetrics(){return DSTY.filter(function(d){if(d[0]==="k")return true;var t=S.targets[d[0]];return t&&t.on;});}
+  function dayGoal(k){return k==="k"?(S.goal||2000):S.targets[k].g;}
+  function dayVal(k,v){return k==="k"?num(v.k)+" kcal":r1(v[k])+"g";}
+  function swatch(cv,d){
+    var dpr=window.devicePixelRatio||1;cv.width=22*dpr;cv.height=10*dpr;var x=cv.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,22,10);
+    x.strokeStyle=mcol(d[2]);x.lineWidth=d[4];x.lineCap="round";x.setLineDash(d[3]);x.beginPath();x.moveTo(2,5);x.lineTo(20,5);x.stroke();
+  }
+  /* The toggles double as the legend (each shows its line style). They're only rebuilt when the tracked macros change, so
+     keyboard focus stays on the one just pressed. */
+  function drawDayTog(av){
+    var box=$("dayTog"),sig=av.map(function(d){return d[0];}).join(",");
+    if(sig!==dayTogSig){
+      dayTogSig=sig;box.innerHTML="";
+      av.forEach(function(d){
+        var b=document.createElement("button"),cv=document.createElement("canvas"),t=document.createElement("span");
+        b.type="button";b.dataset.k=d[0];cv.setAttribute("aria-hidden","true");t.textContent=d[1];b.append(cv,t);
+        b.onclick=function(){dayOn[d[0]]=!dayOn[d[0]];dayHover=null;drawDayChart();};
+        box.appendChild(b);
+      });
+    }
+    [].forEach.call(box.children,function(b){var d=DSTY.filter(function(x){return x[0]===b.dataset.k;})[0];b.setAttribute("aria-pressed",dayOn[d[0]]?"true":"false");swatch(b.querySelector("canvas"),d);});
+  }
   function drawDayChart(){
     var box=$("dayChart");if(!box)return;
-    var k=key(cur),items=S.days[k]||[],today=daysAgo(cur)===0,g=S.goal||2000,timed=[],untimed=[];
+    var k=key(cur),items=S.days[k]||[],today=daysAgo(cur)===0,timed=[],untimed=[];
     items.forEach(function(e){var t=loggedAt(e);(t===null?untimed:timed).push({e:e,t:t});});
     timed.sort(function(a,b){return a.t-b.t||a.e.id-b.e.id;});
-    var macs=DSTY.filter(function(d){var t=S.targets[d[0]];return t&&t.on;}),fiOn=macs.some(function(d){return d[0]==="fi";});
+    var av=dayMetrics(),shown=av.filter(function(d){return dayOn[d[0]];}),macs=shown.filter(function(d){return d[0]!=="k";}),fiOn=macs.some(function(d){return d[0]==="fi";});
     var cum={k:0,p:0,c:0,f:0,fi:0},steps=[],missing=0;
     function addUp(e){cum.k+=e.kcal;var m=e.m||{};["p","c","f"].forEach(function(x){cum[x]+=m[x]||0;});if(typeof m.fi==="number")cum.fi+=m.fi;}
     timed.forEach(function(x){
@@ -2046,55 +2289,290 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       var v={k:cum.k,p:cum.p,c:cum.c,f:cum.f,fi:cum.fi};
       if(st&&st.mn===mn){st.items.push(x.e);st.v=v;}else steps.push({mn:mn,t:mn*60000,items:[x.e],v:v});
     });
-    var tk=$("chDayK"),tm=$("chDayM"),lk=$("lgDayK"),lm=$("lgDayM"),sum=$("sumDay"),note=$("dayNote");
-    var showK=steps.length>0,showM=showK&&macs.length>0;
-    tk.hidden=lk.hidden=!showK;tm.hidden=lm.hidden=!showM;$("dayTblBox").hidden=!items.length;note.hidden=true;
+    var cv=$("chDay"),sum=$("sumDay"),note=$("dayNote"),rd=$("dayRead");
+    drawDayTog(av);
+    var showC=steps.length>0&&shown.length>0;
+    $("dayTog").hidden=$("dayHow").hidden=!items.length;cv.hidden=rd.hidden=!showC;$("dayTblBox").hidden=!items.length;note.hidden=true;DAY=null;
     if(!items.length){sum.textContent=today?"Nothing logged yet today. Your day’s chart builds up as you log.":"Nothing was logged on this day.";return;}
     var notes=[];
     if(untimed.length)notes.push(untimed.length+(untimed.length===1?" item has":" items have")+" no recorded time ("+num(untimed.reduce(function(a,b){return a+b.e.kcal;},0))+" kcal), so "+(untimed.length===1?"it isn’t":"they aren’t")+" on the chart. "+(untimed.length===1?"It’s":"They’re")+" in the table and the day’s totals.");
-    if(missing&&showM)notes.push("Items without macro information, like calorie-only quick adds, count as 0g in the macros chart. That’s a charting assumption, not a guess at what they contained.");
+    if(missing&&macs.length)notes.push("Items without macro information, like calorie-only quick adds, count as 0g for the macros here. That’s a charting assumption, not a guess at what they contained.");
     if(notes.length){note.textContent=notes.join(" ");note.hidden=false;}
-    if(showK){
-      var t0=Math.floor(steps[0].t/36e5)*36e5,last=steps[steps.length-1].t,end=today?Math.max(last,Date.now()):last,t1=Math.ceil((end+60000)/36e5)*36e5;
-      if(t1-t0<3*36e5)t1=t0+3*36e5;if(today&&end>t1)end=t1;
-      var X=function(F,t){return F.L+F.W*(Math.min(t,t1)-t0)/(t1-t0);},labels=[hm(t0),hm(t1)];
-      lk.innerHTML="";lm.innerHTML="";
-      legendItem(lk,"Calories so far",function(x){x.strokeStyle=colv("accent");x.lineWidth=2.5;x.beginPath();x.moveTo(2,5);x.lineTo(24,5);x.stroke();});
-      legendItem(lk,"Goal ("+num(g)+" kcal)",function(x){x.strokeStyle=colv("ink");x.globalAlpha=.65;x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(1,5);x.lineTo(25,5);x.stroke();});
-      var c=canv(tk),F=frame(c,0,Math.max(g*1.1,cum.k*1.05),fmtK,1,labels),x=c.x;
-      function series(F,val,col,dash,w){
-        x.save();x.strokeStyle=col;x.lineWidth=w;x.lineJoin="round";x.setLineDash(dash);x.beginPath();x.moveTo(X(F,t0),F.Y(0));var prev=0;
-        steps.forEach(function(s){var px=X(F,s.t),v=val(s.v);x.lineTo(px,F.Y(prev));x.lineTo(px,F.Y(v));prev=v;});
-        x.lineTo(X(F,end),F.Y(prev));x.stroke();x.setLineDash([]);x.fillStyle=col;
-        steps.forEach(function(s){x.beginPath();x.arc(X(F,s.t),F.Y(val(s.v)),w+1,0,Math.PI*2);x.fill();});
-        x.restore();
-      }
-      function refLine(F,v,label){var y=Math.round(F.Y(v))+0.5;x.save();x.strokeStyle=colv("ink");x.globalAlpha=.65;x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(F.L,y);x.lineTo(F.L+F.W,y);x.stroke();x.restore();x.fillStyle=colv("muted");x.textAlign="right";x.textBaseline="bottom";x.fillText(label,F.L+F.W,y-2);}
-      refLine(F,g,"Goal");
-      series(F,function(v){return v.k;},colv("accent"),[],2.5);
-      if(showM){
-        macs.forEach(function(d){legendItem(lm,d[1],function(x2){x2.strokeStyle=mcol(d[2]);x2.lineWidth=2;x2.lineCap="round";x2.setLineDash(d[3]);x2.beginPath();x2.moveTo(2,5);x2.lineTo(24,5);x2.stroke();});});
-        legendItem(lm,"Target (100%)",function(x2){x2.strokeStyle=colv("ink");x2.globalAlpha=.65;x2.setLineDash([4,3]);x2.lineWidth=1.5;x2.beginPath();x2.moveTo(1,5);x2.lineTo(25,5);x2.stroke();});
-        var pc=function(d){return function(v){return v[d[0]]/S.targets[d[0]].g*100;};},hiM=110;
-        macs.forEach(function(d){hiM=Math.max(hiM,pc(d)(cum)*1.05);});
-        c=canv(tm);x=c.x;var FM=frame(c,0,hiM,function(v){return Math.round(v)+"%";},1,labels);
-        refLine(FM,100,"Target");
-        macs.forEach(function(d){series(FM,pc(d),mcol(d[2]),d[3],2);});
-      }
-      sum.textContent="Logged from "+hm(steps[0].t)+" to "+hm(last)+": "+num(cum.k)+" of your "+num(g)+" kcal goal ("+Math.round(cum.k/g*100)+"%)"+
-        (macs.length?"; "+macs.map(function(d){return d[1].toLowerCase()+" "+r1(cum[d[0]])+" of "+S.targets[d[0]].g+"g";}).join(", "):"")+"."+(steps.length<timed.length?" Items logged in the same minute are shown as one step.":"");
-    }else sum.textContent="None of the items on this day has a recorded time, so they can’t be placed on the chart. They’re listed in the table.";
-    /* The same build-up as a table, for screen readers and small screens. */
-    var tb=$("dayTbl"),hdr=["Time","Added","kcal so far"].concat(macs.map(function(d){return d[1]+" so far";}));tb.innerHTML="";
+    if(!shown.length)sum.textContent="Choose at least one measure above to show it on the chart and in the table.";
+    else if(!steps.length)sum.textContent="None of the items on this day has a recorded time, so they can’t be placed on the chart. They’re listed in the table.";
+    else{
+      var dd=parseKey(k),t1=new Date(dd.getFullYear(),dd.getMonth(),dd.getDate()+1).getTime(),s0=new Date(Math.max(steps[0].t,dd.getTime()));
+      var t0=new Date(s0.getFullYear(),s0.getMonth(),s0.getDate(),s0.getHours()-s0.getHours()%2).getTime();if(t0>=t1)t0=t1-2*36e5;
+      var last=steps[steps.length-1].t,end=today?Math.min(t1,Math.max(Date.now(),last)):t1,hi=110;
+      shown.forEach(function(d){hi=Math.max(hi,cum[d[0]]/dayGoal(d[0])*100*1.05);});
+      DAY={steps:steps,shown:shown,t0:t0,t1:t1,end:end,today:today,hi:hi};
+      if(dayHover!==null&&dayHover>=steps.length)dayHover=null;
+      paintDay();
+      sum.textContent="Logged from "+hm(steps[0].t)+" to "+hm(last)+". So far: "+shown.map(function(d){return (d[0]==="k"?"calories ":d[1].toLowerCase()+" ")+(d[0]==="k"?num(cum.k)+" of "+num(dayGoal("k"))+" kcal":r1(cum[d[0]])+" of "+dayGoal(d[0])+"g")+" ("+Math.round(cum[d[0]]/dayGoal(d[0])*100)+"%)";}).join(", ")+"."+(steps.length<timed.length?" Items logged in the same minute are shown as one step.":"");
+      dayReadout();
+    }
+    /* The same build-up as a table (actual kcal and grams), for screen readers and small screens; one column per measure shown. */
+    var tb=$("dayTbl"),hdr=["Time","Added"].concat(shown.map(function(d){return d[0]==="k"?"kcal so far":d[1]+" so far";}));tb.innerHTML="";
     var cap=document.createElement("caption");cap.className="sr";cap.textContent="How the day built up";tb.appendChild(cap);
     var tr=document.createElement("tr");hdr.forEach(function(h){var th=document.createElement("th");th.scope="col";th.textContent=h;tr.appendChild(th);});tb.appendChild(tr);
-    function row(label,list,v){var r=document.createElement("tr");[label,list.map(function(e){return e.name;}).join(", "),num(v.k)].concat(macs.map(function(d){return r1(v[d[0]])+"g";})).forEach(function(t,i){var td=document.createElement(i?"td":"th");if(!i)td.scope="row";td.textContent=t;r.appendChild(td);});tb.appendChild(r);}
+    function row(label,list,v){var r=document.createElement("tr");[label,list.map(function(e){return e.name;}).join(", ")].concat(shown.map(function(d){return d[0]==="k"?num(v.k):r1(v[d[0]])+"g";})).forEach(function(t,i){var td=document.createElement(i?"td":"th");if(!i)td.scope="row";td.textContent=t;r.appendChild(td);});tb.appendChild(r);}
     steps.forEach(function(s){row(hm(s.t),s.items,s.v);});
     if(untimed.length){untimed.forEach(function(x){addUp(x.e);});row("No time",untimed.map(function(x){return x.e;}),{k:cum.k,p:cum.p,c:cum.c,f:cum.f,fi:cum.fi});}
   }
+  function paintDay(){
+    var D=DAY;if(!D)return;
+    var c=canv($("chDay")),F=frame(c,0,D.hi,function(v){return Math.round(v)+"%";},1,["",""]),x=c.x;
+    function X(t){return F.L+F.W*(Math.max(D.t0,Math.min(t,D.t1))-D.t0)/(D.t1-D.t0);}
+    D.F=F;D.X=X;
+    /* Time labels: every two hours, or every four or six when they wouldn't fit; the start and midnight are always labelled. */
+    var hrs=[],dt=new Date(D.t0);while(dt.getTime()<=D.t1){hrs.push(dt.getTime());dt=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),dt.getHours()+2);}
+    var lw=x.measureText(hm(D.t1)).width+10,every=1;while(every<3&&(hrs.length-1)/every*lw>F.W-lw/2)every++;
+    x.strokeStyle=colv("line");x.lineWidth=1;x.fillStyle=colv("muted");x.textBaseline="alphabetic";
+    var lab=[];
+    hrs.forEach(function(t,i){
+      var px=Math.round(X(t))+0.5,isEnd=i===hrs.length-1;x.beginPath();x.moveTo(px,F.B);x.lineTo(px,F.B+4);x.stroke();
+      if(i%every&&!isEnd)return;var al=i===0?"left":isEnd?"right":"center",w=x.measureText(hm(t)).width;
+      lab.push({t:t,px:px,al:al,l:al==="left"?px:al==="right"?px-w:px-w/2,w:w});
+    });
+    /* Midnight always gets its label; the one before it is dropped if the two would overlap. */
+    if(lab.length>1){var e1=lab[lab.length-1],e0=lab[lab.length-2];if(e0.l+e0.w+6>e1.l&&lab.length>2)lab.splice(lab.length-2,1);}
+    lab.forEach(function(o){x.textAlign=o.al;x.fillText(hm(o.t),o.px,c.h-4);});
+    var cvd=$("chDay").dataset;cvd.t0=D.t0;cvd.t1=D.t1;cvd.labels=lab.map(function(o){return hm(o.t);}).join("|");
+    /* 100% line: the goal for calories, the target for each macro. */
+    var gy=Math.round(F.Y(100))+0.5;x.save();x.strokeStyle=colv("ink");x.globalAlpha=.65;x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(F.L,gy);x.lineTo(F.L+F.W,gy);x.stroke();x.restore();
+    x.fillStyle=colv("muted");x.textAlign="left";x.textBaseline="bottom";x.fillText("Goal / target",F.L+4,gy-2);
+    if(D.today&&D.end<D.t1){var nx=Math.round(X(D.end))+0.5;x.save();x.strokeStyle=colv("muted");x.globalAlpha=.6;x.setLineDash([2,3]);x.beginPath();x.moveTo(nx,F.T);x.lineTo(nx,F.B);x.stroke();x.restore();
+      x.fillStyle=colv("muted");x.textBaseline="top";x.textAlign=nx>F.L+F.W-30?"right":"left";x.fillText("Now",nx+(x.textAlign==="right"?-3:3),F.T);}
+    if(dayHover!==null){var hx=Math.round(X(D.steps[dayHover].t))+0.5;x.save();x.strokeStyle=colv("ink");x.globalAlpha=.35;x.lineWidth=1;x.beginPath();x.moveTo(hx,F.T);x.lineTo(hx,F.B);x.stroke();x.restore();}
+    /* Calories last, so its thicker line sits on top; each line gets a thin surface-coloured edge so crossings stay readable. */
+    D.shown.slice().reverse().forEach(function(d){
+      var g=dayGoal(d[0]),val=function(v){return v[d[0]]/g*100;},col=mcol(d[2]);
+      function path(){x.beginPath();x.moveTo(X(D.t0),F.Y(0));var prev=0;D.steps.forEach(function(s){var px=X(s.t),v=val(s.v);x.lineTo(px,F.Y(prev));x.lineTo(px,F.Y(v));prev=v;});x.lineTo(X(D.end),F.Y(prev));}
+      x.save();x.lineJoin="round";x.lineCap="round";
+      x.strokeStyle=colv("surface");x.lineWidth=d[4]+2.5;x.setLineDash([]);path();x.stroke();
+      x.strokeStyle=col;x.lineWidth=d[4];x.setLineDash(d[3]);path();x.stroke();x.setLineDash([]);
+      x.fillStyle=col;D.steps.forEach(function(s,i){x.beginPath();x.arc(X(s.t),F.Y(val(s.v)),i===dayHover?d[4]+2.5:d[4]+1,0,Math.PI*2);x.fill();});
+      x.restore();
+    });
+  }
+  /* Point at or tap the chart to read the values at that step (the table has the same values for screen readers). */
+  function dayReadout(){
+    var rd=$("dayRead"),D=DAY;if(!D)return;
+    if(dayHover===null){rd.textContent="Point at or tap the chart to see the values at each step.";return;}
+    var s=D.steps[dayHover];
+    rd.textContent=hm(s.t)+", after "+s.items.map(function(e){return e.name;}).join(", ")+": "+D.shown.map(function(d){return d[1].toLowerCase()+" "+dayVal(d[0],s.v)+" ("+Math.round(s.v[d[0]]/dayGoal(d[0])*100)+"%)";}).join(", ")+".";
+  }
+  function dayPoint(e){
+    var D=DAY;if(!D||!D.F)return;var r=$("chDay").getBoundingClientRect(),px=e.clientX-r.left,best=null,bd=1e9;
+    D.steps.forEach(function(s,i){var d=Math.abs(D.X(s.t)-px);if(d<bd){bd=d;best=i;}});
+    if(best!==dayHover){dayHover=best;paintDay();dayReadout();}
+  }
+  $("chDay").addEventListener("pointermove",dayPoint);
+  $("chDay").addEventListener("pointerdown",dayPoint);
+  $("chDay").addEventListener("pointerleave",function(e){if(e.pointerType==="mouse"&&dayHover!==null){dayHover=null;paintDay();dayReadout();}});
   function showProgress(){fillRates();drawLegends();drawWeight(true);drawAdapt();drawCharts(true);}
   /* Background refresh (after a sync, a theme change or a resize): never touches what is being typed. */
   function drawProgress(){if(!$("pg-prog")||$("pg-prog").hidden)return;drawLegends();drawWeight(false);drawAdapt();drawCharts(false);}
+  /* v11: first-run setup. Account, focus, weights, details for the estimate, exercise, then a review of suggested targets.
+     Nothing is saved until the review is confirmed: then the goal, macro targets, aim, target weight, today's weight and the
+     profile are saved together. Skipping keeps the app's defaults. Shown once per device to new users (no data on this
+     device); whether it's done is a per-device flag (calorie-tracker-setup), not synced. */
+  var SUKEY="calorie-tracker-setup",SUSTEPS=["acct","focus","weight","about","ex","review"];
+  var SUTITLE={acct:"Welcome! Let’s get you set up",focus:"Your goal",weight:"Your weight and target",about:"A little about you",ex:"How you’ll get there",review:"Your suggested targets"};
+  /* TEMPORARY TESTING TOOLS: the "Pass (test)" button on every step and "Run setup again (test)" in Settings. They only
+     appear on test builds (VERSION ending in "-wip"), so a released version never shows them. A test run starts from what's
+     saved and only changes anything after a final confirmation. */
+  var TESTING=/-wip$/.test(VERSION);
+  var SU={open:false,test:false,i:0,hu:"cm",ex:{},back:null};
+  function hasContent(){return Object.keys(S.days||{}).some(function(d){return S.days[d]&&S.days[d].length;})||S.meals.length>0||(S.ings||[]).length>0||wList().length>0||!!S.profile||(S.sUpdated||0)>0;}
+  function setupDone(){try{return localStorage.getItem(SUKEY)==="done";}catch(e){return true;}}
+  function markSetup(){try{localStorage.setItem(SUKEY,"done");}catch(e){}}
+  function setSeg(id,val){[].forEach.call($(id).children,function(b){b.setAttribute("aria-pressed",b.dataset.u===val?"true":"false");});}
+  function suUnits(){
+    $("suCkg").hidden=$("suTkg").hidden=wUnit!=="kg";$("suCst").hidden=$("suTst").hidden=wUnit!=="st";setSeg("suWu",wUnit);
+    $("suHcmB").hidden=SU.hu!=="cm";$("suHftB").hidden=SU.hu!=="ft";setSeg("suHu",SU.hu);
+  }
+  function readH(){
+    if(SU.hu==="ft"){var a=$("suHft").value.trim(),b=$("suHin").value.trim();if(a===""&&b==="")return null;var f=parseFloat(a||"0"),i=parseFloat(b||"0");return !(f>=0)||!(i>=0&&i<12)?NaN:(f*12+i)*2.54;}
+    var v=$("suHcm").value.trim();return v===""?null:parseFloat(v);
+  }
+  function fillH(cm){
+    $("suHcm").value=cm!=null?Math.round(cm):"";var t=cm!=null?cm/2.54:null,f=t!=null?Math.floor(t/12):null,i=t!=null?Math.round(t-f*12):null;
+    if(i===12){f++;i=0;}$("suHft").value=f!=null?f:"";$("suHin").value=i!=null?i:"";
+  }
+  function suFocus(){var r=[].filter.call(document.getElementsByName("sufocus"),function(x){return x.checked;})[0];return r?r.value:null;}
+  function suExDraw(){[].forEach.call($("suEx").children,function(b){b.setAttribute("aria-pressed",SU.ex[b.dataset.x]?"true":"false");});}
+  /* Fills the steps from what's saved (blank on a new device). */
+  function suPrefill(){
+    var pr=S.profile||{},lw=wList();
+    [].forEach.call(document.getElementsByName("sufocus"),function(r){r.checked=r.value===pr.focus;});
+    fillW(lw.length?lw[lw.length-1].kg:null,"suCk","suCs","suCl");fillW(twKg(),"suTk","suTs","suTl");
+    $("suAge").value=okNum(pr.age)?pr.age:"";$("suSex").value=pr.sex||"";SU.hu=wUnit==="st"?"ft":"cm";fillH(okNum(pr.cm)?pr.cm:null);
+    $("suPreg").checked=false;SU.ex={};(Array.isArray(pr.ex)?pr.ex:[]).forEach(function(x){SU.ex[x]=true;});$("suAct").value=okNum(pr.act)?String(pr.act):"";
+  }
+  function openSetup(test){
+    SU.open=true;SU.test=!!test;SU.i=0;SU.back=document.activeElement;
+    suPrefill();$("suEm").value="";$("suPw").value="";$("suPw").type="password";$("suSpw").checked=false;$("suHas").hidden=true;$("suAmsg").textContent="";
+    $("suTestNote").hidden=!SU.test;$("suPass").hidden=!TESTING;$("suSkip").textContent=SU.test?"Close test run":"Skip setup";
+    $("setup").hidden=false;suShow();
+  }
+  function closeSetup(){
+    SU.open=false;$("setup").hidden=true;$("suMsg").hidden=true;
+    var b=SU.back;SU.back=null;if(b&&b!==document.body&&b.focus&&document.body.contains(b)&&b.offsetParent!==null)b.focus();else $("t-log").focus();
+  }
+  function suShow(){
+    var s=SUSTEPS[SU.i];
+    [].forEach.call(document.querySelectorAll("#setup section[data-s]"),function(x){x.hidden=x.dataset.s!==s;});
+    $("suStep").textContent="Step "+(SU.i+1)+" of "+SUSTEPS.length;$("suT").textContent=SUTITLE[s];$("suMsg").hidden=true;
+    $("suBack").hidden=SU.i===0;$("suNext").textContent=s==="review"?"Apply these targets":"Next";
+    suUnits();suExDraw();suWdir();if(s==="acct")suAcct();if(s==="review")suReview(true);
+    $("setup").querySelector(".calbody").scrollTop=0;$("suT").focus();
+  }
+  function suAcct(){
+    $("suOut").hidden=!sb||!!user;$("suWho").hidden=!user;
+    if(user)$("suWho").textContent="Signed in as "+user.email+"."+(SU.test?" A test run doesn’t change your account.":"");
+    if(!sb)$("suAmsg").textContent="Cloud sync isn’t available right now. You can carry on and sign in later in Settings.";
+    if(SUSTEPS[SU.i]==="acct")$("suNext").textContent=user?"Next":"Continue without an account";
+  }
+  /* After signing in from the first step: if the account already has data, offer to keep it and finish. */
+  function suSynced(){
+    if(!SU.open||SUSTEPS[SU.i]!=="acct")return;
+    $("suAmsg").textContent="Signed in. Your data is synced.";
+    if(!SU.test&&hasContent())$("suHas").hidden=false;
+  }
+  function suCreds(){return {email:$("suEm").value.trim(),password:$("suPw").value};}
+  $("suSi").onclick=function(){if(!sb)return;$("suAmsg").textContent="Signing in...";sb.auth.signInWithPassword(suCreds()).then(function(r){if(r.error)$("suAmsg").textContent=r.error.message;});};
+  $("suSu").onclick=function(){if(!sb)return;$("suAmsg").textContent="Creating account...";sb.auth.signUp(suCreds()).then(function(r){if(r.error)$("suAmsg").textContent=r.error.message;else if(!r.data||!r.data.session)$("suAmsg").textContent="Check your email to confirm your account. You can carry on with setup now and sign in later in Settings.";});};
+  $("suSpw").onchange=function(){$("suPw").type=this.checked?"text":"password";};
+  $("suKeep").onclick=function(){markSetup();closeSetup();render();};
+  $("suGoOn").onclick=function(){$("suHas").hidden=true;suPrefill();SU.i++;suShow();};
+  [].forEach.call($("suWu").children,function(b){b.onclick=function(){
+    var c=readW("suCk","suCs","suCl"),t=readW("suTk","suTs","suTl");wUnit=b.dataset.u;try{localStorage.setItem(UKEY,wUnit);}catch(e){}
+    fillW(okKg(c)?c:null,"suCk","suCs","suCl");fillW(okKg(t)?t:null,"suTk","suTs","suTl");suUnits();suWdir();
+  };});
+  [].forEach.call($("suHu").children,function(b){b.onclick=function(){var h=readH();SU.hu=b.dataset.u;fillH(h>=100&&h<=250?h:null);suUnits();};});
+  [].forEach.call($("suEx").children,function(b){b.onclick=function(){SU.ex[b.dataset.x]=!SU.ex[b.dataset.x];suExDraw();};});
+  /* A gentle note (not a block) when the target is on the other side of the current weight from the chosen focus. */
+  function suWdir(){
+    var c=readW("suCk","suCs","suCl"),t=readW("suTk","suTs","suTl"),f=suFocus(),n=$("suWdir"),m="";
+    if(okKg(c)&&okKg(t)&&f){if(f==="cut"&&t>c)m="Your target is above your current weight, but your focus is losing weight. Check the numbers, or go back and change your focus.";
+      else if(f==="bulk"&&t<c)m="Your target is below your current weight, but your focus is building muscle. Check the numbers, or go back and change your focus.";}
+    n.textContent=m;n.hidden=!m;
+  }
+  ["suCk","suCs","suCl","suTk","suTs","suTl"].forEach(function(id){$(id).addEventListener("input",function(){$("suMsg").hidden=true;suWdir();});});
+  function suErr(t,el){var m=$("suMsg");m.textContent=t;m.hidden=false;if(el)el.focus();}
+  function suCheck(s){
+    if(s==="focus"&&!suFocus())return {t:"Choose a focus to continue, or skip setup.",el:document.getElementsByName("sufocus")[0]};
+    if(s==="weight"){
+      var c=readW("suCk","suCs","suCl"),t=readW("suTk","suTs","suTl"),bad=wUnit==="st"?"enter a weight between 3 st 3 lb and 62 st 13 lb (pounds 0 to 13.9), or leave it blank.":"enter a weight between 20 and 400 kg, or leave it blank.";
+      if(c!==null&&!okKg(c))return {t:"Current weight: "+bad,el:$(wUnit==="st"?"suCs":"suCk")};
+      if(t!==null&&!okKg(t))return {t:"Target weight: "+bad,el:$(wUnit==="st"?"suTs":"suTk")};
+    }
+    if(s==="about"){
+      var a=$("suAge").value.trim(),h=readH();
+      if(a!==""&&!(/^\d+$/.test(a)&&+a>=1&&+a<=120))return {t:"Enter your age in whole years (1 to 120), or leave it blank.",el:$("suAge")};
+      if(h!==null&&!(h>=100&&h<=250))return {t:"Enter a height between 100 and 250 cm (3 ft 4 in to 8 ft 2 in), or leave it blank.",el:$(SU.hu==="ft"?"suHft":"suHcm")};
+    }
+    return null;
+  }
+  $("suBack").onclick=function(){if(SU.i>0){SU.i--;suShow();}};
+  $("suNext").onclick=function(){var s=SUSTEPS[SU.i];if(s==="review"){suApply();return;}var er=suCheck(s);if(er){suErr(er.t,er.el);return;}SU.i++;suShow();};
+  $("suSkip").onclick=function(){if(!SU.test)markSetup();closeSetup();};
+  /* TEMPORARY TESTING TOOL: skip a step without checking it; on the last step, leave without applying anything. */
+  $("suPass").onclick=function(){if(!TESTING)return;if(SUSTEPS[SU.i]==="review"){$("suSkip").click();return;}SU.i++;suShow();};
+  $("testTools").hidden=!TESTING;
+  $("rerun").onclick=function(){if(TESTING)openSetup(true);};
+  /* The estimate (adults only). Resting burn: Mifflin-St Jeor, 10 × kg + 6.25 × cm − 5 × age, +5 for men, −161 for women
+     (−78, the average, for "prefer not to say"), times an activity factor (1.2 to 1.9). The aim (kg a week) adjusts that at
+     7,700 kcal per kg, never below 1,200 kcal. Protein: 1.6g per kg (1.8 when cutting), or 2.0g (2.2g) with weight lifting
+     or calisthenics, using the target weight when cutting towards a lower one, and at most 35% of calories. Fat: 30% of
+     calories (25% with running or sports, leaving more for carbs). Carbs: the rest. Fibre: 14g per 1,000 kcal (20 to 40g). */
+  var ACTF=[1.2,1.375,1.55,1.725,1.9];
+  function suInputs(){
+    var a=$("suAge").value.trim(),c=readW("suCk","suCs","suCl"),t=readW("suTk","suTs","suTl"),h=readH();
+    return {focus:suFocus(),kg:okKg(c)?c:null,tw:okKg(t)?t:null,age:/^\d+$/.test(a)&&+a>=1&&+a<=120?+a:null,sex:$("suSex").value||null,cm:h>=100&&h<=250?h:null,
+      act:$("suAct").value===""?null:parseInt($("suAct").value,10),ex:EXK.filter(function(k){return SU.ex[k];}),preg:$("suPreg").checked};
+  }
+  function suEstimate(v,rate){
+    if(v.preg)return {why:"preg"};
+    if(v.age!==null&&v.age<18)return {why:"minor"};
+    var miss=[];if(!v.focus)miss.push("focus");if(v.kg===null)miss.push("current weight");if(v.age===null)miss.push("age");if(!v.sex)miss.push("sex");if(v.cm===null)miss.push("height");if(v.act===null)miss.push("how active you are");
+    if(miss.length)return {why:"missing",miss:miss};
+    var bmr=10*v.kg+6.25*v.cm-5*v.age+(v.sex==="m"?5:v.sex==="f"?-161:-78),burn=bmr*ACTF[v.act];
+    var kc=Math.round((burn+rate*7700/7)/50)*50,low=kc<1200;if(low)kc=1200;kc=Math.min(kc,10000);
+    var str=v.ex.indexOf("lift")>=0||v.ex.indexOf("cal")>=0,end=v.ex.indexOf("run")>=0||v.ex.indexOf("sport")>=0,cut=v.focus==="cut";
+    var pk=(str?2:1.6)+(cut?0.2:0),useT=cut&&v.tw!==null&&v.tw<v.kg,p=Math.min(Math.round(pk*(useT?v.tw:v.kg)),Math.floor(kc*0.35/4));
+    var f=Math.round(kc*(end?0.25:0.3)/9),c=Math.max(0,Math.round((kc-4*p-9*f)/4)),fi=Math.max(20,Math.min(40,Math.round(kc/1000*14)));
+    return {ok:true,burn:burn,kc:kc,low:low,p:p,c:c,f:f,fi:fi,pk:pk,useT:useT,str:str,end:end};
+  }
+  function listAnd(a){return a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];}
+  function suAims(f){return f==="bulk"?[0.25,0.5]:f==="cut"?[-1,-0.75,-0.5,-0.25]:RATES;}
+  var SUF=["suKc","suP","suC","suF","suFi"];
+  function suReview(reset){
+    var v=suInputs(),aim=$("suAim");
+    if(reset){var list=suAims(v.focus),cr=curRate(),def=v.focus==="bulk"?0.25:v.focus==="cut"?-0.5:cr;aim.innerHTML="";list.forEach(function(r){opt(aim,String(r),rateLabel(r));});aim.value=String(list.indexOf(cr)>=0?cr:def);}
+    var e=suEstimate(v,parseFloat(aim.value)),intro=$("suRevIntro"),how=$("suHowN"),vals;
+    if(e.ok){
+      intro.textContent="We estimate you burn about "+num(Math.round(e.burn/10)*10)+" kcal a day. For "+(v.focus==="cut"?"losing weight":"building muscle")+" at the aim below, we suggest these daily targets. Change any of them before you apply.";
+      vals=[e.kc,e.p,e.c,e.f,e.fi];
+      how.textContent="How this was worked out: your resting burn uses the Mifflin-St Jeor equation, multiplied for your activity level, then adjusted for your aim (about 7,700 kcal per kg). Protein is "+e.pk+"g per kg of your "+(e.useT?"target":"current")+" weight"+(e.str?" (higher for strength training)":"")+", fat is "+(e.end?"25% of calories, leaving more carbs for running and sports":"30% of calories")+", carbs make up the rest, and fibre is about 14g per 1,000 kcal."+(e.low?" The calories are at this app’s lowest suggestion (1,200 kcal a day), which isn’t a guarantee that it’s right for you.":"");
+    }else{
+      intro.textContent=e.why==="preg"?"This app’s estimates aren’t suitable during pregnancy or breastfeeding, when your needs are different, so nothing is suggested. Please ask your midwife, GP or a dietitian. You can still set your own targets below; they start as your current settings.":
+        e.why==="minor"?"These estimates are only for adults (18 and over), so nothing is suggested. A GP or dietitian can help with targets for you. You can still set your own below; they start as your current settings.":
+        "To suggest targets we need your "+listAnd(e.miss)+". Go back to add "+(e.miss.length===1?"it":"them")+", or set your own targets below; they start as your current settings.";
+      vals=[S.goal||2000,S.targets.p.g,S.targets.c.g,S.targets.f.g,S.targets.fi.g];how.textContent="";
+    }
+    SUF.forEach(function(id,i){$(id).value=vals[i];});
+    suChg();
+  }
+  $("suAim").onchange=function(){suReview(false);};
+  SUF.forEach(function(id){$(id).addEventListener("input",function(){$("suMsg").hidden=true;suChg();});});
+  function suVals(){return SUF.map(function(id){var v=$(id).value.trim();return v===""?NaN:Math.round(Number(v));});}
+  function cap1(t){return t.charAt(0).toUpperCase()+t.slice(1);}
+  /* What applying will change, in words (also used for the test-run confirmation). */
+  function suChanges(v,g){
+    var parts=[],tw=twKg(),w=wts()[key(new Date())],rate=parseFloat($("suAim").value);
+    parts.push("your daily goal becomes "+(g[0]>0?num(g[0]):"?")+" kcal (now "+num(S.goal||2000)+")");
+    parts.push("protein, carbs, fat and fibre are tracked with targets of "+g.slice(1).map(function(x){return (x>0?x:"?")+"g";}).join(", "));
+    if(RATES.indexOf(rate)>=0)parts.push("your aim becomes “"+rateLabel(rate)+"”");
+    if(v.tw!==null)parts.push("your target weight becomes "+fmtW(v.tw)+(tw!=null?" (now "+fmtW(tw)+")":""));else if(tw!=null)parts.push("your target weight ("+fmtW(tw)+") is removed");
+    if(v.kg!==null)parts.push(fmtW(v.kg)+" is saved as today’s weight"+(w&&okNum(w.kg)?" (replacing "+fmtW(w.kg)+")":""));
+    parts.push("your profile (focus, age, sex, height and exercise) is saved"+(user?" to your account":" on this device"));
+    return cap1(parts.join("; "))+".";
+  }
+  function suChg(){$("suChg").textContent="When you apply: "+suChanges(suInputs(),suVals()).replace(/^./,function(c){return c.toLowerCase();})+" Nothing changes until then.";}
+  function suApply(){
+    var v=suInputs(),g=suVals();
+    if(!(g[0]>=500&&g[0]<=10000))return suErr("Enter daily calories between 500 and 10,000.",$("suKc"));
+    for(var i=1;i<5;i++)if(!(g[i]>=1&&g[i]<=1000))return suErr("Enter each macro target in grams, from 1 to 1,000.",$(SUF[i]));
+    function doIt(){
+      var now=Date.now(),rate=parseFloat($("suAim").value);
+      ensureTargets();S.goal=g[0];[["p",1],["c",2],["f",3],["fi",4]].forEach(function(x){S.targets[x[0]]={on:true,g:g[x[1]]};});
+      if(RATES.indexOf(rate)>=0)S.targets.rate=rate;
+      if(v.tw!==null)S.targets.tw=Math.round(v.tw*100)/100;else if(twKg()!=null)S.targets.tw=null;
+      S.sUpdated=now;
+      if(v.kg!==null){S.weights=wts();S.weights[key(new Date())]={kg:Math.round(v.kg*100)/100,t:now};}
+      var pr={t:now};if(v.focus)pr.focus=v.focus;if(v.age!==null)pr.age=v.age;if(v.sex)pr.sex=v.sex;if(v.cm!==null)pr.cm=Math.round(v.cm*10)/10;if(v.ex.length)pr.ex=v.ex;if(v.act!==null&&v.act>=0&&v.act<=4)pr.act=v.act;
+      S.profile=pr;
+      save();if(!SU.test)markSetup();cur=new Date();tab("log");closeSetup();render();
+      var m=$("fmsg");m.textContent="Your targets are saved. You can change them any time in Settings"+(v.tw!==null?", and your target weight on the Progress page":"")+".";m.hidden=false;
+    }
+    if(SU.test)ask({title:"Apply this test run?",text:"This is a test run, but applying changes your real saved settings. "+suChanges(v,g)+" Choose Cancel to leave everything as it is.",yes:"Apply changes",danger:true}).then(function(r){if(r)doIt();});
+    else doIt();
+  }
+  /* Keyboard: focus stays inside setup. Escape closes a test run only; first-run setup is closed with Skip setup. */
+  document.addEventListener("keydown",function(e){
+    if($("setup").hidden||!$("dlg").hidden)return;
+    if(e.key==="Escape"){if(SU.test){e.preventDefault();closeSetup();}return;}
+    if(e.key==="Tab"){
+      var f=[].slice.call($("setup").querySelectorAll("input,select,button,[tabindex]")).filter(function(x){return !x.disabled&&x.offsetParent!==null&&x.tabIndex>=0;}),a=document.activeElement;
+      if(!f.length)return;
+      if(!$("setup").contains(a)){e.preventDefault();f[0].focus();return;}
+      if(a===$("suT")){e.preventDefault();(e.shiftKey?f[f.length-1]:f[0]).focus();return;}
+      if(e.shiftKey&&a===f[0]){e.preventDefault();f[f.length-1].focus();}
+      else if(!e.shiftKey&&a===f[f.length-1]){e.preventDefault();f[0].focus();}
+    }
+  });
   /* Export / import */
   $("exp").onclick=function(){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="calorie-tracker-"+key(new Date())+".json";a.click();};
   $("imp").onclick=function(){$("impf").click();};
@@ -2105,6 +2583,14 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   /* A saved meal's ingredient list: [{k: ingredient key, n: name, a: amount, u: unit, w: grams or ml}] */
   function okItems(l){return Array.isArray(l)&&l.every(function(x){return x&&typeof x==="object"&&typeof x.k==="string"&&okNum(x.w)&&x.w>0&&optNum(x.a)&&(x.u===undefined||/^(g|ml|lb|e)$/.test(x.u));});}
   function okQ(q){return !!q&&typeof q==="object"&&okNum(q.v)&&/^[A-E]$/.test(q.g)&&optBool(q.p);}
+  /* v11 profile from setup: {focus "cut"|"bulk", age years, sex "f"|"m"|"x" (prefer not to say), cm height, ex [exercise],
+     act 0-4 (activity level), t}. Every field but t is optional. */
+  var EXK=["lift","run","sport","cal"];
+  function okProfile(p){
+    return !!p&&typeof p==="object"&&!Array.isArray(p)&&okNum(p.t)&&(p.focus===undefined||p.focus==="cut"||p.focus==="bulk")&&
+      (p.age===undefined||(okNum(p.age)&&p.age>=1&&p.age<=120))&&(p.sex===undefined||/^[fmx]$/.test(p.sex))&&(p.cm===undefined||(okNum(p.cm)&&p.cm>=100&&p.cm<=250))&&
+      (p.ex===undefined||(Array.isArray(p.ex)&&p.ex.every(function(x){return EXK.indexOf(x)>=0;})))&&(p.act===undefined||[0,1,2,3,4].indexOf(p.act)>=0);
+  }
   function validBackup(d){
     if(!d||typeof d!=="object"||Array.isArray(d)||!d.days||typeof d.days!=="object"||Array.isArray(d.days))return false;
     if(d.goal!==undefined&&!(okNum(d.goal)&&d.goal>0))return false;
@@ -2120,7 +2606,9 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       if(!d.targets||typeof d.targets!=="object"||Array.isArray(d.targets))return false;
       if(Object.keys(TDEF).some(function(k){var t=d.targets[k];return t!==undefined&&!(t&&typeof t==="object"&&typeof t.on==="boolean"&&okNum(t.g)&&t.g>0);}))return false;
       if(d.targets.rate!==undefined&&!(okNum(d.targets.rate)&&Math.abs(d.targets.rate)<=2))return false;
+      if(d.targets.tw!==undefined&&d.targets.tw!==null&&!okKg(d.targets.tw))return false;
     }
+    if(d.profile!==undefined&&!okProfile(d.profile))return false;
     if(d.del!==undefined&&(!d.del||typeof d.del!=="object"||Object.keys(d.del).some(function(k){return !okNum(d.del[k]);})))return false;
     if(d.scores!==undefined&&(!d.scores||typeof d.scores!=="object"||Object.keys(d.scores).some(function(k){return !d.scores[k]||!okNum(d.scores[k].v);})))return false;
     if(d.folders!==undefined&&(!d.folders||typeof d.folders!=="object"||Array.isArray(d.folders)||Object.keys(d.folders).some(function(k){var f=d.folders[k];return !f||typeof f!=="object"||!/^[im]$/.test(f.k)||typeof f.name!=="string"||!okNum(f.t)||!optBool(f.gone);})))return false;
@@ -2189,6 +2677,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     M.weights=wt;
     /* Folders and which folder each item is in: newest t wins per folder id / item; a removed folder is a record too (gone). */
     ["folders","fileIn"].forEach(function(f){var o={};[a[f],b[f]].forEach(function(x){for(k in (x||{})){var e=x[k];if(!e||typeof e!=="object"||!okNum(e.t))continue;if(!o[k]||e.t>o[k].t)o[k]=e;}});if(Object.keys(o).length)M[f]=o;});
+    /* Setup profile: the newest one (t) wins. The target weight travels inside targets, with the goal (newest sUpdated). */
+    [a.profile,b.profile].forEach(function(p){if(p&&typeof p==="object"&&okNum(p.t)&&(!M.profile||p.t>=M.profile.t))M.profile=p;});
     return M;
   }
   /* MERGE END */
@@ -2222,6 +2712,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       render();drawIngs();buildFoods();drawSavedMeals();
       lastSync=Date.now();syncFailed=false;
       amsg("Synced at "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+".");
+      if(SU.open)suSynced();
     }).catch(function(e){syncFailed=true;amsg("Couldn't sync: "+(e&&e.message?e.message:e));}).then(function(){syncing=false;if(again){again=false;queuePush();}});
   }
   function queuePush(){if(!sb||!user)return;clearTimeout(pushT);pushT=setTimeout(sync,1500);}
@@ -2231,7 +2722,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("aso").onclick=function(){if(sb)sb.auth.signOut();};
   $("asy").onclick=function(){sync();};
   $("spw").onchange=function(){$("apw").type=this.checked?"text":"password";};
-  if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(user)sync();});
+  if(sb)sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;drawAcct();if(SU.open)suAcct();if(user)sync();});
   window.addEventListener("online",function(){if(syncFailed&&user){amsg("Back online. Syncing...");sync();}});
   document.addEventListener("visibilitychange",function(){if(!document.hidden){dayCheck();if(Date.now()-lastSync>5000)sync();}});
   /* If the app is left open past midnight, move on to the new day (yesterday then freezes as normal). */
@@ -2242,6 +2733,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   drawCook();drawSavedMeals();drawIngs();drawReview();
   applyTheme();syncPickers();drawThemeUi();
   render();
+  if(!setupDone()&&!hasContent())openSetup(false);
 })();
 </script>
 </body>
