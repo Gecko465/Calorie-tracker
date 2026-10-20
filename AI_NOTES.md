@@ -1,6 +1,6 @@
 # AI notes (shared by ChatGPT and Claude)
 
-Last updated by: Claude, 2026-10-20. Refers to `index.html` version: `v9` (released from `wip`, see the handoff log).
+Last updated by: Claude, 2026-10-20. Refers to `index.html` version: `v11` (released to `main`; it includes v10, which was never released on its own).
 
 Isaac (the owner) keeps his `vN_features_to_implement.md` planning documents on his own device. This file lives in the repo so every AI reads the same rules.
 
@@ -24,12 +24,16 @@ localStorage key `calorie-tracker-v1` (never rename):
 {goal, days:{"YYYY-MM-DD":[{id,name,kcal,m?:{p,c,f,fi?,fip?},at?,s?}]},
  meals:[{name,kcal,p,c,f,fi?,fip?,t,q?:{v,g,p?},n?,i?:[{k,n,a,u,w}]}],
  ings:[{id,name,sn?,code?,k,p,c,f,fi?,e?,scanned,src?,rating?}],
- targets:{p,c,f,fi:{on,g}, rate?}, scores:{"YYYY-MM-DD":{v,f,t}},
+ targets:{p,c,f,fi:{on,g}, rate?, tw?}, scores:{"YYYY-MM-DD":{v,f,t}},
+ profile?:{focus?,age?,sex?,cm?,ex?,act?,t},
+ folders?:{id:{k:"i"|"m",name,t,gone?}}, fileIn?:{"i:<ingredient key>"|"m:<meal name>":{f:folder id|null,t}},
  weights?:{"YYYY-MM-DD":{kg,t}}, del:{id:ms}, sUpdated, updated, mig1}
 ```
-- Per device, not synced: `calorie-tracker-theme` (theme), `calorie-tracker-units` (`"kg"` or `"st"`, weight display unit), `calorie-tracker-meal-keep` (saved meals the user chose to keep after an ingredient changed: `{meal name: values signature}`), `calorie-tracker-cal-done` (date today's Calendar ring last celebrated).
+- Per device, not synced: `calorie-tracker-setup` (`"done"` once first-run setup is finished or skipped), `calorie-tracker-theme` (theme), `calorie-tracker-units` (`"kg"` or `"st"`, weight display unit), `calorie-tracker-meal-keep` (saved meals the user chose to keep after an ingredient changed: `{meal name: values signature}`), `calorie-tracker-cal-done` (date today's Calendar ring last celebrated).
 - Entry ids are `Date.now()+Math.random()` (the time it was logged).
 - Unknown fibre is never stored as 0. Startup code must not call `save()`, stamp `updated`, or add keys (`weights` is created on the first weight save).
+- v11 additions (approved by the owner 2026-10-20): `targets.tw` (target weight in kg, 20 to 400; `null` once removed). It's inside `targets`, so it merges with the goal (newest `sUpdated`). `profile` holds the setup answers: `focus` `"cut"`/`"bulk"`, `age` (years), `sex` `"f"`/`"m"`/`"x"` (prefer not to say), `cm` (height), `ex` (any of `lift`, `run`, `sport`, `cal`), `act` (activity 0 to 4) and `t`. Both are written only when the setup review is confirmed (or, for the target, from Progress). Confirming setup also saves the weight entered as today's reading. Pregnancy is asked about but never saved.
+- v10 additions (approved by the owner 2026-10-20): `folders` (ingredient and meal folders kept apart by `k`; a removed folder stays as `gone:true`), `fileIn` (which folder each item is in; no entry or a removed folder = Unfiled; the ingredient and meal records aren't touched), and `del["m:<meal name>"]` when a saved meal is removed. All created on first use.
 - v9 additions (approved by the owner 2026-10-20): `days[].at` (time logged, ms); `meals[].n` (portions the recipe makes, missing = 1; kcal/macros stay whole-recipe totals) and `meals[].i` (ingredients: `k` key, `n` name, `a` amount typed, `u` `g`/`ml`/`lb`/`e`, `w` grams or ml); `ings[].sn` (source/search name) and `ings[].code` (barcode). `days[].s` (v8 slot) is kept in data but no longer shown or written.
 - Ingredient key: `c:<barcode>` if it has one, else `n:<source name or name, lower case>`; basic foods `b:<name, lower case>`. Without a barcode the source name can't be edited (meals find the ingredient by it).
 - v8 additions: `days[].s` (meal slot `b`/`l`/`d`/`s`), `weights` (kg always; `kg:null` marks a removed reading), `targets.rate` (kg per week for the adaptive target, one of -1, -0.75, -0.5, -0.25, 0, 0.25, 0.5).
@@ -39,9 +43,11 @@ localStorage key `calorie-tracker-v1` (never rename):
 `merge()` builds its result from known keys only, so **any new top-level key is dropped on the next sync** unless it gets a merge rule.
 Every new piece of data needs: a merge rule, deletion markers where it can be deleted, a check in `validBackup()`, and a test showing it survives a two-device merge.
 - Entries by id (union minus `del`). The slot `s` travels with the entry.
-- Meals by lower-cased name (newest `t`). Ingredients by key (barcode, else source name, else name), highest id wins. Editing an ingredient gives it a new id and marks the old id deleted.
+- Meals by lower-cased name (newest `t`); a meal with a deletion marker `m:<name>` at or after its `t` is dropped (so a meal saved again later is kept).
+- Folders and fileIn: newest `t` wins per folder id / item. Ingredients by key (barcode, else source name, else name), highest id wins. Editing an ingredient gives it a new id and marks the old id deleted.
 - Goal and targets (including `targets.rate`) by newest `sUpdated`.
 - Scores by date (frozen beats live).
+- Profile: newest `t` wins; a device without one doesn't remove it.
 - Weights by date, newest `t` wins; a removal is `{kg:null,t}` so it syncs like a reading.
 - Known risk: a device still running v7 or older that syncs drops `weights` from the cloud row. Any v8 device puts them back on its next sync (its local copy is merged in), so nothing is lost for good.
 
@@ -51,6 +57,22 @@ Every new piece of data needs: a merge rule, deletion markers where it can be de
 - Day slide: arrows, date and Calendar stay put; reduced motion changes days instantly.
 - Ingredient picker: one live-search combobox (`makePicker`), used by Home cooking and the Daily log's Food option. Amounts 0.1 to 100,000.
 - Import asks Merge / Replace / Cancel. Themes: Green, Ocean, Berry, Slate, Sand, Custom; new UI must look right in all of them, light and dark.
+- v11: first-run setup (`openSetup`). It's shown once per device to new users (no data on the device) in six steps: account, focus (cut/bulk), current and target weight in one unit, age/sex/height, exercise (multi-select) and activity, then a review.
+  - The review suggests calories and macros: Mifflin-St Jeor times an activity factor, then the aim at 7,700 kcal/kg, with a 1,200 floor. Protein is 1.6 to 2.2 g/kg, fat 25 to 30%, carbs the rest, fibre 14 g per 1,000 kcal.
+  - The suggestion is for adults only: under 18 or pregnant/breastfeeding gives no suggestion and points to a professional. Missing details mean manual targets, starting from the current settings.
+  - Nothing is saved until "Apply these targets". Skip keeps the defaults. An account that already has data after signing in is offered "Keep my settings".
+- v11 TEMPORARY TEST TOOLS: "Pass (test)" on every setup step and "Run setup again (test)" in Settings. They show only when VERSION ends in `-wip` (`TESTING`), so released builds hide them. A test run starts from the saved values and asks for confirmation (listing the changes) before applying. Remove the code once setup testing is finished.
+- v11: Progress shows the target weight against the latest reading ("X to lose/gain to reach it"), with a dashed Target line on the weight chart. It can be edited or removed there. No target means none is shown.
+- v11: Daily log chart "How the day built up" is one chart: calories and each tracked macro as % of goal/target (one scale). Each measure has an aria-pressed toggle that also shows its line style (the legend); toggles add or remove that line and its table column, and the table shows actual kcal/g.
+  - The time axis runs from the first item (rounded down to an even hour) to midnight, labelled every 2 hours (4 or 6 when they don't fit). Today's lines stop at "Now".
+  - Same minute = one step. Missing macros count as 0g (said under the chart). Untimed items are in the note and table only. Pointing at or tapping the chart reads out the values.
+- v11: after logging (meal, food, quick add, recent chip, copy, or from Home cooking), if the rings are out of view the page scrolls smoothly to the top and the ring animations wait for it (`ringGate`). Reduced motion scrolls instantly.
+- v11: Ingredients folders open and close from their heading (button, `aria-expanded`). Folders start closed and Unfiled open. The state is kept while the page is open, Rename/Remove stay visible, and moving an item into a closed folder focuses that folder's heading and announces it. The quality bar is centred in each ingredient block.
+- v11: renaming a saved meal while editing renames it (old name gets a deletion marker, folder moves with it) instead of copying it. Renaming onto an existing name asks first, and "Stop editing" leaves the saved meal unchanged.
+- v10: search lists for ingredients and saved meals open on folders (user folders, Unfiled, then the basic groups for ingredients); choosing a folder opens it; typing shows matches inside their folders; clearing collapses them again (`makeCombo`).
+- v10: saved ingredients (Ingredients page) and saved meals (bottom of Home cooking) are listed in folders with Edit, a folder menu and Remove. Removing anything (item or folder) asks in an accessible dialog (`ask()`); folders never delete their items. Removing an ingredient keeps the totals of meals that use it and lists them under "Saved meals to check" with the missing ingredient named.
+- v10: Home cooking: "Portions made" sits just above the totals; meals are edited from the saved-meals list.
+- v10: entry times outside 2000–2100 are ignored for display and rejected on import.
 - v9: no meal slots. Each entry shows the time it was logged (`at`, or the id for older entries: every version since v1 made the id from `Date.now()`); ids that aren't times show "Time not recorded". Newest first.
 - v9: units: "each" is the default when the food has an item weight; lb for foods measured in grams (not ml, no density guessed); "each (set g/ml)" asks for the item weight, and a saved ingredient can remember it (`e`).
 - v9: saved meals log one portion by default; the Daily log has a Portions box. Home cooking shows per-portion and whole-recipe totals and can load a saved meal (v9 meals only) to edit.
@@ -63,14 +85,43 @@ Every new piece of data needs: a merge rule, deletion markers where it can be de
 - v8: charts on canvas in theme colours with a text summary under each; 4 weeks / 3 months by day, 1 year by week. If a custom accent is too close to the over-goal colour, charts use ink for "over".
 
 ## Open questions for the owner
-From ChatGPT's v8 review (v9_features_to_implement.md), not approved for v9; #5 and #7 were done in v9:
-- #1 Keep accounts' local data separate when a different account signs in (currently merges into that account).
-- #2 "Replace my data" is local only; a sync can bring cloud-only data back. Label it, or add a confirmed cloud replace with a backup first.
-- #3 Deletion markers expire after 90 days, so a device offline longer than that could bring a deleted entry back. Keep longer?
-- #4 Conflicts trust device clocks (`sUpdated`, `t`, ids); server revisions would need a Supabase change.
-- #6 Edit or delete past weigh-ins (today only at the moment, to keep past days read-only).
+From ChatGPT's reviews (v9, v10 and v11 planning docs), not approved yet:
+- Keep accounts' local data separate when a different account signs in (currently merges into that account).
+- "Replace my data" is local only; a sync can bring cloud-only data back. Label it, or add a confirmed cloud replace with a backup first.
+- Deletion markers expire after 90 days, so a device offline longer than that could bring a deleted item back. Keep them longer?
+- Conflicts trust device clocks (`sUpdated`, `t`, ids); server revisions would need a Supabase change.
+- Edit or delete past weigh-ins (today only at the moment, to keep past days read-only).
+- Adaptive target: limit to adults / say more about the 1,200 floor (setup already does this for its own suggestion).
+- A project-owned USDA key instead of `DEMO_KEY`.
+- When setup testing is done: remove the temporary test tools' code.
+Done: adaptive-target wording and USDA rate limit (v9); meals with a removed ingredient stay in review, impossible times rejected (v10); renaming a meal no longer duplicates it (v11).
 
 ## Handoff log (newest first)
+
+### [Claude] 2026-10-20, v11
+**Did:** from v11_features_to_implement.md (it includes v10, which was never released on its own):
+- ChatGPT v10-review #1: renaming a meal while editing renames it, with its folder, and asks before taking an existing name. "Stop editing" was added.
+- Tweaks: one Daily log chart with a toggle per measure (calories and macros as % of goal/target, axis from the first item to midnight, 2-hour labels, table columns follow the toggles, tap/point readout); ingredient folders open and close from their heading; the quality bar is centred in each ingredient block; after logging, the page scrolls to the rings before they animate.
+- Features: first-run setup (account, focus, weights, details, exercise, review with an estimate, adults only), the target weight on Progress (summary, chart line, edit/remove), and temporary test tools (-wip builds only).
+- New data (approved by the owner): `targets.tw` and `profile`.
+
+**Tested:** headless Edge (Playwright, `file://`, network blocked, Supabase and product databases mocked), 290 checks (all v10 checks adapted plus v11):
+- Chart: toggles by click and keyboard, any combination, none, table columns, axis range and labels, readout, past day, reduced motion.
+- Folders: open/close by click and keyboard, states kept through moves, edits and new folders, focus and announcement.
+- Quality bar: centring measured.
+- Rings: scroll then animate; no scroll when already in view; reduced motion; from Home cooking.
+- Setup: every step, validation, unit conversion, the estimate's numbers, aim recalculation, nothing saved before Apply, skip, manual targets, under-18 and pregnancy, sign-in during setup with existing-account data, test run with Pass, confirm/cancel and Escape, released build without test tools, no overflow at 320/375px.
+- Target weight: save/refuse/unit/reached/remove.
+- Meal rename: folder, collision, stop editing, and the rename reaching a second device.
+- Two-device merge of the profile and target, export/import and bad-backup rejection, no console errors.
+- Phone screenshots in light, dark, Berry, Sand and at 320px, checked by eye.
+
+**Not tested:** a real phone, real Supabase (sign-in/sign-up from setup, including email confirmation), real product databases.
+
+### [Claude] 2026-10-20, v10-wip
+**Did:** from v10_features_to_implement.md: ChatGPT #4 (meals using a removed ingredient stay in review, totals kept) and #5 (impossible entry times rejected and never break the page); tweaks: saved-meals list at the bottom of Home cooking with Edit and confirmed Remove, confirmed Remove for ingredients (meals using it named), Portions made above the totals; features: "How the day built up" chart with summary and table, folders for ingredients and saved meals (create, rename, remove with move-to, per-item folder menu, folder browsing in the search lists, Daily log meal search with folders).
+**Tested:** headless Edge (Playwright, `file://`, network blocked, Supabase and product databases mocked), 172 checks (all v9 checks adapted plus v10): chart values, same-minute steps, untimed items, 0g note, updates on add/remove, empty and untimed days; folder create/rename/remove with validation, keyboard and click browsing, search narrowing and clearing, ingredient and meal folders kept apart; dialogs (focus on Cancel, Tab trapped, Escape, focus returned); removals with deletion markers and log untouched; two-device merge of folders, assignments and removed meals; export/import and bad-backup rejection; no overflow at 320/375px; no unexpected console errors. Phone screenshots in light, dark and Berry checked by eye.
+**Not tested:** a real phone, real Supabase, real product databases. **Not released:** the owner asked to try v10-wip before it goes to `main`.
 
 ### [Claude] 2026-10-20, v9
 **Did:** from v9_features_to_implement.md: ChatGPT #5 (adaptive target labelled a rough estimate for adults, not medical advice) and #7 (USDA rate limit reported as busy); tweaks: saved meals flagged for review when an ingredient changes (Update / Keep, nothing silent), meal slots replaced by the time each entry was logged, a small bulge-and-shake when a ring fills; features: portions made for meals (log one portion, choose more), one-colour Calendar rings, "each" as default unit plus lb and a typed item weight, source/search name vs display name for ingredients with barcode matching, ingredient editing, saved-meal editing.
