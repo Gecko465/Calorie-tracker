@@ -411,7 +411,38 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 .sut,.sutest,.sc.testonly h2{color:var(--danger)}
 .sut{margin:0;padding:.5rem .7rem;border:1px dashed var(--danger);border-radius:.6rem;font-size:.8rem;font-weight:700}
 .sc.testonly{border:1px dashed var(--danger)}
+#testRow .calbtn{border:1px dashed var(--danger)}
 #suChg{font-size:.85rem}
+/* v12 */
+/* Setup covers the app completely with the page background. */
+#setup.calwrap{background:radial-gradient(ellipse at 50% -15%,var(--glow) 0,transparent 34rem),var(--bg)}
+#setup .calbox{box-shadow:0 18px 50px #18241b30}
+/* A brief bulge when any button is pressed (click, tap or keyboard). The scale property doesn't touch layout or other
+   transforms, and disabled buttons never receive the click. */
+@keyframes btnpress{0%{scale:1}35%{scale:1.06}100%{scale:1}}
+button.pressed{animation:btnpress .22s ease-out}
+@media(prefers-reduced-motion:reduce){button.pressed{animation:none}}
+/* Compact ingredient cards */
+#mylist li{padding:.5rem .1rem;gap:.5rem}
+#mylist li .n{line-height:1.3}
+#mylist .rate{margin-top:.15rem;font-size:.72rem}
+#mylist details.nut{margin-top:.1rem}
+#mylist details.nut summary{padding:.2rem 0;font-size:.78rem}
+#mylist .ictl{margin-top:.15rem;gap:.15rem .7rem}
+#mylist .ictl select{min-height:2.25rem}
+#mylist li>button{flex:0 0 2.25rem;height:2.25rem}
+#mylist .fgrp{margin:.35rem 0 .6rem}
+#mylist .fghd{margin-bottom:.2rem}
+.sbox{margin:-.6rem 0 1rem;padding:0 .9rem;border:1px solid transparent;border-radius:1rem}
+.sbox[open]{background:var(--surface);border-color:var(--line);padding-bottom:.6rem}
+.sbox summary{padding:.5rem 0}
+.sbox h3{font-size:.9rem;margin:.6rem 0 .2rem}
+.sbox p{margin:.3rem 0;line-height:1.45;font-size:.82rem}
+.sbox ul{margin:.2rem 0;padding:0;font-size:.8rem;color:var(--muted)}
+.sbox ul li{display:block;padding:.1rem 0;border:0}
+.sbox table{width:100%;border-collapse:collapse;font-size:.8rem;font-variant-numeric:tabular-nums}
+.sbox th,.sbox td{text-align:right;padding:.15rem .3rem;border-bottom:1px solid var(--line)}
+.sbox th:first-child,.sbox td:first-child{text-align:left}
 </style>
 </head>
 <body>
@@ -424,6 +455,7 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     <button class="icon" id="next" aria-label="Next day">&rsaquo;</button>
   </div>
   <div class="calrow"><button type="button" class="calbtn" id="calBtn" aria-haspopup="dialog">Calendar</button></div>
+  <div class="calrow" id="testRow" hidden><button type="button" class="calbtn sutest" id="rerunLog" aria-haspopup="dialog">Run setup (test)</button></div>
   <div id="dayview">
   <div class="plate">
     <canvas id="ring" aria-hidden="true"></canvas>
@@ -432,7 +464,8 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
   
   <div class="macros" id="macros" hidden></div>
   <div class="mrings" id="mrings"></div>
-  <div class="score" id="score" role="status"><div><span class="sl">Daily score</span><small id="scoreL"></small></div><b id="scoreV">0%</b></div>
+  <div class="score" id="score" role="status"><div><span class="sl" id="scoreT">Daily score</span><small id="scoreL"></small></div><b id="scoreV">0%</b></div>
+  <details class="nut sbox" id="scoreBox"><summary>How this score works</summary><div id="scoreParts"></div></details>
   
 
   <div id="logbox">
@@ -556,6 +589,10 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
     <div class="sc"><h2>Calorie goal</h2>
       <div class="goal"><label for="goal">Daily goal</label><input id="goal" type="number" min="500" max="10000" step="50" inputmode="numeric"><span>kcal</span></div>
     </div>
+    <div class="sc"><h2>Bedtime and your day</h2>
+      <label class="fl">Usual bedtime<select id="bedSel"></select></label>
+      <p class="note" id="bedNote" role="status"></p>
+    </div>
     <div class="sc"><h2>Macro targets</h2>
       <p class="note">Tick a macro to show its ring on the Daily log, then set your daily target in grams.</p>
       <div class="targets" role="group" aria-label="Macro targets"><div id="targets"></div></div>
@@ -620,6 +657,10 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
   </fieldset>
   <label>How active is a typical week?<select id="suAct"><option value="">Choose</option><option value="0">Mostly sitting, little or no exercise</option><option value="1">Light: exercise 1 to 3 days a week</option><option value="2">Moderate: exercise 3 to 5 days a week</option><option value="3">Very active: exercise 6 or 7 days a week</option><option value="4">Extra active: hard daily training or a physical job</option></select></label>
 </section>
+<section data-s="day" hidden>
+  <label>When do you usually go to bed?<select id="suBed"></select></label>
+  <p class="note">Your tracking day runs from bedtime to bedtime, so a late snack still counts towards the day you’re in, and your daily score is made final at bedtime. Not sure? Leave it at midnight. You can change it any time in Settings.</p>
+</section>
 <section data-s="review" hidden>
   <p id="suRevIntro"></p>
   <label>Aim<select id="suAim"></select></label>
@@ -638,8 +679,8 @@ details.nut dt{color:var(--muted)}details.nut dd{margin:0;font-weight:600}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-var VERSION="v11";
-var BUILD="20 Oct 20:15";
+var VERSION="v12";
+var BUILD="24 Oct 11:22";
 /* The publishable key is meant to be public. NEVER paste a service_role or sb_secret key here. */
 /* USDA FoodData Central key for barcode fallback lookups. DEMO_KEY works without sign-up but is limited to 30 lookups an hour;
    a free personal key from api.data.gov raises that. It is a public, read-only key, safe to keep in the page. */
@@ -660,43 +701,69 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       else{if(typeof t.on!=="boolean")t.on=true;if(!(typeof t.g==="number"&&isFinite(t.g)&&t.g>0))t.g=TDEF[k];}
     });
   }
-  /* Daily score (0-100): calories weighted 60 (full marks at 100% of goal, falling evenly to 0 at 0% or 200%),
-     each tracked macro weighted 15 (progress toward its target, capped at 100%). Unknown fibre counts as no progress. */
+  /* Totals for a list of entries. Unknown fibre counts as 0g here; fiState says whether fibre was known for all, some or none. */
   function dayStats(items){
     var m={p:0,c:0,f:0,fi:0},fiKnown=0,fiPartial=false;
     items.forEach(function(i){if(i.m){m.p+=i.m.p;m.c+=i.m.c;m.f+=i.m.f;if(typeof i.m.fi==="number"){m.fi+=i.m.fi;fiKnown++;if(i.m.fip)fiPartial=true;}}});
     m.fiState=!items.length?"all":(!fiKnown?"none":((fiKnown<items.length||fiPartial)?"partial":"all"));
     return {total:Math.round(items.reduce(function(a,b){return a+b.kcal;},0)),m:m};
   }
-  function scoreOf(items){
-    var st=dayStats(items),g=S.goal||2000,acc=60*Math.max(0,1-Math.abs(st.total/g-1)),w=60;
-    (typeof MAC==="undefined"?[]:MAC).forEach(function(x){var t=S.targets&&S.targets[x[0]];if(!t||!t.on)return;w+=15;acc+=15*Math.min((st.m[x[0]]||0)/t.g,1);});
-    return Math.round(acc/w*100);
+  /* v12 daily score (0-100). An estimate made by this app, not a medical or scientifically validated health measure.
+     Two equal parts:
+     - Food quality: the calorie-weighted average quality (0-100) of the foods logged that have a known quality (days[].q: v,
+       and c = the share of that entry's calories it covers). Foods without one are left out, never counted as 0, and the
+       coverage is shown. If none is known, the score is the targets part alone and says so.
+     - Targets: the calorie goal and each tracked macro and fibre count equally; a switched-off target isn't counted. Each scores
+       by how close the total is to it (100 on target, 0 at nothing or at double), so going over isn't rewarded.
+     While the tracking day is running, the targets part is a provisional "on track" measure: nothing is expected during the
+     first 8 hours (assumed sleep); after that a minimum share rises over the rest of the day to 80% at bedtime, and anything from
+     that minimum up to the target counts as fully on track, so no even hourly pace is implied. Going over a target lowers it
+     at any time. When the day ends the final score is worked out from the finished totals and frozen with the day. */
+  var SLEEP_MS=8*36e5;
+  function okQv(q){return !!q&&typeof q==="object"&&okNum(q.v)&&q.v>=0&&q.v<=100&&okNum(q.c)&&q.c>0&&q.c<=1;}
+  function qualityPart(items){
+    var all=0,kn=0,sum=0;items.forEach(function(e){var k=Math.max(0,e.kcal||0);all+=k;if(okQv(e.q)){kn+=k*e.q.c;sum+=e.q.v*k*e.q.c;}});
+    return {v:kn>0?sum/kn:null,cov:all>0?kn/all:0};
   }
-  /* Today's score is kept up to date on every save; once the day has passed it is frozen and never recalculated. */
+  function dayFrac(k,now){var b=dayBounds(k),len=b[1]-b[0]-SLEEP_MS;return Math.max(0,Math.min(1,(now-b[0]-SLEEP_MS)/len));}
+  function liveMin(f){return Math.max(0,1.25*f-0.45);}
+  function scoreTargets(){var l=[["k","Calories",S.goal||2000]];(typeof MAC==="undefined"?[]:MAC).forEach(function(x){var t=S.targets&&S.targets[x[0]];if(t&&t.on)l.push([x[0],x[1],t.g]);});return l;}
+  function closeness(r,live,f){if(r>1)return Math.max(0,2-r);if(!live)return Math.max(0,r);var lo=liveMin(f);return r>=lo?1:r/lo;}
+  function scoreParts(items,k,live,now){
+    var st=dayStats(items),f=live?dayFrac(k,now||Date.now()):1;
+    var rows=scoreTargets().map(function(x){var v=x[0]==="k"?st.total:(st.m[x[0]]||0),r=x[2]>0?v/x[2]:0;return {k:x[0],name:x[1],x:v,g:x[2],r:r,s:closeness(r,live,f)};});
+    var p=rows.reduce(function(a,r){return a+r.s;},0)/rows.length*100,q=qualityPart(items);
+    return {v:Math.round(q.v===null?p:(p+q.v)/2),p:Math.round(p),q:q.v===null?null:Math.round(q.v),cov:q.cov,rows:rows,live:!!live,f:f,fiState:st.m.fiState};
+  }
+  function scoreOf(items,k,live){return scoreParts(items,k||key(tday()),live).v;}
+  /* What's saved in S.scores[day]: v, f (1 = final), t, k:2 (this formula), p (targets part), q and c (quality part and its
+     calorie coverage) when any quality is known. Scores saved before v12 have no k and keep their old value. */
+  function scoreRec(items,k,live){var s=scoreParts(items,k,live),r={v:s.v,f:live?0:1,t:Date.now(),k:2,p:s.p};if(s.q!==null){r.q=s.q;r.c=Math.round(s.cov*100)/100;}return r;}
+  /* Today's score is kept up to date on every save; when the day ends its final score is worked out once, frozen and never
+     recalculated. */
   function ensureScores(){if(!S.scores||typeof S.scores!=="object")S.scores={};}
   function stampScore(){
-    ensureScores();var k=key(new Date()),items=S.days[k]||[],e=S.scores[k];
+    ensureScores();var k=key(tday()),items=S.days[k]||[],e=S.scores[k];
     if(e&&e.f)return;
     if(!items.length&&!e)return;
-    S.scores[k]={v:scoreOf(items),f:0,t:Date.now()};
+    S.scores[k]=scoreRec(items,k,true);
   }
   function freezePast(){
-    ensureScores();var today=key(new Date()),ch=false;
+    ensureScores();var today=key(tday()),ch=false;
     Object.keys(S.days).forEach(function(d){
       if(d>=today)return;
       var items=S.days[d]||[],e=S.scores[d];
       if(e&&e.f)return;
       if(!items.length&&!e)return;
-      S.scores[d]={v:e?e.v:scoreOf(items),f:1,t:e&&e.t?e.t:Date.now()};ch=true;
+      S.scores[d]=scoreRec(items,d,false);ch=true;
     });
-    Object.keys(S.scores).forEach(function(d){var e=S.scores[d];if(d<today&&e&&!e.f){e.f=1;ch=true;}});
+    Object.keys(S.scores).forEach(function(d){var e=S.scores[d];if(d<today&&e&&!e.f){S.scores[d]=scoreRec(S.days[d]||[],d,false);ch=true;}});
     if(ch){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}queuePush();}
   }
   function scoreFor(kk,isToday){
     ensureScores();var items=S.days[kk]||[],e=S.scores[kk];
-    if(isToday)return (items.length||e)?scoreOf(items):0;
-    return e?e.v:(items.length?scoreOf(items):0);
+    if(isToday)return (items.length||e)?scoreOf(items,kk,true):0;
+    return e?e.v:(items.length?scoreOf(items,kk,false):0);
   }
   function save(){stampScore();S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}queuePush();}
   function key(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
@@ -837,8 +904,39 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   /* Past days are read-only and only today plus the previous 7 days can be opened (older records stay stored and synced). */
   var WINDOW=7;
   function sod(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
-  function daysAgo(d){return Math.round((sod(new Date())-sod(d))/864e5);}
+  /* v12: the tracking day. With a bedtime set (targets.bed, minutes after midnight, local time) each day runs from one bedtime
+     to the next. An evening bedtime (12:00 or later) starts the next day's period, so food at 23:30 with a 23:00 bedtime counts
+     towards tomorrow; an early-morning bedtime (before 12:00) ends the current period, so food at 00:30 with a 01:00 bedtime
+     still counts towards yesterday. No bedtime means midnight: the calendar day. Entries keep the day they were logged on, so
+     changing the bedtime only affects food logged from then on. Local dates and times are used throughout, so daylight-saving
+     changes simply make that one period an hour shorter or longer. tday() is local midnight of the current day's label. */
+  function bedMin(){var b=S.targets&&S.targets.bed;return okBed(b)?b:0;}
+  function okBed(b){return okNum(b)&&b===Math.round(b)&&b>=0&&b<1440&&(b>=1080||b<360);}
+  function trackDayOf(ms){
+    var d=new Date(ms),b=bedMin(),m=d.getHours()*60+d.getMinutes(),y=d.getFullYear(),mo=d.getMonth(),dd=d.getDate();
+    if(b>=720)return new Date(y,mo,dd+(m>=b?1:0));
+    if(b>0)return new Date(y,mo,dd-(m<b?1:0));
+    return new Date(y,mo,dd);
+  }
+  function tday(){return trackDayOf(Date.now());}
+  /* Start and end (ms) of the tracking day labelled k. */
+  function dayBounds(k){
+    var p=k.split("-"),y=+p[0],mo=+p[1]-1,d=+p[2],b=bedMin(),h=Math.floor(b/60),mi=b%60,o=b>=720?-1:0;
+    return [new Date(y,mo,d+o,h,mi).getTime(),new Date(y,mo,d+o+1,h,mi).getTime()];
+  }
+  /* Bedtime choices: every half hour from 18:00 to 05:30, with midnight as the default. */
+  function fillBed(sel){
+    sel.innerHTML="";var l=[];for(var m=1080;m<1440;m+=30)l.push(m);for(m=0;m<360;m+=30)l.push(m);
+    l.forEach(function(m){opt(sel,String(m),m?bedLabel(m):"Midnight (default)");});sel.value=String(bedMin());
+  }
+  function bedLabel(b){return b?new Date(2000,0,1,Math.floor(b/60),b%60).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):"midnight";}
+  function daysAgo(d){return Math.round((tday()-sod(d))/864e5);}
   function inWindow(d){var n=daysAgo(d);return n>=0&&n<=WINDOW;}
+  document.addEventListener("click",function(e){
+    var b=e.target&&e.target.closest?e.target.closest("button"):null;if(!b||b.disabled||reducedMotion())return;
+    b.classList.remove("pressed");void b.offsetWidth;b.classList.add("pressed");
+  },true);
+  document.addEventListener("animationend",function(e){if(e.animationName==="btnpress"&&e.target.classList)e.target.classList.remove("pressed");});
   function reducedMotion(){return !!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);}
   /* v11: after logging, if the calorie and macro rings are out of view the page scrolls back to the top first, and the ring
      animations (and their celebrations) wait until the scroll has finished, so you can watch them fill. While the gate is
@@ -899,7 +997,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     });
   }
   function render(){
-    if(!inWindow(cur))cur=new Date();
+    if(!inWindow(cur))cur=tday();
     freezePast();
     var animate=animateWheels;animateWheels=false;
     if(lastDay!==key(cur)){fxTimers.forEach(clearTimeout);fxTimers=[];lastDay=key(cur);}
@@ -911,16 +1009,14 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     $("ro").hidden=today;
     $("copyrow").hidden=today||!items.length;
     if(pendingCopy&&(today||pendingCopy.d!==k))cancelCopy();
-    renderedToday=today?key(new Date()):null;
+    renderedToday=today?key(tday()):null;
     $("pg-log").dataset.glance=today?"TODAY AT A GLANCE":"PAST DAY \u00b7 READ-ONLY";
     $("lhead").textContent=today?"Today\u2019s log":"Log for "+cur.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"short"});
     var oldTotal=parseFloat($("eaten").textContent)||0,fromCal=ringShown;
     if(animate)animateNumber($("eaten"),oldTotal,total,3000);
     else if($("eaten")._numTo!==total||$("eaten")._numTo==null){$("eaten")._numberAnimation=($("eaten")._numberAnimation||0)+1;$("eaten")._numTo=null;$("eaten").textContent=total;}
     var m=dayStats(items).m;
-    var sc=scoreFor(k,today);
-    $("scoreV").textContent=sc+"%";
-    $("scoreL").textContent=today?"Updates as you log":"Final score, saved at the end of the day";
+    drawScore();
     $("macros").innerHTML="<span><b>"+m.p+"g</b> protein</span><span><b>"+m.c+"g</b> carbs</span><span><b>"+m.f+"g</b> fat</span>";
     fireHits(animate,k,total,m,fromCal);
     drawT(m,animate);
@@ -929,6 +1025,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     
     ringTo(total,animate);
     $("goal").value=S.goal;
+    if(document.activeElement!==$("bedSel")&&$("bedSel").options.length){$("bedSel").value=String(bedMin());bedNote();}
     var box=$("list"); box.innerHTML="";
     if(!items.length){var e=document.createElement("p");e.className="empty";e.textContent=today?"Nothing logged yet. Add a saved meal, a food or a quick add above.":"Nothing was logged on this day.";box.appendChild(e);}
     /* Newest first, each with the time it was logged; the saved order is unchanged. */
@@ -962,6 +1059,50 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     drawDayChart();
     drawProgress();
   }
+  /* The score card and its breakdown: the two parts, what's known, and whether the score is provisional or final. Redrawn on
+     every render and once a minute, because the on-track measure changes as the day goes on. */
+  function drawScore(){
+    var k=key(cur),today=daysAgo(cur)===0,items=S.days[k]||[],e=(S.scores||{})[k],box=$("scoreParts"),s=null,stored=null,old=false;
+    if(today)s=(items.length||e)?scoreParts(items,k,true):null;
+    else if(e&&e.f){if(e.k===2)stored=e;else old=true;}
+    else if(items.length)s=scoreParts(items,k,false);
+    var v=s?s.v:stored?stored.v:e?e.v:0,bed=bedLabel(bedMin());
+    function qtxt(q){return q===null||q===undefined?"food quality: not enough data":"food quality "+q;}
+    /* Only changed text is written, so the once-a-minute refresh doesn't make screen readers repeat the score. */
+    function put(id,x){if($(id).textContent!==x)$(id).textContent=x;}
+    put("scoreV",v+"%");
+    put("scoreT",today?"On-track score (provisional)":"Final score");
+    put("scoreL",today?(s?cap1(qtxt(s.q))+" · targets "+s.p+" · final at "+bed:"Log food to start today’s score"):
+      old?"Worked out with the older formula (before v12)":stored?cap1(qtxt(okNum(stored.q)?stored.q:null))+" · targets "+stored.p:s?cap1(qtxt(s.q))+" · targets "+s.p:"Nothing was logged on this day");
+    box.innerHTML="";
+    function para(t,cls){var p=document.createElement("p");if(cls)p.className=cls;p.textContent=t;box.appendChild(p);return p;}
+    function head(t){var h=document.createElement("h3");h.textContent=t;box.appendChild(h);}
+    para("Two equal parts: the quality of the food you log, and how close you are to your calorie goal and each target you track (targets you switch off aren’t counted). It’s an estimate made by this app to help you keep track, not a medical or scientifically validated health score.");
+    if(old){para("This day’s score was saved before v12 with the older formula, so it isn’t broken down here.");return;}
+    var q=s?s.q:stored&&okNum(stored.q)?stored.q:null,cov=s?s.cov:stored&&okNum(stored.c)?stored.c:0,p=s?s.p:stored?stored.p:null;
+    head("Food quality: "+(q===null?"not enough data":q+" out of 100"));
+    var known=items.filter(function(x){return okQv(x.q);}),unk=items.filter(function(x){return !okQv(x.q);});
+    para(q===null?"None of the food logged on this day has a quality estimate yet, so this part is left out and the score is the targets part alone.":
+      "The calorie-weighted average of the foods with a quality estimate"+(cov<0.995?", which cover "+Math.round(cov*100)+"% of the day’s calories (partial data)":", covering all of the day’s calories")+". Foods without one are left out rather than counted as low.");
+    if(items.length){
+      var ul=document.createElement("ul");
+      known.concat(unk).forEach(function(x){var li=document.createElement("li");li.textContent=x.name+": "+(okQv(x.q)?x.q.v+"/100"+(x.q.c<0.995?" (from "+Math.round(x.q.c*100)+"% of it)":""):"no quality data")+", "+num(x.kcal)+" kcal";ul.appendChild(li);});
+      box.appendChild(ul);
+    }
+    para("Quality comes from each ingredient: the Nutri-Score for scanned products (which takes in saturated fat, sugars, salt, fibre, protein and fruit and vegetables), and a typical value for each basic food. Meals average their ingredients by calories. Quick adds, ingredients added by hand, and food logged before v12 have no quality data.","note");
+    head("Targets: "+(p===null?"—":p+" out of 100"));
+    if(s){
+      var tb=document.createElement("table");
+      [["","So far","Target","Score"]].concat(s.rows.map(function(r){return [r.k==="k"?"Calories (kcal)":r.name+(r.k==="fi"&&s.fiState!=="all"?"*":""),r.k==="k"?num(r.x):r1(r.x)+"g",r.k==="k"?num(r.g):r.g+"g",Math.round(r.s*100)+""];})).forEach(function(r,i){
+        var tr=document.createElement("tr");r.forEach(function(c){var td=document.createElement(i?"td":"th");td.textContent=c;tr.appendChild(td);});tb.appendChild(tr);});
+      box.appendChild(tb);
+      if(s.rows.some(function(r){return r.k==="fi";})&&s.fiState!=="all")para("* Fibre isn\u2019t known for everything logged, so the total may be low.","note");
+    }else if(stored)para("Saved when the day ended, from the targets you had then.","note");
+    if(today&&s){
+      var lo=Math.round(liveMin(s.f)*100);
+      para("Provisional: while the day is running this is an “on track” score. Nothing is expected in the first 8 hours after "+(bedMin()?"your bedtime, "+bed+",":"midnight")+", when you’re likely asleep. After that, anything from a minimum share (now "+lo+"% of each target, rising to 80% at the end of the day) up to the target counts as on track, so you don’t need to eat at an even pace. Going over a target lowers it. At "+bed+" the final score is worked out from how close you finished to each target, and frozen with the day.");
+    }else para("Final: worked out when the day ended from how close the day finished to each target, then frozen with the day.");
+  }
   var renderedToday=null;
   /* When an entry was logged: its saved time (v9 on), or for older entries the time in its id (every version has made the id
      from the time the entry was added). An id that isn't a time shows "Time not recorded" rather than a guess. */
@@ -969,13 +1110,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function loggedAt(e){if(okNum(e.at)&&e.at>=T_MIN&&e.at<=T_MAX)return e.at;var t=Number(e.id);return t>946684800000&&t<4102444800000?t:null;}
   function byNewest(a,b){var x=loggedAt(a),y=loggedAt(b);if(x===null&&y===null)return b.id-a.id;if(x===null)return 1;if(y===null)return -1;return y-x||b.id-a.id;}
   function hm(t){return new Date(t).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});}
-  function add(name,kcal,m){if(daysAgo(cur)!==0)cur=new Date();var k=key(cur),now=Date.now();var e={id:now+Math.random(),name:name,kcal:kcal,at:now};if(m)e.m=m;(S.days[k]=S.days[k]||[]).push(e);save();bringRings();animateWheels=true;render();return e;}
+  function add(name,kcal,m,q){if(daysAgo(cur)!==0)cur=tday();var k=key(cur),now=Date.now();var e={id:now+Math.random(),name:name,kcal:kcal,at:now};if(m)e.m=m;if(okQv(q))e.q={v:Math.round(q.v),c:Math.round(q.c*100)/100};(S.days[k]=S.days[k]||[]).push(e);save();bringRings();animateWheels=true;render();return e;}
   /* "Added ..." with an Undo for the newest entry, so a mistaken tap is easy to take back. */
   var lastAdded=null;
   function addedNote(name,e){
     var m=$("fmsg"),t=document.createElement("span"),u=document.createElement("button");
     m.innerHTML="";t.textContent="Added \u201c"+name+"\u201d at "+hm(loggedAt(e))+".";
-    lastAdded={id:e.id,k:key(new Date()),name:name};
+    lastAdded={id:e.id,k:key(tday()),name:name};
     u.type="button";u.className="linkbtn";u.textContent="Undo";u.setAttribute("aria-label","Undo adding "+name);
     u.onclick=undoAdd;m.append(t,u);m.hidden=false;
   }
@@ -998,7 +1139,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!item){msg.textContent="Choose a saved meal first.";msg.hidden=false;return;}
     if(!(k>0)){$("pormsg").hidden=false;$("lpor").focus();return;}
     $("pormsg").hidden=true;msg.hidden=true;
-    var o=portionOf(item,k),nm=porName(item.name,k),en=add(nm,o.kcal,mealM(o));addedNote(nm,en);$("msearch").focus({preventScroll:true});
+    var o=portionOf(item,k),nm=porName(item.name,k),en=add(nm,o.kcal,mealM(o),mealQ(item));addedNote(nm,en);$("msearch").focus({preventScroll:true});
   };
   /* What to log: a saved meal, a single food, or a quick add. */
   function setMode(md){
@@ -1009,7 +1150,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   /* Recent foods come straight from the log (last 4 weeks, newest first, one per name and calorie value); nothing extra is stored. */
   var recentGuard={};
   function recentFoods(){
-    var t=sod(new Date()),from=key(new Date(t.getFullYear(),t.getMonth(),t.getDate()-28)),to=key(t),all=[],seen={},out=[];
+    var t=tday(),from=key(new Date(t.getFullYear(),t.getMonth(),t.getDate()-28)),to=key(t),all=[],seen={},out=[];
     Object.keys(S.days).forEach(function(d){if(d>=from&&d<=to)all=all.concat(S.days[d]||[]);});
     all.sort(function(a,b){return b.id-a.id;});
     for(var i=0;i<all.length&&out.length<8;i++){var e=all[i],sig=String(e.name).toLowerCase()+"|"+e.kcal;if(seen[sig])continue;seen[sig]=1;out.push(e);}
@@ -1024,7 +1165,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       b.onclick=function(){
         /* A quick double tap logs it once. */
         var now=Date.now();if(recentGuard.sig===sig&&now-recentGuard.t<800)return;recentGuard={sig:sig,t:now};
-        var n=add(e.name,e.kcal,e.m?JSON.parse(JSON.stringify(e.m)):null);addedNote(e.name,n);
+        var n=add(e.name,e.kcal,e.m?JSON.parse(JSON.stringify(e.m)):null,e.q);addedNote(e.name,n);
       };
       box.appendChild(b);
     });
@@ -1045,11 +1186,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var pc=pendingCopy;cancelCopy();if(!pc)return;
     var src=(S.days[pc.d]||[]).filter(function(e){return pc.ids.indexOf(e.id)>=0;}).sort(function(a,b){return -byNewest(a,b);});
     if(!src.length)return;
-    var tk=key(new Date()),base=Date.now(),list=S.days[tk]=S.days[tk]||[];
-    src.forEach(function(e,i){var c={id:base+i+Math.random()*0.5,name:e.name,kcal:e.kcal,at:base+i};if(e.m)c.m=JSON.parse(JSON.stringify(e.m));list.push(c);});
-    cur=new Date();save();bringRings();animateWheels=true;render();
+    var tk=key(tday()),base=Date.now(),list=S.days[tk]=S.days[tk]||[];
+    src.forEach(function(e,i){var c={id:base+i+Math.random()*0.5,name:e.name,kcal:e.kcal,at:base+i};if(e.m)c.m=JSON.parse(JSON.stringify(e.m));if(okQv(e.q))c.q={v:e.q.v,c:e.q.c};list.push(c);});
+    cur=tday();save();bringRings();animateWheels=true;render();
     var m=$("fmsg");m.textContent="Copied "+src.length+(src.length===1?" item":" items")+" to today.";m.hidden=false;
   };
+  function bedNote(){var b=bedMin();$("bedNote").textContent="Your tracking day runs from "+bedLabel(b)+" to "+bedLabel(b)+(b?" (the day is named after the date most of it falls on)":"")+", and your daily score is made final then. Changing it applies from now on: food already logged stays on the day it was logged.";}
+  $("bedSel").onchange=function(){var b=parseInt(this.value,10);if(!okBed(b))return;S.targets.bed=b;S.sUpdated=Date.now();save();cur=tday();render();bedNote();};
   $("goal").onchange=function(){var g=parseInt(this.value,10);if(g>=500&&g<=10000){S.goal=g;S.sUpdated=Date.now();save();}render();};
   /* The date heading and arrows stay put and update straight away; only the day's content slides. */
   function navHead(){
@@ -1122,7 +1265,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     sec.className="calmonth";g.className="calgrid";
     h.textContent=new Date(y,mo,1).toLocaleDateString(undefined,{month:"long",year:"numeric"});
     ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(function(w){var c=document.createElement("div");c.className="wd";c.textContent=w;c.setAttribute("aria-hidden","true");g.appendChild(c);});
-    var lead=(new Date(y,mo,1).getDay()+6)%7,days=new Date(y,mo+1,0).getDate(),i,todayS=sod(new Date());
+    var lead=(new Date(y,mo,1).getDay()+6)%7,days=new Date(y,mo+1,0).getDate(),i,todayS=tday();
     for(i=0;i<lead;i++)g.appendChild(document.createElement("div"));
     for(i=1;i<=days;i++)(function(day){
       var d=new Date(y,mo,day),b=document.createElement("button"),kk=key(d),label=calFmt?calFmt.format(d):d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"});
@@ -1143,7 +1286,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     return sec;
   }
   function openCal(){
-    var box=$("calbody"),r=regInfo(),t=new Date(),y=r.start.getFullYear(),mo=r.start.getMonth(),secs=[];
+    var box=$("calbody"),r=regInfo(),t=tday(),y=r.start.getFullYear(),mo=r.start.getMonth(),secs=[];
     try{calFmt=calFmt||new Intl.DateTimeFormat(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"});}catch(e){calFmt=null;}
     if(calObs){calObs.disconnect();calObs=null;}
     box.innerHTML="";
@@ -1193,6 +1336,40 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   "Banana":2.6,"Apple":2.4,"Orange":2.4,"Strawberries":2,"Blueberries":2.4,"Grapes":0.9,"Avocado":6.7,
   "Onion":1.7,"Carrot":2.8,"Tomato":1.2,"Tinned chopped tomatoes":1,"Broccoli":2.6,"Pepper":2,"Mushrooms":1,"Spinach":2.2,"Cauliflower":2,"Courgette":1,"Cabbage":2.5,"Peas, frozen":5,"Sweetcorn, tinned":1.8,"Lettuce":1.2,
   "Olive oil":0,"Vegetable oil":0,"Sugar":0,"Plain flour":3,"Honey":0.2,"Peanut butter":6,"Coconut milk, tinned":0,"Soy sauce":0.8,"Tomato ketchup":0.3,"Mayonnaise":0,"Baked beans, tinned":3.7};
+  /* v12 food quality (0-100), an estimate. It's never worked out from total fat or carbs alone:
+     - Scanned products with a Nutri-Score (which weighs saturated fat, sugars, salt and energy against fibre, protein and fruit,
+       vegetables and pulses): A 95, B 80, C 60, D 40, E 25.
+     - Basic foods: a typical value for each, in the same spirit: vegetables, fruit, pulses, whole grains and fish high; refined
+       grains and fattier meats in the middle; processed meats, sugar, cream, butter and salty sauces lower; unsaturated oils
+       above saturated fats.
+     - Anything else (ingredients added by hand, quick adds) has no quality and is left out. */
+  var NSQ={A:95,B:80,C:60,D:40,E:25};
+  var BQ={"Chicken breast, raw":85,"Chicken thigh, raw skinless":80,"Beef mince 5% fat, raw":75,"Beef mince 10% fat, raw":65,"Beef mince 20% fat, raw":45,"Beef steak, raw":70,"Pork loin chop, raw":70,"Pork sausages, raw":35,"Bacon rashers, raw":30,"Lamb mince, raw":45,"Turkey mince, raw":80,"Salmon fillet, raw":88,"Cod fillet, raw":88,"Tuna, tinned in water, drained":85,"Prawns, raw":80,"Egg":80,"Tofu, firm":85,"Chickpeas, tinned, drained":90,"Kidney beans, tinned, drained":90,"Red lentils, dry":92,
+    "White rice, dry":55,"Brown rice, dry":75,"Pasta, dry":60,"Rolled oats":88,"Bread, white (slice)":50,"Bread, wholemeal (slice)":75,"Tortilla wrap":50,"Potato, raw":70,"Sweet potato, raw":80,"Couscous, dry":60,"Quinoa, dry":82,
+    "Whole milk":60,"Semi-skimmed milk":65,"Skimmed milk":70,"Cheddar cheese":40,"Mozzarella":50,"Cottage cheese":75,"Greek yoghurt, full fat":65,"Natural yoghurt, low fat":75,"Butter":20,"Double cream":20,
+    "Banana":88,"Apple":92,"Orange":92,"Strawberries":95,"Blueberries":95,"Grapes":80,"Avocado":85,
+    "Onion":92,"Carrot":95,"Tomato":95,"Tinned chopped tomatoes":90,"Broccoli":98,"Pepper":95,"Mushrooms":92,"Spinach":98,"Cauliflower":95,"Courgette":95,"Cabbage":95,"Peas, frozen":92,"Sweetcorn, tinned":78,"Lettuce":92,
+    "Olive oil":60,"Vegetable oil":50,"Sugar":10,"Plain flour":50,"Honey":20,"Peanut butter":55,"Coconut milk, tinned":30,"Soy sauce":30,"Tomato ketchup":30,"Mayonnaise":30,"Baked beans, tinned":72};
+  /* Quality of one food (an ALL row), or null when unknown. */
+  function foodQ(f){
+    if(!f)return null;
+    if(String(f[9]).indexOf("b:")===0){var v=BQ[f[0]];return okNum(v)?v:null;}
+    var r=f[8],g=r&&r.scheme==="Nutri-Score"&&r.value!=null?String(r.value).toUpperCase():"";return NSQ.hasOwnProperty(g)?NSQ[g]:null;
+  }
+  /* Quality of a list of ingredient rows: calorie-weighted over the ones with a known quality. c = the share of calories
+     covered (ingredients that can no longer be found count as uncovered). Null when nothing is known. */
+  function rowsQ(rows,missing){
+    var all=0,kn=0,sum=0,nk=0;rows.forEach(function(r){var k=Math.max(0,r.k),q=foodQ(foodByKey(r.key));all+=k;if(q!==null){kn+=k;sum+=q*k;nk++;}});
+    if(!(kn>0))return null;var n=rows.length+(missing||0);
+    return {v:sum/kn,c:Math.min(1,(all>0?kn/all:1)*(n?rows.length/n:1)),n:n,nk:nk};
+  }
+  /* A saved meal's quality from its ingredients as they are now. Meals saved before v9 didn't keep their ingredients: unknown. */
+  function mealQ(m){
+    if(!Array.isArray(m.i)||!m.i.length)return null;
+    var rows=[],miss=0;m.i.forEach(function(it){var r=rowFromItem(it);if(r)rows.push(r);else miss++;});
+    return rowsQ(rows,miss);
+  }
+  function gradeOf(v){return v>=80?"A":v>=65?"B":v>=50?"C":v>=35?"D":"E";}
   /* A search combobox with folders, used for ingredients (Home cooking and the Daily log's Food) and saved meals (Daily log).
      Empty search: the folders, collapsed; choosing a folder opens or closes it. Typing: the matching items, grouped under their
      folders and updated with each character (exact name, then starts with, then every word starts a word, then every word
@@ -1382,7 +1559,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   });
   /* A list in folders (saved ingredients, saved meals): a heading per folder with Rename and Remove, then Unfiled. */
   function linkbtn(t,label){var b=document.createElement("button");b.type="button";b.className="linkbtn";b.textContent=t;if(label)b.setAttribute("aria-label",label);return b;}
-  /* coll (ingredients only): each folder's open/closed state by folder id ("_u" = Unfiled), kept while the page is open.
+  /* coll (saved ingredients and, from v12, saved meals; each list has its own): each folder's open/closed state by folder id ("_u" = Unfiled), kept while the page is open.
      The heading is a button with aria-expanded; Rename and Remove stay available when a folder is closed. Folders start
      closed and Unfiled starts open, so new ingredients are easy to find. */
   function folderGroups(k,items,box,render,after,coll){
@@ -1416,7 +1593,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     sl.onchange=function(){
       var to=sl.value||null,fname=to?(S.folders[to]||{}).name:"Unfiled";fileItem(fk,to);save();after();
       var again=[].filter.call(document.querySelectorAll("select[data-fk]"),function(z){return z.dataset.fk===fk&&z.offsetParent!==null;})[0];
-      var head=document.querySelector('.ftog[data-fid="'+(to||"_u")+'"]');
+      var head=document.querySelector((k==="i"?"#mylist":"#mealList")+' .ftog[data-fid="'+(to||"_u")+'"]');
       if(again)again.focus();else if(head)head.focus();
       if($("fstat"))$("fstat").textContent="Moved “"+name+"” to "+fname+(again?".":" (folder closed).");
     };
@@ -1463,7 +1640,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("lgo").onclick=function(){
     var row=logPicker.read();if(!row)return;
     var t=totals([row]),name=row.name+" ("+row.label+")";
-    var e=add(name,t.k,mealM(t));logPicker.clear();addedNote(name,e);
+    var fq=foodQ(foodByKey(row.key)),e=add(name,t.k,mealM(t),fq===null?null:{v:fq,c:1});logPicker.clear();addedNote(name,e);
   };
   ["lamt","lew"].forEach(function(id){$(id).onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("lgo").click();}};});
   /* Quick add: calories required; name and macros optional. No macros typed means the entry has none.
@@ -1489,36 +1666,21 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     list.forEach(function(i){t.k+=i.k;t.p+=i.p;t.c+=i.c;t.f+=i.f;if(typeof i.fi==="number"){t.fi+=i.fi;known++;}});
     return {k:Math.round(t.k/n),p:Math.round(t.p/n),c:Math.round(t.c/n),f:Math.round(t.f/n),fi:Math.round(t.fi/n*10)/10,fiState:!list.length?"all":(!known?"none":(known<list.length?"partial":"all")),raw:t,known:known,count:list.length};
   }
-  /* Estimated meal quality, 0-100 and graded A-E. It works from the meal's totals, so every ingredient counts by the
-     amount used, and compares each nutrient with the meal's calories, so a bigger batch of the same recipe gets the same grade.
-     Starts at 50. Protein adds up to 30 (all of it at 8g per 100 kcal) and fibre up to 20 (all of it at 2g per 100 kcal).
-     Fat above 30% of the calories takes off up to 25 (all of it by 60%); carbs above 55% take off up to 20 (all of it by 85%).
-     Fibre that isn't known is left out rather than guessed, so a meal with unknown fibre is marked partial and may score low. */
-  var QGRADES=[[75,"A"],[60,"B"],[45,"C"],[30,"D"],[-1,"E"]];
-  function mealQuality(k,p,c,f,fi,fiState){
-    if(!(k>=5)||!isFinite(k))return null;
-    function cl(x){return Math.max(0,Math.min(1,x));}
-    var v=50+30*cl(100*p/k/8)+20*cl(100*(fiState==="none"?0:(fi||0))/k/2)-25*cl((9*f/k-0.30)/0.30)-20*cl((4*c/k-0.55)/0.30);
-    v=Math.round(Math.max(0,Math.min(100,v)));
-    var q={v:v,g:QGRADES.filter(function(x){return v>=x[0];})[0][1]};
-    if(fiState!=="all")q.p=true;
-    return q;
-  }
-  /* The stored estimate for a saved meal; meals saved before estimates existed get one worked out from their totals (not saved). */
-  function qualityOfMeal(m){
-    if(m.q&&okQ(m.q))return m.q;
-    return mealQuality(m.kcal,m.p,m.c,m.f,m.fi,typeof m.fi!=="number"?"none":(m.fip?"partial":"all"));
-  }
+  /* v12: a meal's estimated quality is its ingredients' quality (foodQ), weighted by calories (rowsQ); graded A (80+), B (65+),
+     C (50+), D (35+), E. Grades saved by earlier versions (meals[].q) stay in the data but aren't shown any more. */
+  function qOf(r){return r?{v:Math.round(r.v),g:gradeOf(r.v),p:r.c<0.995,c:r.c,n:r.n,nk:r.nk}:null;}
+  function qualityOfMeal(m){return qOf(mealQ(m));}
   /* The quality line: grade, bar and a short note. note=null leaves the note out. */
   function qualityNode(q,note){
     var d=document.createElement("div"),t=document.createElement("span");
     d.className="rate mq";
-    if(!q){t.textContent="Quality estimate unavailable: there aren't enough calories in this meal to judge it.";d.appendChild(t);return d;}
-    t.textContent="Estimated quality "+q.g+(q.p?" (partial)":"");
+    if(!q){t.textContent="No quality estimate: none of its ingredients has quality data.";d.appendChild(t);return d;}
+    t.textContent="Estimated quality "+q.g+" ("+q.v+"/100"+(q.p?", partial data":"")+")";
     d.append(gradeBar(q.g,false,"Estimated quality"),t);
     if(note){var s=document.createElement("small");s.className="mqn";s.textContent=note;d.appendChild(s);}
     return d;
   }
+  function qNote(q){return q?(q.nk<q.n?"From "+q.nk+" of "+q.n+" ingredients; the others have no quality data, so they’re left out.":"From all its ingredients.")+" Each counts by its calories: Nutri-Score for scanned products, typical values for basic foods.":null;}
   function fibreHtml(t){return t.fiState==="none"?"<span>fibre unknown</span>":"<span><b>"+t.fi+"g"+(t.fiState==="partial"?"+":"")+"</b> fibre"+(t.fiState==="partial"?" (partial)":"")+"</span>";}
   function drawCook(){
     var ul=$("ings");ul.innerHTML="";
@@ -1532,10 +1694,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     $("logMeal").textContent=n!==1?"Add 1 portion to my log":"Add this meal to my log";
     var box=$("cq");box.innerHTML="";box.hidden=!ings.length;
     if(ings.length){
-      var q=mealQuality(t.raw.k,t.raw.p,t.raw.c,t.raw.f,t.raw.fi,t.fiState);
-      box.appendChild(qualityNode(q,!q?null:(t.fiState==="none"?"An estimate from calories, protein, carbs and fat. Fibre isn't known for any ingredient, so it may be lower than it should be.":
-        t.fiState==="partial"?"An estimate from calories, protein, carbs, fat and fibre. Fibre isn't known for "+(t.count-t.known)+" of "+t.count+" ingredients, so it may be lower than it should be.":
-        "An estimate from calories, protein, carbs, fat and fibre, scaled by the amounts used.")));
+      var q=qOf(rowsQ(ings));
+      box.appendChild(qualityNode(q,qNote(q)));
     }
   }
   /* Daily log: saved meals in the same folder search as ingredients. */
@@ -1585,9 +1745,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   /* The meal being built, as a saved meal: whole-recipe totals, portions made, and its ingredient list (so it can be edited,
      and checked when an ingredient changes). */
   function mealFrom(name,rows,n){
-    var t=totals(rows),meal={name:name,kcal:t.k,p:t.p,c:t.c,f:t.f,t:Date.now(),n:n},q=mealQuality(t.raw.k,t.raw.p,t.raw.c,t.raw.f,t.raw.fi,t.fiState);
+    var t=totals(rows),meal={name:name,kcal:t.k,p:t.p,c:t.c,f:t.f,t:Date.now(),n:n};
     if(t.fiState!=="none"){meal.fi=t.fi;if(t.fiState==="partial")meal.fip=true;}
-    if(q)meal.q=q;
     meal.i=rows.map(function(r){return {k:r.key,n:r.name,a:r.a,u:r.u,w:Math.round(r.w*100)/100};});
     return meal;
   }
@@ -1595,7 +1754,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!ings.length){$("fsearch").focus();return;}
     if(badN())return;
     var nm=$("mname").value.trim()||"Home-cooked meal",o=portionOf(mealFrom(nm,ings,cookN()),1);
-    tab("log");var e=add(nm,o.kcal,mealM(o));resetCook();addedNote(nm,e);
+    tab("log");var e=add(nm,o.kcal,mealM(o),rowsQ(ings));resetCook();addedNote(nm,e);
   };
   /* pendingMeal: {meal, from}. editOrig: the lower-case name of the saved meal loaded with Edit, so changing the name while
      editing renames that meal instead of saving a second copy. */
@@ -1666,8 +1825,9 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       n.className="n";n.textContent=m.name;sm.textContent=mealInfo(m)+(mealN(m)!==1?" · makes "+r1(mealN(m))+" portions":"");n.appendChild(sm);
       var ctl=itemControls("m",it.fk,m.name,function(){loadMealForEdit(m);},function(){removeMeal(m);},drawSavedMeals);
       n.appendChild(ctl.row);li.append(n,ctl.x);return li;
-    },drawSavedMeals);
+    },drawSavedMeals,openMF);
   }
+  var openMF={};
   function removeMeal(m){
     ask({title:"Remove the saved meal “"+m.name+"”?",text:"Only the saved meal is removed. Anything already in your log from it stays as it is.",yes:"Remove meal",danger:true}).then(function(r){
       if(!r)return;var nm=m.name.toLowerCase();
@@ -1708,10 +1868,9 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       }
       var t=rc.t,nn=mealN(m),d=document.createElement("div"),b=document.createElement("b"),tb=document.createElement("table"),ul=document.createElement("ul");
       d.className="rv";b.textContent=m.name+(nn!==1?" (whole recipe, "+r1(nn)+" portions)":"");
-      var oq=qualityOfMeal(m),nq=mealQuality(t.raw.k,t.raw.p,t.raw.c,t.raw.f,t.raw.fi,t.fiState);
       function fib(fi,fip){return typeof fi==="number"?r1(fi)+"g"+(fip?"+":""):"unknown";}
       [["","Saved","Now"],["Calories",m.kcal+" kcal",t.k+" kcal"],["Protein",m.p+"g",t.p+"g"],["Carbs",m.c+"g",t.c+"g"],["Fat",m.f+"g",t.f+"g"],
-       ["Fibre",fib(m.fi,m.fip),t.fiState==="none"?"unknown":fib(t.fi,t.fiState==="partial")],["Quality",oq?oq.g+(oq.p?" (partial)":""):"\u2014",nq?nq.g+(nq.p?" (partial)":""):"\u2014"]].forEach(function(r,i){
+       ["Fibre",fib(m.fi,m.fip),t.fiState==="none"?"unknown":fib(t.fi,t.fiState==="partial")]].forEach(function(r,i){
         var tr=document.createElement("tr");r.forEach(function(c){var x=document.createElement(i?"td":"th");x.textContent=c;tr.appendChild(x);});tb.appendChild(tr);});
       rc.rows.forEach(function(r){var li=document.createElement("li");li.textContent=r.name+", "+r.label+": "+Math.round(r.k)+" kcal";ul.appendChild(li);});
       var row=document.createElement("div"),up=document.createElement("button"),kp=document.createElement("button");row.className="row2";
@@ -2020,7 +2179,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function drawWeight(fill){
     $("wkgIn").hidden=wUnit!=="kg";$("wstIn").hidden=wUnit!=="st";
     [].forEach.call($("wunit").children,function(b){b.setAttribute("aria-pressed",b.dataset.u===wUnit?"true":"false");});
-    var tk=key(new Date()),w=wts()[tk],has=!!(w&&okNum(w.kg)),tl=wTrend(),last=tl[tl.length-1],box=$("wnow");
+    var tk=key(tday()),w=wts()[tk],has=!!(w&&okNum(w.kg)),tl=wTrend(),last=tl[tl.length-1],box=$("wnow");
     $("wgo").textContent=has?"Update":"Save";
     if(fill){$("wkg").value=has?Math.round(w.kg*10)/10:"";var s=has?stlb(w.kg):null;$("wst").value=s?s[0]:"";$("wlb").value=s?s[1]:"";}
     box.innerHTML="";
@@ -2029,7 +2188,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     else t.textContent=last?"Not weighed today. Trend "+fmtW(last.tr)+", last weighed "+shortDate(last.d)+".":"No weight logged yet.";
     box.appendChild(t);
     if(has){var rm=document.createElement("button");rm.type="button";rm.className="linkbtn";rm.textContent="Remove today’s weight";
-      rm.onclick=function(){S.weights=wts();S.weights[key(new Date())]={kg:null,t:Date.now()};save();$("wmsg").hidden=true;drawWeight(true);drawCharts(false);drawAdapt();};box.appendChild(rm);}
+      rm.onclick=function(){S.weights=wts();S.weights[key(tday())]={kg:null,t:Date.now()};save();$("wmsg").hidden=true;drawWeight(true);drawCharts(false);drawAdapt();};box.appendChild(rm);}
     drawTarget(fill);
   }
   /* v11: target weight, kept in kg as targets.tw (synced with the goal and targets; null once removed). Shown against the
@@ -2051,7 +2210,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(tw==null){s.textContent="No target weight set. Add one to see how far you have to go.";return;}
     var t="Target: "+fmtW(tw)+".";
     if(!last)t+=" Log a weight to see how far you have to go.";
-    else{var d=last.kg-tw;t+=" Latest reading: "+fmtW(last.kg)+" ("+(last.d===key(new Date())?"today":shortDate(last.d))+"). "+(Math.abs(d)<0.05?"You’ve reached your target.":fmtAbs(d)+" to "+(d>0?"lose":"gain")+" to reach it.");}
+    else{var d=last.kg-tw;t+=" Latest reading: "+fmtW(last.kg)+" ("+(last.d===key(tday())?"today":shortDate(last.d))+"). "+(Math.abs(d)<0.05?"You’ve reached your target.":fmtAbs(d)+" to "+(d>0?"lose":"gain")+" to reach it.");}
     s.textContent=t;
   }
   $("tgo").onclick=function(){
@@ -2066,7 +2225,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(wUnit==="st"){var a=$("wst").value.trim(),b=$("wlb").value.trim(),s=parseFloat(a||"0"),l=parseFloat(b||"0");kg=(a===""&&b==="")||!(s>=0)||!(l>=0&&l<14)?NaN:(s*14+l)*KG_LB;}
     else kg=parseFloat($("wkg").value);
     if(!(kg>=20&&kg<=400)){msg.textContent=wUnit==="st"?"Enter a weight between 3 st 3 lb and 62 st 13 lb (pounds 0 to 13.9).":"Enter a weight between 20 and 400 kg.";msg.hidden=false;return;}
-    msg.hidden=true;S.weights=wts();S.weights[key(new Date())]={kg:Math.round(kg*100)/100,t:Date.now()};save();drawWeight(true);drawCharts(false);drawAdapt();
+    msg.hidden=true;S.weights=wts();S.weights[key(tday())]={kg:Math.round(kg*100)/100,t:Date.now()};save();drawWeight(true);drawCharts(false);drawAdapt();
   };
   ["wkg","wst","wlb"].forEach(function(id){$(id).onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("wgo").click();}};$(id).oninput=function(){$("wmsg").hidden=true;};});
   [].forEach.call($("wunit").children,function(b){b.onclick=function(){wUnit=b.dataset.u;try{localStorage.setItem(UKEY,wUnit);}catch(e){}$("wmsg").hidden=true;fillRates();drawWeight(true);drawCharts(false);drawAdapt();};});
@@ -2076,7 +2235,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   [].forEach.call($("rng").children,function(b){b.onclick=function(){RANGE=parseInt(b.dataset.r,10);[].forEach.call($("rng").children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false");});drawCharts(true);};});
   function rangeName(){return RANGE===28?"the last 4 weeks":RANGE===91?"the last 3 months":"the last 12 months";}
   function progRows(){
-    var t=sod(new Date()),rows=[];
+    var t=tday(),rows=[];
     for(var i=RANGE-1;i>=0;i--){var d=new Date(t.getFullYear(),t.getMonth(),t.getDate()-i),k=key(d),it=S.days[k]||[];
       if(!it.length){rows.push({k:k,logged:false});continue;}
       var st=dayStats(it);rows.push({k:k,logged:true,kcal:st.total,m:st.m,hasM:it.some(function(e){return !!e.m;})});}
@@ -2214,7 +2373,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function fillRates(){var s=$("arate");s.innerHTML="";RATES.forEach(function(r){opt(s,String(r),rateLabel(r));});s.value=String(curRate());}
   $("arate").onchange=function(){var r=parseFloat(this.value);if(RATES.indexOf(r)<0)return;S.targets.rate=r;S.sUpdated=Date.now();save();aPending=null;$("aBox").hidden=true;drawAdapt();};
   function estimate(){
-    var t=sod(new Date()),n=0,sum=0;
+    var t=tday(),n=0,sum=0;
     for(var i=1;i<=28;i++){var it=S.days[key(new Date(t.getFullYear(),t.getMonth(),t.getDate()-i))];if(it&&it.length){n++;sum+=dayStats(it).total;}}
     var from=key(new Date(t.getFullYear(),t.getMonth(),t.getDate()-28)),tl=wTrend().filter(function(r){return r.d>=from;}),res={n:n};
     if(n<14){res.why="days";return res;}
@@ -2247,7 +2406,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("aNo").onclick=function(){aPending=null;$("aBox").hidden=true;$("ause").focus();};
   /* How the selected day built up, on one chart: each chosen measure (calories and each tracked macro) as a share of its
      daily goal or target, so they share one scale, stepping up at the time each item was logged (same minute = one step).
-     The time axis runs from the first item (rounded down to an even hour) to midnight at the end of the day, labelled every
+     The time axis runs from the first item (rounded down to an even hour) to the end of the tracking day (bedtime, or midnight), labelled every
      two hours (every four or six when they wouldn't fit); today's lines stop at the current time. Toggles add or remove a
      measure from the chart and its column from the table; the table shows the actual kcal and grams. Missing macros count
      as 0g (said under the chart). Items with no recorded time are listed in the note and table, not on the chart.
@@ -2301,8 +2460,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(!shown.length)sum.textContent="Choose at least one measure above to show it on the chart and in the table.";
     else if(!steps.length)sum.textContent="None of the items on this day has a recorded time, so they can’t be placed on the chart. They’re listed in the table.";
     else{
-      var dd=parseKey(k),t1=new Date(dd.getFullYear(),dd.getMonth(),dd.getDate()+1).getTime(),s0=new Date(Math.max(steps[0].t,dd.getTime()));
-      var t0=new Date(s0.getFullYear(),s0.getMonth(),s0.getDate(),s0.getHours()-s0.getHours()%2).getTime();if(t0>=t1)t0=t1-2*36e5;
+      var db=dayBounds(k),t1=db[1],s0=new Date(Math.max(steps[0].t,db[0]));
+      var t0=Math.max(db[0],new Date(s0.getFullYear(),s0.getMonth(),s0.getDate(),s0.getHours()-s0.getHours()%2).getTime());if(t0>=t1)t0=t1-2*36e5;
       var last=steps[steps.length-1].t,end=today?Math.min(t1,Math.max(Date.now(),last)):t1,hi=110;
       shown.forEach(function(d){hi=Math.max(hi,cum[d[0]]/dayGoal(d[0])*100*1.05);});
       DAY={steps:steps,shown:shown,t0:t0,t1:t1,end:end,today:today,hi:hi};
@@ -2326,6 +2485,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     D.F=F;D.X=X;
     /* Time labels: every two hours, or every four or six when they wouldn't fit; the start and midnight are always labelled. */
     var hrs=[],dt=new Date(D.t0);while(dt.getTime()<=D.t1){hrs.push(dt.getTime());dt=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),dt.getHours()+2);}
+    /* A bedtime that isn't on the two-hour grid (e.g. 23:00 or 00:30) still ends the axis with its own label. */
+    if(hrs[hrs.length-1]<D.t1)hrs.push(D.t1);
     var lw=x.measureText(hm(D.t1)).width+10,every=1;while(every<3&&(hrs.length-1)/every*lw>F.W-lw/2)every++;
     x.strokeStyle=colv("line");x.lineWidth=1;x.fillStyle=colv("muted");x.textBaseline="alphabetic";
     var lab=[];
@@ -2377,8 +2538,8 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
      Nothing is saved until the review is confirmed: then the goal, macro targets, aim, target weight, today's weight and the
      profile are saved together. Skipping keeps the app's defaults. Shown once per device to new users (no data on this
      device); whether it's done is a per-device flag (calorie-tracker-setup), not synced. */
-  var SUKEY="calorie-tracker-setup",SUSTEPS=["acct","focus","weight","about","ex","review"];
-  var SUTITLE={acct:"Welcome! Let’s get you set up",focus:"Your goal",weight:"Your weight and target",about:"A little about you",ex:"How you’ll get there",review:"Your suggested targets"};
+  var SUKEY="calorie-tracker-setup",SUSTEPS=["acct","focus","weight","about","ex","day","review"];
+  var SUTITLE={acct:"Welcome! Let’s get you set up",focus:"Your goal",weight:"Your weight and target",about:"A little about you",ex:"How you’ll get there",day:"Your day",review:"Your suggested targets"};
   /* TEMPORARY TESTING TOOLS: the "Pass (test)" button on every step and "Run setup again (test)" in Settings. They only
      appear on test builds (VERSION ending in "-wip"), so a released version never shows them. A test run starts from what's
      saved and only changes anything after a final confirmation. */
@@ -2408,7 +2569,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     [].forEach.call(document.getElementsByName("sufocus"),function(r){r.checked=r.value===pr.focus;});
     fillW(lw.length?lw[lw.length-1].kg:null,"suCk","suCs","suCl");fillW(twKg(),"suTk","suTs","suTl");
     $("suAge").value=okNum(pr.age)?pr.age:"";$("suSex").value=pr.sex||"";SU.hu=wUnit==="st"?"ft":"cm";fillH(okNum(pr.cm)?pr.cm:null);
-    $("suPreg").checked=false;SU.ex={};(Array.isArray(pr.ex)?pr.ex:[]).forEach(function(x){SU.ex[x]=true;});$("suAct").value=okNum(pr.act)?String(pr.act):"";
+    fillBed($("suBed"));$("suPreg").checked=false;SU.ex={};(Array.isArray(pr.ex)?pr.ex:[]).forEach(function(x){SU.ex[x]=true;});$("suAct").value=okNum(pr.act)?String(pr.act):"";
   }
   function openSetup(test){
     SU.open=true;SU.test=!!test;SU.i=0;SU.back=document.activeElement;
@@ -2420,9 +2581,11 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     SU.open=false;$("setup").hidden=true;$("suMsg").hidden=true;
     var b=SU.back;SU.back=null;if(b&&b!==document.body&&b.focus&&document.body.contains(b)&&b.offsetParent!==null)b.focus();else $("t-log").focus();
   }
-  function suShow(){
-    var s=SUSTEPS[SU.i];
-    [].forEach.call(document.querySelectorAll("#setup section[data-s]"),function(x){x.hidden=x.dataset.s!==s;});
+  function suShow(dir){
+    var s=SUSTEPS[SU.i],sec=null;
+    [].forEach.call(document.querySelectorAll("#setup section[data-s]"),function(x){x.hidden=x.dataset.s!==s;if(!x.hidden)sec=x;});
+    /* A short slide and fade between steps (in the direction of travel); instant with reduced motion. Input isn't held up. */
+    if(dir&&sec&&sec.animate&&!reducedMotion()){var o={duration:200,easing:"cubic-bezier(.22,.61,.36,1)"};sec.animate([{opacity:0,transform:"translateX("+(dir*18)+"px)"},{opacity:1,transform:"none"}],o);$("suT").animate([{opacity:0},{opacity:1}],o);}
     $("suStep").textContent="Step "+(SU.i+1)+" of "+SUSTEPS.length;$("suT").textContent=SUTITLE[s];$("suMsg").hidden=true;
     $("suBack").hidden=SU.i===0;$("suNext").textContent=s==="review"?"Apply these targets":"Next";
     suUnits();suExDraw();suWdir();if(s==="acct")suAcct();if(s==="review")suReview(true);
@@ -2445,7 +2608,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   $("suSu").onclick=function(){if(!sb)return;$("suAmsg").textContent="Creating account...";sb.auth.signUp(suCreds()).then(function(r){if(r.error)$("suAmsg").textContent=r.error.message;else if(!r.data||!r.data.session)$("suAmsg").textContent="Check your email to confirm your account. You can carry on with setup now and sign in later in Settings.";});};
   $("suSpw").onchange=function(){$("suPw").type=this.checked?"text":"password";};
   $("suKeep").onclick=function(){markSetup();closeSetup();render();};
-  $("suGoOn").onclick=function(){$("suHas").hidden=true;suPrefill();SU.i++;suShow();};
+  $("suGoOn").onclick=function(){$("suHas").hidden=true;suPrefill();SU.i++;suShow(1);};
   [].forEach.call($("suWu").children,function(b){b.onclick=function(){
     var c=readW("suCk","suCs","suCl"),t=readW("suTk","suTs","suTl");wUnit=b.dataset.u;try{localStorage.setItem(UKEY,wUnit);}catch(e){}
     fillW(okKg(c)?c:null,"suCk","suCs","suCl");fillW(okKg(t)?t:null,"suTk","suTs","suTl");suUnits();suWdir();
@@ -2475,13 +2638,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     }
     return null;
   }
-  $("suBack").onclick=function(){if(SU.i>0){SU.i--;suShow();}};
-  $("suNext").onclick=function(){var s=SUSTEPS[SU.i];if(s==="review"){suApply();return;}var er=suCheck(s);if(er){suErr(er.t,er.el);return;}SU.i++;suShow();};
+  $("suBack").onclick=function(){if(SU.i>0){SU.i--;suShow(-1);}};
+  $("suNext").onclick=function(){var s=SUSTEPS[SU.i];if(s==="review"){suApply();return;}var er=suCheck(s);if(er){suErr(er.t,er.el);return;}SU.i++;suShow(1);};
   $("suSkip").onclick=function(){if(!SU.test)markSetup();closeSetup();};
   /* TEMPORARY TESTING TOOL: skip a step without checking it; on the last step, leave without applying anything. */
-  $("suPass").onclick=function(){if(!TESTING)return;if(SUSTEPS[SU.i]==="review"){$("suSkip").click();return;}SU.i++;suShow();};
-  $("testTools").hidden=!TESTING;
-  $("rerun").onclick=function(){if(TESTING)openSetup(true);};
+  $("suPass").onclick=function(){if(!TESTING)return;if(SUSTEPS[SU.i]==="review"){$("suSkip").click();return;}SU.i++;suShow(1);};
+  $("testTools").hidden=!TESTING;$("testRow").hidden=!TESTING;
+  $("rerun").onclick=$("rerunLog").onclick=function(){if(TESTING)openSetup(true);};
   /* The estimate (adults only). Resting burn: Mifflin-St Jeor, 10 × kg + 6.25 × cm − 5 × age, +5 for men, −161 for women
      (−78, the average, for "prefer not to say"), times an activity factor (1.2 to 1.9). The aim (kg a week) adjusts that at
      7,700 kcal per kg, never below 1,200 kcal. Protein: 1.6g per kg (1.8 when cutting), or 2.0g (2.2g) with weight lifting
@@ -2498,6 +2661,10 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     if(v.age!==null&&v.age<18)return {why:"minor"};
     var miss=[];if(!v.focus)miss.push("focus");if(v.kg===null)miss.push("current weight");if(v.age===null)miss.push("age");if(!v.sex)miss.push("sex");if(v.cm===null)miss.push("height");if(v.act===null)miss.push("how active you are");
     if(miss.length)return {why:"missing",miss:miss};
+    /* ChatGPT #6: no weight-loss suggestion when the current or target weight is low for the height entered (BMI under 18.5,
+       a rough screening measure, not a diagnosis). */
+    var m2=Math.pow(v.cm/100,2);
+    if(v.focus==="cut"&&(v.kg/m2<18.5||(v.tw!==null&&v.tw/m2<18.5)))return {why:"low",cur:v.kg/m2<18.5};
     var bmr=10*v.kg+6.25*v.cm-5*v.age+(v.sex==="m"?5:v.sex==="f"?-161:-78),burn=bmr*ACTF[v.act];
     var kc=Math.round((burn+rate*7700/7)/50)*50,low=kc<1200;if(low)kc=1200;kc=Math.min(kc,10000);
     var str=v.ex.indexOf("lift")>=0||v.ex.indexOf("cal")>=0,end=v.ex.indexOf("run")>=0||v.ex.indexOf("sport")>=0,cut=v.focus==="cut";
@@ -2510,14 +2677,17 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   var SUF=["suKc","suP","suC","suF","suFi"];
   function suReview(reset){
     var v=suInputs(),aim=$("suAim");
-    if(reset){var list=suAims(v.focus),cr=curRate(),def=v.focus==="bulk"?0.25:v.focus==="cut"?-0.5:cr;aim.innerHTML="";list.forEach(function(r){opt(aim,String(r),rateLabel(r));});aim.value=String(list.indexOf(cr)>=0?cr:def);}
+    /* With a low weight (ChatGPT #6) no weight-loss aim is offered. */
+    var lowW=suEstimate(v,0).why==="low";
+    if(reset){var list=lowW?[0,0.25,0.5]:suAims(v.focus),cr=curRate(),def=lowW?0:v.focus==="bulk"?0.25:v.focus==="cut"?-0.5:cr;aim.innerHTML="";list.forEach(function(r){opt(aim,String(r),rateLabel(r));});aim.value=String(list.indexOf(cr)>=0?cr:def);}
     var e=suEstimate(v,parseFloat(aim.value)),intro=$("suRevIntro"),how=$("suHowN"),vals;
     if(e.ok){
       intro.textContent="We estimate you burn about "+num(Math.round(e.burn/10)*10)+" kcal a day. For "+(v.focus==="cut"?"losing weight":"building muscle")+" at the aim below, we suggest these daily targets. Change any of them before you apply.";
       vals=[e.kc,e.p,e.c,e.f,e.fi];
       how.textContent="How this was worked out: your resting burn uses the Mifflin-St Jeor equation, multiplied for your activity level, then adjusted for your aim (about 7,700 kcal per kg). Protein is "+e.pk+"g per kg of your "+(e.useT?"target":"current")+" weight"+(e.str?" (higher for strength training)":"")+", fat is "+(e.end?"25% of calories, leaving more carbs for running and sports":"30% of calories")+", carbs make up the rest, and fibre is about 14g per 1,000 kcal."+(e.low?" The calories are at this app’s lowest suggestion (1,200 kcal a day), which isn’t a guarantee that it’s right for you.":"");
     }else{
-      intro.textContent=e.why==="preg"?"This app’s estimates aren’t suitable during pregnancy or breastfeeding, when your needs are different, so nothing is suggested. Please ask your midwife, GP or a dietitian. You can still set your own targets below; they start as your current settings.":
+      intro.textContent=e.why==="low"?"Your "+(e.cur?"current":"target")+" weight is low for the height you entered (a BMI under 18.5). BMI is only a rough screening measure, not a diagnosis, but losing weight from here could be unsafe, so this app won\u2019t suggest a weight-loss target. Please talk to a GP or dietitian before cutting. You can still set your own targets below; they start as your current settings.":
+        e.why==="preg"?"This app’s estimates aren’t suitable during pregnancy or breastfeeding, when your needs are different, so nothing is suggested. Please ask your midwife, GP or a dietitian. You can still set your own targets below; they start as your current settings.":
         e.why==="minor"?"These estimates are only for adults (18 and over), so nothing is suggested. A GP or dietitian can help with targets for you. You can still set your own below; they start as your current settings.":
         "To suggest targets we need your "+listAnd(e.miss)+". Go back to add "+(e.miss.length===1?"it":"them")+", or set your own targets below; they start as your current settings.";
       vals=[S.goal||2000,S.targets.p.g,S.targets.c.g,S.targets.f.g,S.targets.fi.g];how.textContent="";
@@ -2531,12 +2701,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   function cap1(t){return t.charAt(0).toUpperCase()+t.slice(1);}
   /* What applying will change, in words (also used for the test-run confirmation). */
   function suChanges(v,g){
-    var parts=[],tw=twKg(),w=wts()[key(new Date())],rate=parseFloat($("suAim").value);
+    var parts=[],tw=twKg(),w=wts()[key(tday())],rate=parseFloat($("suAim").value);
     parts.push("your daily goal becomes "+(g[0]>0?num(g[0]):"?")+" kcal (now "+num(S.goal||2000)+")");
     parts.push("protein, carbs, fat and fibre are tracked with targets of "+g.slice(1).map(function(x){return (x>0?x:"?")+"g";}).join(", "));
     if(RATES.indexOf(rate)>=0)parts.push("your aim becomes “"+rateLabel(rate)+"”");
     if(v.tw!==null)parts.push("your target weight becomes "+fmtW(v.tw)+(tw!=null?" (now "+fmtW(tw)+")":""));else if(tw!=null)parts.push("your target weight ("+fmtW(tw)+") is removed");
     if(v.kg!==null)parts.push(fmtW(v.kg)+" is saved as today’s weight"+(w&&okNum(w.kg)?" (replacing "+fmtW(w.kg)+")":""));
+    var bd=parseInt($("suBed").value,10);if(okBed(bd)&&bd!==bedMin())parts.push("your day runs from "+bedLabel(bd)+" to "+bedLabel(bd)+" (now "+bedLabel(bedMin())+")");
     parts.push("your profile (focus, age, sex, height and exercise) is saved"+(user?" to your account":" on this device"));
     return cap1(parts.join("; "))+".";
   }
@@ -2550,11 +2721,12 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       ensureTargets();S.goal=g[0];[["p",1],["c",2],["f",3],["fi",4]].forEach(function(x){S.targets[x[0]]={on:true,g:g[x[1]]};});
       if(RATES.indexOf(rate)>=0)S.targets.rate=rate;
       if(v.tw!==null)S.targets.tw=Math.round(v.tw*100)/100;else if(twKg()!=null)S.targets.tw=null;
+      var bd=parseInt($("suBed").value,10);if(okBed(bd)&&bd!==bedMin())S.targets.bed=bd;
       S.sUpdated=now;
-      if(v.kg!==null){S.weights=wts();S.weights[key(new Date())]={kg:Math.round(v.kg*100)/100,t:now};}
+      if(v.kg!==null){S.weights=wts();S.weights[key(tday())]={kg:Math.round(v.kg*100)/100,t:now};}
       var pr={t:now};if(v.focus)pr.focus=v.focus;if(v.age!==null)pr.age=v.age;if(v.sex)pr.sex=v.sex;if(v.cm!==null)pr.cm=Math.round(v.cm*10)/10;if(v.ex.length)pr.ex=v.ex;if(v.act!==null&&v.act>=0&&v.act<=4)pr.act=v.act;
       S.profile=pr;
-      save();if(!SU.test)markSetup();cur=new Date();tab("log");closeSetup();render();
+      save();if(!SU.test)markSetup();cur=tday();tab("log");closeSetup();render();
       var m=$("fmsg");m.textContent="Your targets are saved. You can change them any time in Settings"+(v.tw!==null?", and your target weight on the Progress page":"")+".";m.hidden=false;
     }
     if(SU.test)ask({title:"Apply this test run?",text:"This is a test run, but applying changes your real saved settings. "+suChanges(v,g)+" Choose Cancel to leave everything as it is.",yes:"Apply changes",danger:true}).then(function(r){if(r)doIt();});
@@ -2597,7 +2769,7 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
     var days=Object.keys(d.days);
     for(var i=0;i<days.length;i++){
       if(!/^\d{4}-\d{2}-\d{2}$/.test(days[i])||!Array.isArray(d.days[days[i]]))return false;
-      if(!d.days[days[i]].every(function(e){return e&&typeof e==="object"&&typeof e.name==="string"&&okNum(e.kcal)&&okNum(e.id)&&(e.m===undefined||okMacros(e.m))&&(e.s===undefined||/^[blds]$/.test(e.s))&&(e.at===undefined||(okNum(e.at)&&e.at>=946684800000&&e.at<=4102444800000));}))return false;
+      if(!d.days[days[i]].every(function(e){return e&&typeof e==="object"&&typeof e.name==="string"&&okNum(e.kcal)&&okNum(e.id)&&(e.m===undefined||okMacros(e.m))&&(e.s===undefined||/^[blds]$/.test(e.s))&&(e.at===undefined||(okNum(e.at)&&e.at>=946684800000&&e.at<=4102444800000))&&(e.q===undefined||okQv(e.q));}))return false;
     }
     if(d.meals!==undefined&&!(Array.isArray(d.meals)&&d.meals.every(function(m){return m&&typeof m.name==="string"&&okNum(m.kcal)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optBool(m.fip)&&(m.q===undefined||okQ(m.q))&&(m.n===undefined||(okNum(m.n)&&m.n>0&&m.n<=100))&&(m.i===undefined||okItems(m.i));})))return false;
     if(d.ings!==undefined&&!(Array.isArray(d.ings)&&d.ings.every(function(m){return m&&typeof m.name==="string"&&okNum(m.id)&&okNum(m.k)&&okNum(m.p)&&okNum(m.c)&&okNum(m.f)&&optNum(m.fi)&&optNum(m.e)&&(m.sn===undefined||typeof m.sn==="string")&&(m.code===undefined||/^\d{6,14}$/.test(m.code));})))return false;
@@ -2607,10 +2779,11 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
       if(Object.keys(TDEF).some(function(k){var t=d.targets[k];return t!==undefined&&!(t&&typeof t==="object"&&typeof t.on==="boolean"&&okNum(t.g)&&t.g>0);}))return false;
       if(d.targets.rate!==undefined&&!(okNum(d.targets.rate)&&Math.abs(d.targets.rate)<=2))return false;
       if(d.targets.tw!==undefined&&d.targets.tw!==null&&!okKg(d.targets.tw))return false;
+      if(d.targets.bed!==undefined&&!okBed(d.targets.bed))return false;
     }
     if(d.profile!==undefined&&!okProfile(d.profile))return false;
     if(d.del!==undefined&&(!d.del||typeof d.del!=="object"||Object.keys(d.del).some(function(k){return !okNum(d.del[k]);})))return false;
-    if(d.scores!==undefined&&(!d.scores||typeof d.scores!=="object"||Object.keys(d.scores).some(function(k){return !d.scores[k]||!okNum(d.scores[k].v);})))return false;
+    if(d.scores!==undefined&&(!d.scores||typeof d.scores!=="object"||Object.keys(d.scores).some(function(k){var s=d.scores[k];return !s||!okNum(s.v)||(s.p!==undefined&&!(okNum(s.p)&&s.p>=0&&s.p<=100))||(s.q!==undefined&&!(okNum(s.q)&&s.q>=0&&s.q<=100))||(s.c!==undefined&&!(okNum(s.c)&&s.c>=0&&s.c<=1));})))return false;
     if(d.folders!==undefined&&(!d.folders||typeof d.folders!=="object"||Array.isArray(d.folders)||Object.keys(d.folders).some(function(k){var f=d.folders[k];return !f||typeof f!=="object"||!/^[im]$/.test(f.k)||typeof f.name!=="string"||!okNum(f.t)||!optBool(f.gone);})))return false;
     if(d.fileIn!==undefined&&(!d.fileIn||typeof d.fileIn!=="object"||Array.isArray(d.fileIn)||Object.keys(d.fileIn).some(function(k){var a=d.fileIn[k];return !/^[im]:/.test(k)||!a||typeof a!=="object"||!okNum(a.t)||!(a.f===null||typeof a.f==="string");})))return false;
     if(d.weights!==undefined&&(!d.weights||typeof d.weights!=="object"||Array.isArray(d.weights)||Object.keys(d.weights).some(function(k){var w=d.weights[k];return !/^\d{4}-\d{2}-\d{2}$/.test(k)||!w||typeof w!=="object"||!okNum(w.t)||!(w.kg===null||(okNum(w.kg)&&w.kg>=20&&w.kg<=400));})))return false;
@@ -2726,13 +2899,13 @@ var SUPABASE_URL="https://ckxzayzkcmqddspxipwf.supabase.co", SUPABASE_KEY="sb_pu
   window.addEventListener("online",function(){if(syncFailed&&user){amsg("Back online. Syncing...");sync();}});
   document.addEventListener("visibilitychange",function(){if(!document.hidden){dayCheck();if(Date.now()-lastSync>5000)sync();}});
   /* If the app is left open past midnight, move on to the new day (yesterday then freezes as normal). */
-  function dayCheck(){if(renderedToday&&renderedToday!==key(new Date())){cur=new Date();render();}}
+  function dayCheck(){if(renderedToday&&renderedToday!==key(tday())){cur=tday();render();}else if(renderedToday&&!$("pg-log").hidden)drawScore();}
   setInterval(dayCheck,60000);
   drawAcct();
   $("ver").textContent=VERSION;$("build").textContent=" \u00b7 built "+BUILD;
   drawCook();drawSavedMeals();drawIngs();drawReview();
   applyTheme();syncPickers();drawThemeUi();
-  render();
+  fillBed($("bedSel"));cur=tday();render();
   if(!setupDone()&&!hasContent())openSetup(false);
 })();
 </script>

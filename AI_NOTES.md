@@ -1,6 +1,6 @@
 # AI notes (shared by ChatGPT and Claude)
 
-Last updated by: Claude, 2026-10-20. Refers to `index.html` version: `v11` (released to `main`; it includes v10, which was never released on its own).
+Last updated by: Claude, 2026-10-24. Refers to `index.html` version: `v12` (released to `main`).
 
 Isaac (the owner) keeps his `vN_features_to_implement.md` planning documents on his own device. This file lives in the repo so every AI reads the same rules.
 
@@ -21,10 +21,10 @@ Isaac (the owner) keeps his `vN_features_to_implement.md` planning documents on 
 ## Saved data
 localStorage key `calorie-tracker-v1` (never rename):
 ```
-{goal, days:{"YYYY-MM-DD":[{id,name,kcal,m?:{p,c,f,fi?,fip?},at?,s?}]},
+{goal, days:{"YYYY-MM-DD":[{id,name,kcal,m?:{p,c,f,fi?,fip?},at?,s?,q?:{v,c}}]},
  meals:[{name,kcal,p,c,f,fi?,fip?,t,q?:{v,g,p?},n?,i?:[{k,n,a,u,w}]}],
  ings:[{id,name,sn?,code?,k,p,c,f,fi?,e?,scanned,src?,rating?}],
- targets:{p,c,f,fi:{on,g}, rate?, tw?}, scores:{"YYYY-MM-DD":{v,f,t}},
+ targets:{p,c,f,fi:{on,g}, rate?, tw?, bed?}, scores:{"YYYY-MM-DD":{v,f,t,k?,p?,q?,c?}},
  profile?:{focus?,age?,sex?,cm?,ex?,act?,t},
  folders?:{id:{k:"i"|"m",name,t,gone?}}, fileIn?:{"i:<ingredient key>"|"m:<meal name>":{f:folder id|null,t}},
  weights?:{"YYYY-MM-DD":{kg,t}}, del:{id:ms}, sUpdated, updated, mig1}
@@ -32,6 +32,11 @@ localStorage key `calorie-tracker-v1` (never rename):
 - Per device, not synced: `calorie-tracker-setup` (`"done"` once first-run setup is finished or skipped), `calorie-tracker-theme` (theme), `calorie-tracker-units` (`"kg"` or `"st"`, weight display unit), `calorie-tracker-meal-keep` (saved meals the user chose to keep after an ingredient changed: `{meal name: values signature}`), `calorie-tracker-cal-done` (date today's Calendar ring last celebrated).
 - Entry ids are `Date.now()+Math.random()` (the time it was logged).
 - Unknown fibre is never stored as 0. Startup code must not call `save()`, stamp `updated`, or add keys (`weights` is created on the first weight save).
+- v12 additions (approved by the owner 2026-10-24):
+  - `targets.bed`: bedtime, in minutes after local midnight, every half hour from 18:00 to 05:30 (1080–1410 or 0–330). Missing or 0 means midnight. It's inside `targets`, so it merges with the goal (newest `sUpdated`).
+  - `days[].q`: the food quality of a log entry: `v` 0–100 and `c`, the share (0–1) of its calories that has a known quality. It's written when the entry is logged; entries without it are "unknown".
+  - `scores[day]` from v12: `k:2` (new formula), `p` (targets part 0–100), and `q` and `c` (quality part and its coverage) when any quality is known. Earlier scores have no `k` and are never recalculated once frozen.
+  - `meals[].q` (the old A–E grade) is kept in the data but no longer written or shown.
 - v11 additions (approved by the owner 2026-10-20): `targets.tw` (target weight in kg, 20 to 400; `null` once removed). It's inside `targets`, so it merges with the goal (newest `sUpdated`). `profile` holds the setup answers: `focus` `"cut"`/`"bulk"`, `age` (years), `sex` `"f"`/`"m"`/`"x"` (prefer not to say), `cm` (height), `ex` (any of `lift`, `run`, `sport`, `cal`), `act` (activity 0 to 4) and `t`. Both are written only when the setup review is confirmed (or, for the target, from Progress). Confirming setup also saves the weight entered as today's reading. Pregnancy is asked about but never saved.
 - v10 additions (approved by the owner 2026-10-20): `folders` (ingredient and meal folders kept apart by `k`; a removed folder stays as `gone:true`), `fileIn` (which folder each item is in; no entry or a removed folder = Unfiled; the ingredient and meal records aren't touched), and `del["m:<meal name>"]` when a saved meal is removed. All created on first use.
 - v9 additions (approved by the owner 2026-10-20): `days[].at` (time logged, ms); `meals[].n` (portions the recipe makes, missing = 1; kcal/macros stay whole-recipe totals) and `meals[].i` (ingredients: `k` key, `n` name, `a` amount typed, `u` `g`/`ml`/`lb`/`e`, `w` grams or ml); `ings[].sn` (source/search name) and `ings[].code` (barcode). `days[].s` (v8 slot) is kept in data but no longer shown or written.
@@ -52,7 +57,21 @@ Every new piece of data needs: a merge rule, deletion markers where it can be de
 - Known risk: a device still running v7 or older that syncs drops `weights` from the cloud row. Any v8 device puts them back on its next sync (its local copy is merged in), so nothing is lost for good.
 
 ## Behaviour to preserve
-- Daily score: calories weight 60, each tracked macro weight 15. Past days are frozen once and never recalculated.
+- v12 daily score (replaces the old one; an app estimate, not a medical or validated health score). Two equal parts:
+  - Food quality: the calorie-weighted average of entries' `q` (unknown entries are left out, never counted as 0; coverage is shown). With no known quality, the score is the targets part alone.
+  - Targets: the calorie goal plus each enabled macro/fibre, averaged equally (switched-off targets don't count). Each scores by closeness: r = total/target, r for r ≤ 1, 2 − r above (0 at double), so overshooting isn't rewarded.
+  - Provisional "on track" while the tracking day runs. Nothing is expected for the first 8 h after the day starts (assumed sleep). Then the minimum share is max(0, 1.25·f − 0.45), where f is the fraction of the remaining day, reaching 80% at the end. From that minimum up to the target counts as 1, below it r/min, and over the target 2 − r.
+  - Final at the end of the tracking day: closeness, frozen once (`freezePast`). A breakdown under "How this score works" shows the parts, each food's quality, the target table and the provisional/final explanation. It refreshes every minute.
+- v12 food quality (`foodQ`): Nutri-Score A95/B80/C60/D40/E25 for scanned products; a typical value per basic food (`BQ`: vegetables, fruit, pulses, whole grains and fish high; processed meat, sugar, butter, cream and salty sauces low; unsaturated oils above saturated). Ingredients added by hand and quick adds are unknown. Meals average their ingredients by calories (`rowsQ`/`mealQ`); missing ingredients reduce coverage. Meal grades shown: A ≥80, B ≥65, C ≥50, D ≥35, else E.
+- v12 tracking day (`tday()`, `trackDayOf`, `dayBounds`): bedtime to bedtime.
+  - An evening bedtime (≥ 12:00) starts the next day's period; an early-morning one (< 12:00) ends the current period. Days are named after the date most of the period falls on.
+  - Entries keep the day they were logged on, and changing the bedtime only affects food logged after the change.
+  - Local Date arithmetic handles daylight saving (that day is 23 or 25 h). Weigh-ins, "today", the 7-day window, the chart axis and score freezing all follow the tracking day.
+- v12: setup has a "Your day" bedtime step (7 steps now), an opaque background and a short slide between steps (none with reduced motion).
+  - ChatGPT #6: with a current or target BMI under 18.5 and a cut focus, no weight-loss target or aim is offered. The wording is careful and non-diagnostic, and points to a GP or dietitian.
+- v12: every button gets a brief bulge when clicked (`scale` animation, delegated so dynamic buttons get it too; none for disabled buttons or with reduced motion, no layout shift).
+- v12: ingredient cards are compact; saved-meal folders open and close like ingredient folders (each list keeps its own state).
+- Old scores (before v12) were: calories weight 60, each tracked macro weight 15. Past days are frozen once and never recalculated.
 - Rings: canvas, one painter (`paintProgress`). Background redraws must not cancel a running animation. Confetti and pulse fire once and respect reduced motion.
 - Day slide: arrows, date and Calendar stay put; reduced motion changes days instantly.
 - Ingredient picker: one live-search combobox (`makePicker`), used by Home cooking and the Daily log's Food option. Amounts 0.1 to 100,000.
@@ -61,7 +80,7 @@ Every new piece of data needs: a merge rule, deletion markers where it can be de
   - The review suggests calories and macros: Mifflin-St Jeor times an activity factor, then the aim at 7,700 kcal/kg, with a 1,200 floor. Protein is 1.6 to 2.2 g/kg, fat 25 to 30%, carbs the rest, fibre 14 g per 1,000 kcal.
   - The suggestion is for adults only: under 18 or pregnant/breastfeeding gives no suggestion and points to a professional. Missing details mean manual targets, starting from the current settings.
   - Nothing is saved until "Apply these targets". Skip keeps the defaults. An account that already has data after signing in is offered "Keep my settings".
-- v11 TEMPORARY TEST TOOLS: "Pass (test)" on every setup step and "Run setup again (test)" in Settings. They show only when VERSION ends in `-wip` (`TESTING`), so released builds hide them. A test run starts from the saved values and asks for confirmation (listing the changes) before applying. Remove the code once setup testing is finished.
+- v11 TEMPORARY TEST TOOLS: "Pass (test)" on every setup step, "Run setup again (test)" in Settings and (v12) "Run setup (test)" under Calendar on the Daily log. They show only when VERSION ends in `-wip` (`TESTING`), so released builds hide them. A test run starts from the saved values and asks for confirmation (listing the changes) before applying. Remove the code once setup testing is finished.
 - v11: Progress shows the target weight against the latest reading ("X to lose/gain to reach it"), with a dashed Target line on the weight chart. It can be edited or removed there. No target means none is shown.
 - v11: Daily log chart "How the day built up" is one chart: calories and each tracked macro as % of goal/target (one scale). Each measure has an aria-pressed toggle that also shows its line style (the legend); toggles add or remove that line and its table column, and the table shows actual kcal/g.
   - The time axis runs from the first item (rounded down to an even hour) to midnight, labelled every 2 hours (4 or 6 when they don't fit). Today's lines stop at "Now".
@@ -94,9 +113,35 @@ From ChatGPT's reviews (v9, v10 and v11 planning docs), not approved yet:
 - Adaptive target: limit to adults / say more about the 1,200 floor (setup already does this for its own suggestion).
 - A project-owned USDA key instead of `DEMO_KEY`.
 - When setup testing is done: remove the temporary test tools' code.
-Done: adaptive-target wording and USDA rate limit (v9); meals with a removed ingredient stay in review, impossible times rejected (v10); renaming a meal no longer duplicates it (v11).
+- From the v12 review: keep the two-hour chart labels on narrow phones (angled labels) instead of 4/6-hour spacing (#8).
+- Food-group variety isn't part of the quality score yet (entries don't record their food group).
+Done: low-weight check in setup (v12 review #6); adaptive-target wording and USDA rate limit (v9); meals with a removed ingredient stay in review, impossible times rejected (v10); renaming a meal no longer duplicates it (v11).
 
 ## Handoff log (newest first)
+
+### [Claude] 2026-10-24, v12
+**Did:** from v12_features_to_implement.md (the owner asked to keep it as v12, so it includes the v12-wip test button):
+- ChatGPT #6: low-weight check in setup.
+- Tweaks: an opaque setup background with step transitions, a press bulge on every button, compact ingredient cards, collapsible saved-meal folders.
+- Features: the new time-aware daily score with a quality part and a targets part; the bedtime tracking day, with a setup step and a Settings control; the ingredient-based quality estimate (also used for meal grades).
+- New data (approved by the owner): `targets.bed`, `days[].q`, score parts.
+
+**Tested:** headless Edge (Playwright, `file://`, network blocked, Supabase and product databases mocked), 368 checks (all v11/v12-wip checks adapted plus v12):
+- Score: provisional values at fixed clock times, falling later in the day, overshoot, a target switched off, no quality data, final freeze of unfrozen and left-over live days, old frozen scores untouched and labelled, freeze at bedtime with the app open.
+- Quality: stored on food, meal and recent entries, quick adds unknown, meal grades, partial coverage.
+- Tracking day: evening and early-morning bedtimes, a bedtime change not moving entries, the chart axis to bedtime with its own label, and the UK clock change on 25 Oct 2026 (Europe/London).
+- Setup: opaque background, animation and reduced motion, low-weight cases.
+- Buttons: press bulge on click, keyboard, release only, dynamic buttons; none when disabled or with reduced motion; no layout shift.
+- Card size and tap targets; meal folders by click and keyboard, with focus and state kept.
+- Two-device merge, export/import and bad-backup rejection, no console errors.
+- Phone screenshots in light, dark and at 320px, checked by eye.
+
+**Not tested:** a real phone (the press animation and step slide on iOS Safari), real Supabase, real product databases, and a bedtime freeze across a real overnight.
+
+### [Claude] 2026-10-20, v12-wip
+**Did:** at the owner's request, added a "Run setup (test)" button on the Daily log (under Calendar) that opens a setup test run. Pass was already on every setup step. Like the other test tools, it only shows on -wip builds; the owner chose to keep them out of the live site.
+**Tested:** 300 checks (the v11 suite plus: the button shows, opens a test run on step 1, Pass is on all six steps and walks through them, closing without changing anything, focus returns to the button). A copy with VERSION "v12" passes 282 checks with every test tool hidden. Screenshot checked.
+**Not released:** the owner asked for the test file only.
 
 ### [Claude] 2026-10-20, v11
 **Did:** from v11_features_to_implement.md (it includes v10, which was never released on its own):
